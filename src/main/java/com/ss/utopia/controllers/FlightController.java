@@ -1,11 +1,10 @@
-package com.ss.utopia.controllers;
+package com.utopia.flight.controller;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ss.utopia.exceptions.FlightNotFoundException;
-import com.ss.utopia.models.Flight;
-import com.ss.utopia.models.HttpError;
-import com.ss.utopia.services.FlightService;
+
+import com.utopia.flight.model.Flight;
+import com.utopia.flight.service.FlightService;
 
 @RestController
 @RequestMapping(value = "/flights")
@@ -32,31 +31,19 @@ public class FlightController {
 	
 	@Autowired
 	FlightService flightService;
-	
-	
-	@GetMapping()
-	public ResponseEntity<Object> getAll(){
-		List<Flight> allFlights = flightService.getAll();
+
+	@GetMapping
+	public ResponseEntity<Object> findAll() throws ConnectException, SQLException{
+		List<Flight> allFlights = flightService.findAll();
 		return !allFlights.isEmpty() ? new ResponseEntity<>(allFlights, HttpStatus.OK)
 				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 	
-	@GetMapping("id/{flightId}")
-	public ResponseEntity<Object> findById(@PathVariable String path) {
-		try {
-			Integer flightId = Integer.parseInt(path);
-			Flight flight = flightService.findById(flightId);
-			return new ResponseEntity<>(flight, HttpStatus.OK);
-
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Flight ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-			
-		} catch(FlightNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		}
+	@GetMapping("id/{flightId}") 
+	public ResponseEntity<Flight> findById(@PathVariable Integer flightId) throws ConnectException, SQLException {
+		return flightService.findById(flightId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	@PostMapping()
@@ -64,34 +51,33 @@ public class FlightController {
 		return new ResponseEntity<>(flightService.insert(flight), HttpStatus.CREATED);
 	}
 	
-	// @PutMapping("id/{flightId}")
-	// public ResponseEntity<Flight> update(@Valid @RequestBody Flight flight, @PathVariable Integer flightId){
-	// 	return flightService.findById(flightId)
-	// 			.map(flightObj -> {
-	// 				flight.setId(flightObj.getId());
-	// 				return ResponseEntity.ok(flightService.update(flight));
-	// 			})
-	// 			.orElseGet(() -> ResponseEntity.notFound().build());
-	// }
+	@PutMapping("id/{flightId}")
+	public ResponseEntity<Flight> update(@Valid @RequestBody Flight flight, @PathVariable Integer flightId){
+		return flightService.findById(flightId)
+				.map(flightObj -> {
+					flight.setId(flightObj.getId());
+					return ResponseEntity.ok(flightService.update(flight));
+				})
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
 	
-	// @DeleteMapping("id/{flightId}")
-	// public ResponseEntity<Flight> delete(@PathVariable Integer flightId) {
-	// 	return flightService.findById(flightId)
-	// 			.map(flight -> {
-	// 				flightService.delete(flightId);
-	// 				return ResponseEntity.ok(flight);
-	// 			})
-	// 			.orElseGet(() -> ResponseEntity.notFound().build());
-	// }
+	@DeleteMapping("id/{flightId}")
+	public ResponseEntity<Flight> delete(@PathVariable Integer flightId) {
+		return flightService.findById(flightId)
+				.map(flight -> {
+					flightService.delete(flightId);
+					return ResponseEntity.ok(flight);
+				})
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
 	
-	
-	@GetMapping("/search/{routeId}")
-	public ResponseEntity<Object> search(@PathVariable String routeId, @PathParam(value = "date") String date){
-		List<Flight> all = flightService.search(routeId, date);
+	@GetMapping("/search")
+	public ResponseEntity<Object> search(@RequestParam String orig, @RequestParam String dest, @RequestParam String date, @RequestParam Integer travelers)
+			throws ConnectException, SQLException{
+		List<Flight> all = flightService.search(orig, dest, date, travelers);
 		return !all.isEmpty() ? new ResponseEntity<>(all, HttpStatus.OK)
 				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
-	
 	
 	@ExceptionHandler(ConnectException.class)
 	public ResponseEntity<Object> invalidConnection() {
@@ -108,10 +94,7 @@ public class FlightController {
 		return new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 	
-//	@ExceptionHandler(ConstraintViolationException.class)
-//	public ResponseEntity<Object> invalggidMessage() {
-//		return new ResponseEntity<>("Invalid Message Content!", HttpStatus.BAD_REQUEST);
-//	}
+	
 	
 
 	

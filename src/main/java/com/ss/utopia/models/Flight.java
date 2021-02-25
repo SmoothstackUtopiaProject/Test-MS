@@ -1,4 +1,4 @@
-package com.ss.utopia.models;
+package com.utopia.flight.model;
 
 
 
@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -26,8 +28,9 @@ public class Flight {
 	private Integer id;
 
 	@NotNull(message = "Route id should not be empty")
-	@Column(name = "route_id", nullable = false)
-	private Integer routeId;
+	@ManyToOne
+	@JoinColumn(name = "route_id")
+	private Route routeId;
 
 	@NotNull(message = "Airplane id should not be empty")
 	@Column(name = "airplane_id")
@@ -52,7 +55,7 @@ public class Flight {
 	public Flight() {
 	};
 	
-	public Flight(Integer id, Integer routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice) {
+	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice) {
 		super();
 		this.id = id;
 		this.routeId = routeId;
@@ -63,7 +66,7 @@ public class Flight {
 	}
 	
 	
-	public Flight(Integer id, Integer routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice,
+	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice,
 			Integer availableSeats) {
 		super();
 		this.id = id;
@@ -83,11 +86,11 @@ public class Flight {
 		this.id = id;
 	}
 
-	public Integer getRouteId() {
+	public Route getRouteId() {
 		return routeId;
 	}
 
-	public void setRouteId(Integer routeId) {
+	public void setRouteId(Route routeId) {
 		this.routeId = routeId;
 	}
 
