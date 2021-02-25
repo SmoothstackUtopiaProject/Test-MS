@@ -1,4 +1,4 @@
-package com.utopia.flight.respository;
+package com.ss.utopia.repositories;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.utopia.flight.model.Flight;
+import com.ss.utopia.models.Flight;
 
 @Repository
 public interface FlightRespository extends JpaRepository<Flight, Integer> {
@@ -31,5 +31,4 @@ public interface FlightRespository extends JpaRepository<Flight, Integer> {
 	
 	@Query(value="SELECT flight.* FROM flight, route WHERE flight.route_id = route.id AND route.origin_id = ?1 AND route.destination_id = ?2 AND flight.departure_date >= ?3 AND flight.available_seats >= ?4", nativeQuery = true)
 	List<Flight> searchFlightByOrigDestDateSeat(String origin, String destination, Date date, Integer travelers);
-	
 }

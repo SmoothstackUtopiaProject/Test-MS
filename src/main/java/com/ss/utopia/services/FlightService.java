@@ -1,20 +1,16 @@
-package com.utopia.flight.service;
+package com.ss.utopia.services;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.utopia.flight.exception.FlightNotFoundException;
-import com.utopia.flight.model.Flight;
-import com.utopia.flight.respository.FlightRespository;
+import com.ss.utopia.models.Flight;
+import com.ss.utopia.repositories.FlightRespository;
 
 @Service
 public class FlightService {
@@ -49,6 +45,4 @@ public class FlightService {
 		Date stringToDate = Date.valueOf(date);
 		return flightRespository.searchFlightByOrigDestDateSeat(orig, dest, stringToDate, travelers);
 	}
-
-
 }

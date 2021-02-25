@@ -1,4 +1,4 @@
-package com.utopia.flight.controller;
+package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.utopia.flight.model.Flight;
-import com.utopia.flight.service.FlightService;
+import com.ss.utopia.models.Flight;
+import com.ss.utopia.services.FlightService;
 
 @RestController
 @RequestMapping(value = "/flights")
@@ -42,8 +42,8 @@ public class FlightController {
 	@GetMapping("id/{flightId}") 
 	public ResponseEntity<Flight> findById(@PathVariable Integer flightId) throws ConnectException, SQLException {
 		return flightService.findById(flightId)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+			.map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	@PostMapping()

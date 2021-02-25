@@ -1,4 +1,4 @@
-package com.utopia.flight.model;
+package com.ss.utopia.models;
 
 
 
