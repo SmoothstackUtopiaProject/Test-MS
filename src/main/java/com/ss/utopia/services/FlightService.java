@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
 import com.ss.utopia.repositories.FlightRespository;
 
@@ -20,8 +21,10 @@ public class FlightService {
 		return flightRespository.findAllFlights();
 	}
 	
-	public Optional<Flight> findById(Integer id) {
-		return flightRespository.findById(id);
+	public Flight findById(Integer id) throws FlightNotFoundException {
+		Optional<Flight> optionalFlight = flightRespository.findById(id);
+		if(!optionalFlight.isPresent()) throw new FlightNotFoundException("No Flight with ID: " + id + " exists.");
+		return optionalFlight.get();
 	}
 
 	public Flight insert(Flight flight) {

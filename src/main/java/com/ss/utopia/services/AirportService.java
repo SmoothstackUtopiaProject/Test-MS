@@ -24,7 +24,7 @@ public class AirportService {
 	public Airport findByIataId(String iataId) throws AirportNotFoundException {
 		// Validate IataId
 		String formattedIataId = formatIataId(iataId);
-		if(!validateIataId(formattedIataId)) throw new IllegalArgumentException("Not a valid IATA code: " + formattedIataId + "!");
+		if(!validateIataId(formattedIataId)) throw new IllegalArgumentException("Not a valid IATA code: " + formattedIataId + ".");
 
 		// Perform GET query
 		Optional<Airport> optionalAirpot = airportRepository.findById(formattedIataId);

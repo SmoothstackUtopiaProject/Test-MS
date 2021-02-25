@@ -13,14 +13,15 @@ import com.ss.utopia.exceptions.BookingAlreadyExistsException;
 import com.ss.utopia.exceptions.BookingGuestNotFoundException;
 import com.ss.utopia.exceptions.BookingNotFoundException;
 import com.ss.utopia.exceptions.BookingUserNotFoundException;
+import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Booking;
 import com.ss.utopia.models.BookingGuest;
 import com.ss.utopia.models.BookingUser;
 import com.ss.utopia.models.BookingWithReferenceData;
 import com.ss.utopia.models.FlightBooking;
 import com.ss.utopia.models.Passenger;
-import com.ss.utopia.repositories.BookingRepository;
 import com.ss.utopia.repositories.FlightBookingRepository;
+import com.ss.utopia.repositories.BookingRepository;
 import com.ss.utopia.repositories.PassengerRepository;
 
 @Service
@@ -37,6 +38,9 @@ public class BookingService {
 
 	@Autowired 
 	FlightBookingRepository flightBookingRepository;
+
+	@Autowired
+	FlightService flightService;
 
 	@Autowired 
 	PassengerRepository passengerRepository;
@@ -136,9 +140,10 @@ public class BookingService {
 	}
 
 	public Booking insertByBookingUser(Integer userId) throws BookingAlreadyExistsException,
-	 ConnectException, IllegalArgumentException, SQLException {
+	BookingUserNotFoundException, ConnectException, IllegalArgumentException, SQLException {
 
-		Booking newBooking = bookingRepository.save(new Booking(2));
+		bookingUserService.findUserByUserId(userId);
+		Booking newBooking = bookingRepository.save(new Booking(0));
 		bookingUserService.insert(newBooking.getId(), userId);
 		return newBooking;
 	}
@@ -159,63 +164,35 @@ public class BookingService {
 		return bookingRepository.save(booking);
 	}
 
-	public BookingWithReferenceData updateWithReferenceData(Integer bookingId, Integer status, Integer flightId, Integer passengerId, Integer userId, String guestEmail, String guestPhone) 
-	throws BookingNotFoundException, ConnectException, IllegalArgumentException, SQLException {
-	
-		
-		Booking booking = findById(bookingId);
-		booking.setstatus(status);
-		Booking updatedBooking = bookingRepository.save(booking);
+	public FlightBooking updateFlightBooking(Integer bookingId, Integer flightId) throws BookingNotFoundException, 
+	ConnectException, FlightNotFoundException, IllegalArgumentException, SQLException {
 
-		BookingWithReferenceData newBookingWithReferenceData = new BookingWithReferenceData(updatedBooking.getId(), 
-		updatedBooking.getStatus(), booking.getConfirmationCode(), flightId, passengerId, userId, guestEmail, guestPhone);
-
-		Optional<FlightBooking> optionalFlightBooking = flightBookingRepository.findById(flightId);
-		if(optionalFlightBooking.isPresent()) {
+		findById(bookingId);
+		flightService.findById(flightId);
+		try {
+			Optional<FlightBooking> optionalFlightBooking = flightBookingRepository.findById(bookingId);
+			if(!optionalFlightBooking.isPresent()) throw new IllegalArgumentException();
 			FlightBooking flightBooking = optionalFlightBooking.get();
-			flightBooking.setBookingId(bookingId);
-			FlightBooking newFlightBooking = flightBookingRepository.save(flightBooking);
-			newBookingWithReferenceData.setFlightId(newFlightBooking.getFlightId());
+			flightBooking.setFlightId(flightId);
+			return flightBookingRepository.save(flightBooking);
+		} catch(IllegalArgumentException err) {
+			return flightBookingRepository.save(new FlightBooking(flightId, bookingId));
 		}
-
-		Optional<Passenger> optionalPassenger = passengerRepository.findById(passengerId);
-		if(optionalPassenger.isPresent()) {
-			Passenger passenger = optionalPassenger.get();
-			passenger.setBookingId(bookingId);
-			Passenger newPassenger = passengerRepository.save(passenger);
-			newBookingWithReferenceData.setPassengerId(newPassenger.getId());
-		}
-
-		try {
-			bookingGuestService.findByBookingId(bookingId);
-			BookingGuest newBookingGuest = bookingGuestService.update(bookingId, guestEmail, guestPhone);
-			newBookingWithReferenceData.setGuestEmail(newBookingGuest.getEmail());
-			newBookingWithReferenceData.setGuestPhone(newBookingGuest.getPhone());
-		} catch(BookingGuestNotFoundException err) {
-			try {
-				BookingGuest newBookingGuest = bookingGuestService.insert(bookingId, guestEmail, guestPhone);
-				newBookingWithReferenceData.setGuestEmail(newBookingGuest.getEmail());
-				newBookingWithReferenceData.setGuestPhone(newBookingGuest.getPhone());
-			} catch(BookingAlreadyExistsException err2){/* Ignore for now, TODO error handling for partial updates */}
-		}
-
-		try {
-			bookingUserService.findByBookingId(bookingId);
-			BookingUser newBookingUser = bookingUserService.update(bookingId, userId);
-			newBookingWithReferenceData.setUserId(newBookingUser.getBookingId());
-		} catch(BookingUserNotFoundException err) {
-			try {
-				BookingUser newBookingUser = bookingUserService.insert(bookingId, userId);
-				newBookingWithReferenceData.setUserId(newBookingUser.getBookingId());
-			}catch(BookingAlreadyExistsException err2){/* Ignore for now, TODO error handling for partial updates */}
-		}
-
-		return newBookingWithReferenceData;
 	}
 
 	public void delete(Integer id) throws BookingNotFoundException, 
 	ConnectException, IllegalArgumentException, SQLException {
 		findById(id);
 		bookingRepository.deleteById(id);
+	}
+
+	public long deleteFlightBooking(Integer bookingId) throws BookingNotFoundException, 
+	ConnectException, IllegalArgumentException, SQLException {
+
+		flightBookingRepository.findById(bookingId);
+		long preRowsCount = flightBookingRepository.count();
+		flightBookingRepository.deleteByBookingId(bookingId);
+		long postRowsCount = flightBookingRepository.count();
+		return preRowsCount - postRowsCount;
 	}
 }
