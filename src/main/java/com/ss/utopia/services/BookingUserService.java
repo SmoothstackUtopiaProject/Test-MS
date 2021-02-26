@@ -51,7 +51,7 @@ public class BookingUserService {
 	ConnectException, IllegalArgumentException, SQLException {
 		
 		Optional<User> optionalUser = userRepository.findById(userId);
-		if(optionalUser.isEmpty()) throw new BookingUserNotFoundException("No User with ID: " + userId + " exists.");
+		if(!optionalUser.isPresent()) throw new BookingUserNotFoundException("No User with ID: " + userId + " exists.");
 		return optionalUser.get();
 	}
 
