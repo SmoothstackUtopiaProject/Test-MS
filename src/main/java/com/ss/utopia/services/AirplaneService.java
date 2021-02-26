@@ -24,32 +24,31 @@ public class AirplaneService {
 	
 	public Airplane findById(Integer id) throws AirplaneNotFoundException {
 		Optional<Airplane> optionalAirplane = airplaneRepository.findById(id);
-		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + id + " exists!");
+		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + id + " exists.");
 		return optionalAirplane.get();
 	}
 	
 	public List<Airplane> findByTypeId(Integer typeId) throws AirplaneTypeNotFoundException {
 		Optional<AirplaneType> optionalAirplaneType = airplaneRepository.findAirplaneTypeById(typeId);
-		if(!optionalAirplaneType.isPresent()) throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + typeId + " exist!");
+		if(!optionalAirplaneType.isPresent()) throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + typeId + " exist.");
 		return airplaneRepository.findByTypeId(typeId);
 	}
 
-	public Airplane insert(Airplane airplane) throws AirplaneTypeNotFoundException {
-		Optional<AirplaneType> optionalType = airplaneRepository.findAirplaneTypeById(airplane.getTypeId());
-		if(!optionalType.isPresent()) throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + airplane.getTypeId() + " exist!");
-		airplane.setTypeId(optionalType.get().getId());
-		return airplaneRepository.save(airplane);
+	public Airplane insert(Integer typeId) throws AirplaneTypeNotFoundException {
+		Optional<AirplaneType> optionalType = airplaneRepository.findAirplaneTypeById(typeId);
+		if(!optionalType.isPresent()) throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + typeId + " exist.");
+		return airplaneRepository.save(new Airplane(typeId));
 	}
 
 	public void delete(Integer id) throws AirplaneNotFoundException {
 		Optional<Airplane> optionalAirplane = airplaneRepository.findById(id);
-		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + id + " exists!");
+		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + id + " exists.");
 		airplaneRepository.deleteById(id);
 	}
 
 	public Airplane update(Airplane airplane) throws AirplaneNotFoundException, AirplaneTypeNotFoundException {
 		Optional<Airplane> optionalAirplane = airplaneRepository.findById(airplane.getId());
-		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + airplane.getId() + " exists!");
-		return insert(airplane);
+		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + airplane.getId() + " exists.");
+		return null; //insert(airplane);
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,8 +47,8 @@ public class AirplaneController {
 		} else return new ResponseEntity<>(airplaneList, HttpStatus.OK);
 	}
 	
-	@GetMapping("/id")
-	public ResponseEntity<Object> findById(@RequestParam Integer id){
+	@GetMapping("{id}")
+	public ResponseEntity<Object> findById(@PathVariable Integer id){
 		try {
 			Airplane airplane = airplaneService.findById(id);
 			return new ResponseEntity<>(airplane, HttpStatus.OK);
@@ -58,8 +59,8 @@ public class AirplaneController {
 		}
 	}
 	
-	@GetMapping("/type")
-	public ResponseEntity<Object> findByTypeId(@RequestParam Integer id){
+	@GetMapping("/type/{id}")
+	public ResponseEntity<Object> findByTypeId(@PathVariable Integer id){
 		try {
 			List<Airplane> airplane = airplaneService.findByTypeId(id);
 			return new ResponseEntity<>(airplane, HttpStatus.OK);
@@ -71,9 +72,10 @@ public class AirplaneController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody Airplane airplane) {
+	public ResponseEntity<Object> insert(@RequestBody String body) {
 		try {
-			Airplane newAirplane = airplaneService.insert(airplane);
+			Integer typeId = Integer.parseInt(body);
+			Airplane newAirplane = airplaneService.insert(typeId);
 			return new ResponseEntity<>(newAirplane, HttpStatus.CREATED);
 		}	catch(AirplaneTypeNotFoundException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
@@ -82,8 +84,8 @@ public class AirplaneController {
 		}	
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<Object> delete(@RequestParam Integer id) {
+	@DeleteMapping("{id}")
+	public ResponseEntity<Object> delete(@PathVariable Integer id) {
 		try {
 			airplaneService.delete(id);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
