@@ -97,7 +97,7 @@ public class AirplaneController {
 	@PutMapping
 	public ResponseEntity<Object> update(@RequestBody Airplane airplane) {
 		try {
-			Airplane newAirplane = airplaneService.update(airplane);
+			Airplane newAirplane = airplaneService.update(airplane);	
 			return new ResponseEntity<>(newAirplane, HttpStatus.OK);
 		}	catch (AirplaneNotFoundException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
