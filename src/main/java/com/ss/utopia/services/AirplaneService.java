@@ -49,6 +49,6 @@ public class AirplaneService {
 	public Airplane update(Airplane airplane) throws AirplaneNotFoundException, AirplaneTypeNotFoundException {
 		Optional<Airplane> optionalAirplane = airplaneRepository.findById(airplane.getId());
 		if(!optionalAirplane.isPresent()) throw new AirplaneNotFoundException("No Airplane with ID: " + airplane.getId() + " exists.");
-		return null; //insert(airplane);
+		return airplaneRepository.save(airplane);
 	}
 }
