@@ -1,5 +1,6 @@
 package com.ss.utopia.repositories;
 
+import com.ss.utopia.models.User;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -7,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.ss.utopia.models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
