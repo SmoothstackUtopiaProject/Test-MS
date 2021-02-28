@@ -35,6 +35,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+				<dependency>
+			<groupId>it.ozimov</groupId>
+			<artifactId>spring-boot-freemarker-email</artifactId>
+			<version>0.6.3</version>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
