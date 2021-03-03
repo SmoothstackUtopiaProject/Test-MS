@@ -114,8 +114,8 @@ public class PassengerController {
 
 		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
 		return !passengers.isEmpty()
-		? new ResponseEntity<>(passengers, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(passengers, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping
@@ -183,7 +183,7 @@ public class PassengerController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable String id) 
+	public ResponseEntity<Object> deleteById(@PathVariable String id) 
 	throws ConnectException, SQLException {
 
 		try {
