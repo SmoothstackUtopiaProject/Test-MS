@@ -29,15 +29,11 @@ public class Booking {
 
 	public Booking() {}
 	public Booking(Integer status) {
-		super();
 		this.status = status;
-
-		// TODO: replace generated UUIDs with UUID input from PaymentMS
 		this.confirmationCode = UUID.randomUUID().toString();
 	}
 
 	public Booking(Integer id, Integer status, String confirmationCode) {
-		super();
 		this.id = id;
 		this.status = status;
 		this.confirmationCode = confirmationCode;

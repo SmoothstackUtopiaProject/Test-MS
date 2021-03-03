@@ -1,6 +1,6 @@
 package com.ss.utopia.repositories;
 
-import java.util.Optional;
+import java.util.List;
 
 import com.ss.utopia.models.Passenger;
 
@@ -12,5 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
 
   @Query(value = "SELECT * FROM passenger WHERE booking_id = ?1", nativeQuery = true)
-  Optional<Passenger> findByBookingId(Integer bookingId);
+  List<Passenger> findByBookingId(Integer bookingId);
+
+  @Query(value = "SELECT * FROM passenger WHERE passport_id = ?1", nativeQuery = true)
+  List<Passenger> findByPassportId(String passportId);
 }
