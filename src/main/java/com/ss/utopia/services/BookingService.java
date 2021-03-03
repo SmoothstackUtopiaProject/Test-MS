@@ -109,8 +109,8 @@ public class BookingService {
 		Optional<FlightBooking> optionalFlightBooking = flightBookingRepository.findById(bookingId);
 		if(optionalFlightBooking.isPresent()) bookingWithReferenceData.setFlightId(optionalFlightBooking.get().getFlightId());
 
-		Optional<Passenger> optionalPassenger = passengerRepository.findByBookingId(bookingId);
-		if(optionalPassenger.isPresent()) bookingWithReferenceData.setPassengerId(optionalPassenger.get().getId());
+		// List<Passenger> passengersList = passengerRepository.findByBookingId(bookingId);
+		// if(passengersList.isEmpty()) bookingWithReferenceData.setPassengerId(passengersList.get().getId());
 
 		try {
 			BookingUser bookingUser = bookingUserService.findByBookingId(bookingId);

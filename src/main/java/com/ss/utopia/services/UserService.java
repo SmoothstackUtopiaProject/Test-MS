@@ -11,20 +11,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.time.DateUtils;
-import org.bouncycastle.asn1.dvcs.Data;
-import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ss.utopia.email.models.MailRequest;
 import com.ss.utopia.email.models.MailResponse;
 import com.ss.utopia.email.services.EmailService;
-import com.ss.utopia.exceptions.ExpiredTokenExpception;
 import com.ss.utopia.exceptions.IncorrectPasswordException;
 import com.ss.utopia.exceptions.PasswordNotAllowedException;
 import com.ss.utopia.exceptions.TokenAlreadyIssuedException;
-import com.ss.utopia.exceptions.TokenNotFoundExpection;
 import com.ss.utopia.exceptions.UserAlreadyExistsException;
 import com.ss.utopia.exceptions.UserNotFoundException;
 import com.ss.utopia.exceptions.UserRoleNotFoundException;

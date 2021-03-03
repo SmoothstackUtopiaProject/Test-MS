@@ -1,12 +1,10 @@
 package com.ss.utopia.controllers;
 
-import java.io.Console;
 import java.net.ConnectException;
 import java.sql.SQLException;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,8 +65,8 @@ public class UserController {
 
 	
 	@PostMapping("/forgot-password")
-	public ResponseEntity<?> forgotPassword(@RequestBody LinkedHashMap uMap ) throws ConnectException, IllegalArgumentException, SQLException{
-		String email = (String) uMap.get("email");
+	public ResponseEntity<Object> forgotPassword(@RequestBody HashMap<String, String> userMap) throws ConnectException, IllegalArgumentException, SQLException{
+		String email = userMap.get("email");
 		try {
 			userService.sendRecoveryEmail(email);
 			return new ResponseEntity<>(null, HttpStatus.OK);	
@@ -80,23 +78,22 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/verify-token")
-	public ResponseEntity<?> verifyToken(@RequestBody LinkedHashMap uMap ) {
+	public ResponseEntity<Object> verifyToken(@RequestBody HashMap<String, String> userMap) {
 		
-		String recoveryCode = (String) uMap.get("recoveryCode");
+		String recoveryCode = userMap.get("recoveryCode");
 		try {
 			userTokenService.verifyToken(recoveryCode);
 			return new ResponseEntity<>(HttpStatus.OK);	
 		} catch (ExpiredTokenExpception | TokenNotFoundExpection e) {
 			return new ResponseEntity<>("Link is expired, please request a new one", HttpStatus.NOT_FOUND);
 		}
-	
-	}
+	}	
 	
 	@PostMapping("/forgot-password/recover")
-	public ResponseEntity<?> passwordRecovery(@RequestBody LinkedHashMap uMap) throws ConnectException, IllegalArgumentException, SQLException   {
+	public ResponseEntity<Object> passwordRecovery(@RequestBody HashMap<String, String> userMap) throws ConnectException, IllegalArgumentException, SQLException   {
 		
-		String recoveryCode = (String) uMap.get("recoveryCode");
-		String password = (String) uMap.get("password");
+		String recoveryCode = userMap.get("recoveryCode");
+		String password = userMap.get("password");
 		
 		try {
 			userService.ChangePassword(userTokenService.verifyToken(recoveryCode), password);
@@ -111,9 +108,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LinkedHashMap uMap) {
-		String email = (String) uMap.get("email");
-		String password = (String) uMap.get("password");
+	public ResponseEntity<Object> login(@RequestBody HashMap<String, String> userMap) {
+		String email = userMap.get("email");
+		String password = userMap.get("password");
 		
 		try {
 			return new ResponseEntity<>(userService.verifyUser(email, password), HttpStatus.OK);

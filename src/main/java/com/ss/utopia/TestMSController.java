@@ -32,6 +32,7 @@ public class TestMSController {
 			"booking-service",
 			"flight-service",
 			"orchestrator-service",
+			"passenger-service",
 			"route-service",
 			"user-service"
 		);
