@@ -2,7 +2,7 @@ package com.ss.utopia.models;
 
 
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -38,7 +38,7 @@ public class Flight {
 
 	@NotNull(message = "Departure date should not be empty")
 	@Column(name = "departure_date")
-	private LocalDate date;
+	private Date date;
 
 	@NotNull(message = "Departure time should not be empty")
 	@Column(name = "departure_time")
@@ -55,7 +55,7 @@ public class Flight {
 	public Flight() {
 	};
 	
-	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice) {
+	public Flight(Integer id, Route routeId, Integer airplaneId, Date date, LocalTime time, double seatPrice) {
 		super();
 		this.id = id;
 		this.routeId = routeId;
@@ -66,7 +66,7 @@ public class Flight {
 	}
 	
 	
-	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice,
+	public Flight(Integer id, Route routeId, Integer airplaneId, Date date, LocalTime time, double seatPrice,
 			Integer availableSeats) {
 		super();
 		this.id = id;
@@ -118,11 +118,11 @@ public class Flight {
 		this.availableSeats = availableSeats;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -133,7 +133,4 @@ public class Flight {
 	public void setTime(LocalTime time) {
 		this.time = time;
 	}
-	
-	
-
 }
