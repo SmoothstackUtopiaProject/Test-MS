@@ -2,6 +2,7 @@ package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,11 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
+import com.ss.utopia.models.HttpError;
 import com.ss.utopia.services.FlightService;
 
 @RestController
@@ -39,44 +40,59 @@ public class FlightController {
 				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 	
-	@GetMapping("id/{flightId}") 
-	public ResponseEntity<Flight> findById(@PathVariable Integer flightId) throws ConnectException, SQLException {
-		return flightService.findById(flightId)
-			.map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+
+	@GetMapping("{path}")
+	public ResponseEntity<Object> findById(@PathVariable String path)
+	throws ConnectException, SQLException {
+
+		try {
+			Integer flightId = Integer.parseInt(path);
+			Flight flight = flightService.findById(flightId);
+			return new ResponseEntity<>(flight, HttpStatus.OK);
+
+		} catch(IllegalArgumentException | NullPointerException err) {
+			String errorMessage = "Cannot process Flight ID " + err.getMessage()
+			.substring(0, 1).toLowerCase() + err.getMessage()
+			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
+			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
+			
+		} catch(FlightNotFoundException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+		}
 	}
 	
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<Flight> create(@Valid @RequestBody Flight flight ) {
 		return new ResponseEntity<>(flightService.insert(flight), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("id/{flightId}")
-	public ResponseEntity<Flight> update(@Valid @RequestBody Flight flight, @PathVariable Integer flightId){
-		return flightService.findById(flightId)
-				.map(flightObj -> {
-					flight.setId(flightObj.getId());
-					return ResponseEntity.ok(flightService.update(flight));
-				})
-				.orElseGet(() -> ResponseEntity.notFound().build());
-	}
+	// @PutMapping
+	// public ResponseEntity<Flight> update(@Valid @RequestBody Flight flight){
+	// 	return flightService.findById(flightId)
+	// 			.map(flightObj -> {
+	// 				flight.setId(flightObj.getId());
+	// 				return ResponseEntity.ok(flightService.update(flight));
+	// 			})
+	// 			.orElseGet(() -> ResponseEntity.notFound().build());
+	// }
 	
-	@DeleteMapping("id/{flightId}")
-	public ResponseEntity<Flight> delete(@PathVariable Integer flightId) {
-		return flightService.findById(flightId)
-				.map(flight -> {
-					flightService.delete(flightId);
-					return ResponseEntity.ok(flight);
-				})
-				.orElseGet(() -> ResponseEntity.notFound().build());
-	}
+	// @DeleteMapping("{flightId}")
+	// public ResponseEntity<Flight> deleteById(@PathVariable Integer flightId) {
+	// 	return flightService.findById(flightId)
+	// 			.map(flight -> {
+	// 				flightService.deleteById(flightId);
+	// 				return ResponseEntity.ok(flight);
+	// 			})
+	// 			.orElseGet(() -> ResponseEntity.notFound().build());
+	// }
 	
-	@GetMapping("/search")
-	public ResponseEntity<Object> search(@RequestParam String orig, @RequestParam String dest, @RequestParam String date, @RequestParam Integer travelers)
-			throws ConnectException, SQLException{
-		List<Flight> all = flightService.search(orig, dest, date, travelers);
-		return !all.isEmpty() ? new ResponseEntity<>(all, HttpStatus.OK)
-				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	@PostMapping("/search")
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
+
+		List<Flight> flights = flightService.findBySearchAndFilter(filterMap);
+		return !flights.isEmpty() 
+			? new ResponseEntity<>(flights, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 	
 	@ExceptionHandler(ConnectException.class)
@@ -93,15 +109,4 @@ public class FlightController {
 	public ResponseEntity<Object> invalidSQL() {
 		return new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE);
 	}
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-
 }
