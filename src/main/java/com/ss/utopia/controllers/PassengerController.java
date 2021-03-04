@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.PassengerAlreadyExistsException;
@@ -109,7 +108,7 @@ public class PassengerController {
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestParam HashMap<String, String> filterMap)
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap)
 	throws ConnectException, SQLException {
 
 		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
@@ -121,6 +120,9 @@ public class PassengerController {
 	@PostMapping
 	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> passengerMap)
 	throws ConnectException, SQLException {
+
+		System.out.println("======================");
+		System.out.println(passengerMap);
 
 		try {
 			Integer bookingId = Integer.parseInt(passengerMap.get("bookingId"));

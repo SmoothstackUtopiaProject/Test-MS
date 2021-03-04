@@ -44,9 +44,14 @@ public class PassengerService {
 	}
 
 	public List<Passenger> findBySearchAndFilter(HashMap<String, String> filterMap) {
+
+		System.out.println("======================");
+		System.out.println(filterMap);
+
 		List<Passenger> passengers = findAll();
-		List<Passenger> searchedPassengers = applySearch(passengers, filterMap);
-		return applyFilters(searchedPassengers, filterMap);
+		if(filterMap.keySet().contains("searchTerms")) passengers = applySearch(passengers, filterMap);
+		if(!filterMap.keySet().isEmpty()) passengers = applyFilters(passengers, filterMap);
+		return passengers;
 	}
 
 	public List<Passenger> applySearch(List<Passenger> passengers, HashMap<String, String> filterMap) {
@@ -54,14 +59,15 @@ public class PassengerService {
 		
 		String searchTerms = "searchTerms";
 		if(filterMap.keySet().contains(searchTerms)) {
-			String[] splitTerms = filterMap.get(searchTerms).split("+");
+			String formattedSearch = filterMap.get(searchTerms).replace(", ", ",").toLowerCase();
+			String[] splitTerms = formattedSearch.split(",");
 			ObjectMapper mapper = new ObjectMapper();
 			
 			for(Passenger passenger : passengers) {
 				boolean containsSearchTerms = true;
 				
 				try {
-					String passengerAsString = mapper.writeValueAsString(passenger);
+					String passengerAsString = mapper.writeValueAsString(passenger).toLowerCase();
 					for(String term : splitTerms) {
 						if(!passengerAsString.contains(term)) {
 							containsSearchTerms = false;
