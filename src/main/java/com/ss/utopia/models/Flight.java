@@ -51,6 +51,8 @@ public class Flight {
 
 	@Column(name = "available_seats", nullable = true)
 	private Integer availableSeats;
+	
+	
 
 	public Flight() {
 	};

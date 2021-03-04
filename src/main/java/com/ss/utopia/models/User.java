@@ -3,11 +3,17 @@ package com.ss.utopia.models;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name = "user")
@@ -17,44 +23,70 @@ public class User {
 	@GeneratedValue
 	@Column(name = "id")
 	private Integer id;
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "role_id")
-	private UserRole userRole;
+	@NotNull(message = "First name should not be empty")
 	@Column(name = "first_name")
 	private String firstName;
+	@NotNull(message = "Last name should not be empty")
 	@Column(name = "last_name")
 	private String lastName;
+	@NotNull(message = "Email should not be empty")
 	@Column(name = "email")
+	@Email(message = "Email should be valid")
 	private String email;
+	@NotNull(message = "Password should not be empty")
 	@Column(name = "password")
 	private String password;
+	@NotNull(message = "Phone number should not be empty")
 	@Column(name = "phone")
 	private String phone;
+	@NotNull(message = "Role should not be empty")
+    @Enumerated(EnumType.STRING)
+    @Column(name="role")
+    private Role role;
 	
-	
-	public User() {}
-	public User(Integer id, UserRole userRole, String firstName, 
-	String lastName, String email, String password, String phone) {
-		super();
-		this.id = id;
-		this.userRole = userRole;
+    @Transient
+    private String token;
+    
+    public User() {
+    };    
+    public User(Role role, String firstName,String lastName,String email,String password,String phone) {
+    	
+    	this.role = role;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.email = email;
+    	this.password = password;
+    	this.phone = phone;
+    }
+ 
+	public User(Role role, String firstName,String lastName,String email,String password,String phone,
+			 String token) {
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.phone = phone;
+		this.role = role;
+		this.token = token;
+	}
+	
+	public Role getRole() {
+		return role;
 	}
 
-	public User(UserRole userRole, String firstName, 
-	String lastName, String email, String password, String phone) {
-		super();
-		this.userRole = userRole;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
+	public void setRole(Role role) {
+		this.role = role;
 	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 
 	public Integer getId() {
 		return id;
@@ -64,13 +96,6 @@ public class User {
 		this.id = id;
 	}
 
-	public UserRole getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
-	}
 
 	public String getFirstName() {
 		return firstName;
