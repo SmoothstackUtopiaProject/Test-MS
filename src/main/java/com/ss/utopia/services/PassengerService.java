@@ -231,9 +231,9 @@ public class PassengerService {
 		if(!passengerExistCheck.isEmpty()) throw new PassengerAlreadyExistsException(
 			"A Passenger with the Passport ID: " + passportId + " already exists.");
 
-		return passengerRepository.save(new Passenger(
-			bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran
-		));
+		return passengerRepository.save(
+			new Passenger(bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran)
+		);
 	}
 
 	public Passenger update(Integer id, Integer bookingId, String passportId, String firstName, 
@@ -242,7 +242,7 @@ public class PassengerService {
 
 		findById(id);
 		return passengerRepository.save(
-			new Passenger(bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran)
+			new Passenger(id, bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran)
 		);
 	}
 
