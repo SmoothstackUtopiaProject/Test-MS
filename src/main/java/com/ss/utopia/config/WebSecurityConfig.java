@@ -43,7 +43,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 //These can be reachable for just have admin role.
 //                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/**").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/airports/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/airports/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/airports/**").hasRole("USER")
 //                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
                 //All remaining paths should need authentication.
                 .anyRequest().fullyAuthenticated()
