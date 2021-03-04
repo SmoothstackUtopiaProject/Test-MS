@@ -3,6 +3,7 @@ package com.ss.utopia.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,9 +39,12 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .authorizeRequests()
                 //These are public paths
-                .antMatchers("/users/**").permitAll()
+//                .antMatchers("/users/**").permitAll()
                 //These can be reachable for just have admin role.
-//                .antMatchers("/api/admin/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/airports/**").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
                 //All remaining paths should need authentication.
                 .anyRequest().fullyAuthenticated()
                 .and()

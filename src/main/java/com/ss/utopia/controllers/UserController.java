@@ -121,21 +121,6 @@ public class UserController {
 		}
 	}
 
-//	@GetMapping("/auth/login")
-//	public ResponseEntity<?> login(@RequestBody LinkedHashMap uMap) {
-//		String email = (String) uMap.get("email");
-//		String password = (String) uMap.get("password");
-//
-//		try {
-//			return new ResponseEntity<>(userService.verifyUser(email, password), HttpStatus.OK);
-//		} catch (UserNotFoundException err) {
-//			return new ResponseEntity<>(err.getMessage(), HttpStatus.NOT_FOUND);
-//		} catch (IncorrectPasswordException err) {
-//			return new ResponseEntity<>(err.getMessage(), HttpStatus.UNAUTHORIZED);
-//		}
-//
-//	}
-
 	@GetMapping("{path}")
 	public ResponseEntity<Object> findById(@PathVariable String path) throws ConnectException, SQLException {
 
