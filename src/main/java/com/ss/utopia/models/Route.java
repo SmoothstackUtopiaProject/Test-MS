@@ -28,6 +28,11 @@ public class Route {
 
 	public Route() {
 	}
+	
+	public Route(Integer id) {
+		super();
+		this.id = id;
+	}
 
 	public Route(Integer id, Airport origin, Airport destination) {
 		super();

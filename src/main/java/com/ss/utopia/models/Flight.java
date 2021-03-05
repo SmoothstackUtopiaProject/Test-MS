@@ -1,9 +1,9 @@
 package com.ss.utopia.models;
 
 
-
 import java.sql.Date;
-import java.time.LocalTime;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,9 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 
 
 @Entity
@@ -28,54 +26,102 @@ public class Flight {
 	private Integer id;
 
 	@NotNull(message = "Route id should not be empty")
-	@ManyToOne
 	@JoinColumn(name = "route_id")
-	private Route routeId;
+	private Integer routeId;
 
 	@NotNull(message = "Airplane id should not be empty")
 	@Column(name = "airplane_id")
 	private Integer airplaneId;
 
-	@NotNull(message = "Departure date should not be empty")
-	@Column(name = "departure_date")
-	private Date date;
-
 	@NotNull(message = "Departure time should not be empty")
-	@Column(name = "departure_time")
-	private LocalTime time;
-
-	@NotNull(message = "Seat price should not be empty")
-	@Min(1)
-	@Column(name = "seat_price")
-	private Double seatPrice;
-
-	@Column(name = "available_seats", nullable = true)
-	private Integer availableSeats;
-
-	public Flight() {
-	};
+	@Column(name = "departure_timestamp")
+	private Timestamp dateTime;
 	
-	public Flight(Integer id, Route routeId, Integer airplaneId, Date date, LocalTime time, double seatPrice) {
-		super();
-		this.id = id;
-		this.routeId = routeId;
-		this.airplaneId = airplaneId;
-		this.date = date;
-		this.time = time;
-		this.seatPrice = seatPrice;
+	@NotNull(message = "Seating id should not be empty")
+	@GeneratedValue
+	@Column(name = "seating_id")
+	private Integer seatingId;
+	
+	@NotNull(message="Duration should not be empty")
+	@Column(name="duration")
+	private Integer duration;
+	
+	@NotNull(message="Status should not be empty")
+	@Column(name="status")
+	private String status;
+	
+	public Flight() {
 	}
 	
-	
-	public Flight(Integer id, Route routeId, Integer airplaneId, Date date, LocalTime time, double seatPrice,
-			Integer availableSeats) {
+
+	public Flight(Integer id, @NotNull(message = "Route id should not be empty") Integer routeId,
+			@NotNull(message = "Airplane id should not be empty") Integer airplaneId,
+			@NotNull(message = "Departure time should not be empty") Timestamp dateTime,
+			@NotNull(message = "Seating id should not be empty") Integer seatingId,
+			@NotNull(message = "Duration should not be empty") Integer duration,
+			@NotNull(message = "Status should not be empty") String status) {
 		super();
 		this.id = id;
 		this.routeId = routeId;
 		this.airplaneId = airplaneId;
-		this.date = date;
-		this.time = time;
-		this.seatPrice = seatPrice;
-		this.availableSeats = availableSeats;
+		this.dateTime = dateTime;
+		this.seatingId = seatingId;
+		this.duration = duration;
+		this.status = status;
+	}
+
+
+	public Flight(Integer routeId, Integer airplaneId, Timestamp dateTime, Integer seatingId, Integer duration,String status) 
+	{
+		this.routeId = routeId;
+		this.airplaneId = airplaneId;
+		this.dateTime = dateTime;
+		this.seatingId = seatingId;
+		this.duration = duration;
+		this.status = status;
+	}
+
+	public Flight(@NotNull(message = "Route id should not be empty") Integer routeId,
+			@NotNull(message = "Airplane id should not be empty") Integer airplaneId,
+			@NotNull(message = "Departure time should not be empty") Timestamp dateTime) {
+		super();
+		this.routeId = routeId;
+		this.airplaneId = airplaneId;
+		this.dateTime = dateTime;
+	}
+
+
+
+	public Timestamp getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(Timestamp dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public Integer getSeatingId() {
+		return seatingId;
+	}
+
+	public void setSeatingId(Integer seatingId) {
+		this.seatingId = seatingId;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -86,11 +132,11 @@ public class Flight {
 		this.id = id;
 	}
 
-	public Route getRouteId() {
+	public Integer getRouteId() {
 		return routeId;
 	}
 
-	public void setRouteId(Route routeId) {
+	public void setRouteId(Integer routeId) {
 		this.routeId = routeId;
 	}
 
@@ -102,35 +148,4 @@ public class Flight {
 		this.airplaneId = airplaneId;
 	}
 
-	public double getSeatPrice() {
-		return seatPrice;
-	}
-
-	public void setSeatPrice(double seatPrice) {
-		this.seatPrice = seatPrice;
-	}
-
-	public Integer getAvailableSeats() {
-		return availableSeats;
-	}
-
-	public void setAvailableSeats(Integer availableSeats) {
-		this.availableSeats = availableSeats;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public LocalTime getTime() {
-		return time;
-	}
-
-	public void setTime(LocalTime time) {
-		this.time = time;
-	}
 }
