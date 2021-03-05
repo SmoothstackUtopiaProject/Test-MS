@@ -54,14 +54,36 @@ public class PassengerService {
 		
 		String searchTerms = "searchTerms";
 		if(filterMap.keySet().contains(searchTerms)) {
+<<<<<<< Updated upstream
 			String[] splitTerms = filterMap.get(searchTerms).split("+");
+=======
+			String formattedSearch = filterMap.get(searchTerms)
+			.toLowerCase()
+			.replace(", ", ",");
+			System.out.println(formattedSearch);
+			String[] splitTerms = formattedSearch.split(",");
+>>>>>>> Stashed changes
 			ObjectMapper mapper = new ObjectMapper();
 			
 			for(Passenger passenger : passengers) {
 				boolean containsSearchTerms = true;
 				
 				try {
+<<<<<<< Updated upstream
 					String passengerAsString = mapper.writeValueAsString(passenger);
+=======
+					String passengerAsString = mapper.writeValueAsString(passenger)
+					.toLowerCase()
+					.replace("bookingid", "")
+					.replace("passportid", "")
+					.replace("firstname", "")
+					.replace("lastname", "")
+					.replace("dateofbirth", "")
+					.replace("sex", "")
+					.replace("address", "")
+					.replace("isveteran", "");
+					
+>>>>>>> Stashed changes
 					for(String term : splitTerms) {
 						if(!passengerAsString.contains(term)) {
 							containsSearchTerms = false;
