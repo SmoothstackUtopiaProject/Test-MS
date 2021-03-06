@@ -67,7 +67,7 @@ public class BookingUserService {
     
 		findUserByUserId(userId);
 		BookingUser bookingUser = findByBookingId(bookingId);
-    bookingUser.setUserId(userId);
+    bookingUser.setBookingUserId(userId);
     return bookingUserRepository.save(bookingUser);
 	}
 

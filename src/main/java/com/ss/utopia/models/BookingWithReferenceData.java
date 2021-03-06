@@ -2,103 +2,103 @@ package com.ss.utopia.models;
 
 public class BookingWithReferenceData {
 	
-	private Integer id;
-	private Integer status;
-	private String confirmationCode;
-	private Integer flightId;
-	private Integer passengerId;
-	private Integer userId;
-	private String guestEmail;
-	private String guestPhone;
+	private Integer bookingId;
+	private String bookingStatus;
+	private String bookingConfirmationCode;
+	private Integer bookingFlightId;
+	private Integer bookingPassengerId;
+	private Integer bookingUserId;
+	private String bookingGuestEmail;
+	private String bookingGuestPhone;
 
 	public BookingWithReferenceData(){}
-	public BookingWithReferenceData(Integer id, Integer status, String confirmationCode, 
-	Integer flightId, Integer passengerId, Integer userId) {
+	public BookingWithReferenceData(Integer bookingId, String bookingStatus, String bookingConfirmationCode, 
+	Integer bookingFlightId, Integer bookingPassengerId, Integer bookingUserId) {
 		super();
-		this.id = id;
-		this.status = status;
-		this.confirmationCode = confirmationCode;
-		this.flightId = flightId;
-		this.passengerId = passengerId;
-		this.userId = userId;
-		this.guestEmail = "";
-		this.guestPhone = "";
+		this.bookingId = bookingId;
+		this.bookingStatus = bookingStatus;
+		this.bookingConfirmationCode = bookingConfirmationCode;
+		this.bookingFlightId = bookingFlightId;
+		this.bookingPassengerId = bookingPassengerId;
+		this.bookingUserId = bookingUserId;
+		this.bookingGuestEmail = "";
+		this.bookingGuestPhone = "";
 	}
 
-	public BookingWithReferenceData(Integer id, Integer status, String confirmationCode, 
-	Integer flightId, Integer passengerId, Integer userId, String guestEmail, String guestPhone) {
+	public BookingWithReferenceData(Integer bookingId, String bookingStatus, String bookingConfirmationCode, 
+	Integer bookingFlightId, Integer bookingPassengerId, Integer bookingUserId, String bookingGuestEmail, String bookingGuestPhone) {
 		super();
-		this.id = id;
-		this.status = status;
-		this.confirmationCode = confirmationCode;
-		this.flightId = flightId;
-		this.passengerId = passengerId;
-		this.userId = userId;
-		this.guestEmail = guestEmail;
-		this.guestPhone = guestPhone;
+		this.bookingId = bookingId;
+		this.bookingStatus = bookingStatus;
+		this.bookingConfirmationCode = bookingConfirmationCode;
+		this.bookingFlightId = bookingFlightId;
+		this.bookingPassengerId = bookingPassengerId;
+		this.bookingUserId = bookingUserId;
+		this.bookingGuestEmail = bookingGuestEmail;
+		this.bookingGuestPhone = bookingGuestPhone;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getBookingId() {
+		return bookingId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setBookingId(Integer bookingId) {
+		this.bookingId = bookingId;
 	}
 
-	public Integer getStatus() {
-		return status;
+	public String getBookingStatus() {
+		return bookingStatus;
 	}
 
-	public void setstatus(Integer status) {
-		this.status = status;
+	public void setBookingstatus(String bookingStatus) {
+		this.bookingStatus = bookingStatus;
 	}
 
-	public String getConfirmationCode() {
-		return confirmationCode;
+	public String getBookingConfirmationCode() {
+		return bookingConfirmationCode;
 	}
 
-	public void setConfirmationCode(String confirmationCode) {
-		this.confirmationCode = confirmationCode;
+	public void setBookingConfirmationCode(String bookingConfirmationCode) {
+		this.bookingConfirmationCode = bookingConfirmationCode;
 	}
 
-	public Integer getFlightId() {
-		return flightId;
+	public Integer getBookingFlightId() {
+		return bookingFlightId;
 	}
 
-	public void setFlightId(Integer flightId) {
-		this.flightId = flightId;
+	public void setBookingFlightId(Integer bookingFlightId) {
+		this.bookingFlightId = bookingFlightId;
 	}
 
-	public Integer getPassengerId() {
-		return passengerId;
+	public Integer getBookingPassengerId() {
+		return bookingPassengerId;
 	}
 
-	public void setPassengerId(Integer passengerId) {
-		this.passengerId = passengerId;
+	public void setBookingPassengerId(Integer bookingPassengerId) {
+		this.bookingPassengerId = bookingPassengerId;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public Integer getBookingUserId() {
+		return bookingUserId;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setBookingUserId(Integer bookingUserId) {
+		this.bookingUserId = bookingUserId;
 	}
 
-	public String getGuestEmail() {
-		return guestEmail;
+	public String getBookingGuestEmail() {
+		return bookingGuestEmail;
 	}
 
-	public void setGuestEmail(String guestEmail) {
-		this.guestEmail = guestEmail;
+	public void setBookingGuestEmail(String bookingGuestEmail) {
+		this.bookingGuestEmail = bookingGuestEmail;
 	}
 
-	public String getGuestPhone() {
-		return guestPhone;
+	public String getBookingGuestPhone() {
+		return bookingGuestPhone;
 	}
 
-	public void setGuestPhone(String guestPhone) {
-		this.guestPhone = guestPhone;
+	public void setBookingGuestPhone(String bookingGuestPhone) {
+		this.bookingGuestPhone = bookingGuestPhone;
 	}
 }

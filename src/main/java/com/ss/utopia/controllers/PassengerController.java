@@ -49,15 +49,16 @@ public class PassengerController {
 		
 		List<Passenger> passengers = passengerService.findAll();
 		return !passengers.isEmpty()
-		? new ResponseEntity<>(passengers, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(passengers, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<Object> findById(@PathVariable String id) {
+	@GetMapping("{passengerId}")
+	public ResponseEntity<Object> findById(@PathVariable String passengerId)
+	throws ConnectException, SQLException {
 
 		try {
-			Integer formattedId = Integer.parseInt(id);
+			Integer formattedId = Integer.parseInt(passengerId);
 			Passenger passenger = passengerService.findById(formattedId);
 			return new ResponseEntity<>(passenger, HttpStatus.OK);
 
@@ -123,17 +124,17 @@ public class PassengerController {
 		System.out.println(passengerMap);
 
 		try {
-			Integer bookingId = Integer.parseInt(passengerMap.get("bookingId"));
-			String passportId = passengerMap.get("passportId");
-			String firstName = passengerMap.get("firstName");
-			String lastName = passengerMap.get("lastName");
-			Date dateOfBirth = Date.valueOf(passengerMap.get("dateOfBirth"));
-			String sex = passengerMap.get("sex");
-			String address = passengerMap.get("address");
-			Boolean isVeteran = Boolean.parseBoolean(passengerMap.get("isVeteran"));
+			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
+			String passengerPassportId = passengerMap.get("passengerPassportId");
+			String passengerFirstName = passengerMap.get("passengerFirstName");
+			String passengerLastName = passengerMap.get("passengerLastName");
+			Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+			String passengerSex = passengerMap.get("passengerSex");
+			String passengerAddress = passengerMap.get("passengerAddress");
+			Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
 
 			Passenger newPassenger = passengerService.insert(
-				bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran
+				passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
 			);
 			return new ResponseEntity<>(newPassenger, HttpStatus.CREATED);
 
@@ -158,18 +159,18 @@ public class PassengerController {
 		System.out.println(passengerMap);
 
 		try {
-			Integer id = Integer.parseInt(passengerMap.get("id"));
-			Integer bookingId = Integer.parseInt(passengerMap.get("bookingId"));
-			String passportId = passengerMap.get("passportId");
-			String firstName = passengerMap.get("firstName");
-			String lastName = passengerMap.get("lastName");
-			Date dateOfBirth = Date.valueOf(passengerMap.get("dateOfBirth"));
-			String sex = passengerMap.get("sex");
-			String address = passengerMap.get("address");
-			Boolean isVeteran = Boolean.parseBoolean(passengerMap.get("isVeteran"));
+			Integer passengerId = Integer.parseInt(passengerMap.get("passengerId"));
+			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
+			String passengerPassportId = passengerMap.get("passengerPassportId");
+			String passengerFirstName = passengerMap.get("passengerFirstName");
+			String passengerLastName = passengerMap.get("passengerLastName");
+			Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+			String passengerSex = passengerMap.get("passengerSex");
+			String passengerAddress = passengerMap.get("passengerAddress");
+			Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
 
 			Passenger newPassenger = passengerService.update(
-				id, bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran
+				passengerId, passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
 			);
 
 			System.out.println("======RETURN=======");
@@ -187,12 +188,13 @@ public class PassengerController {
 		} 
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<Object> deleteById(@PathVariable String id) 
+	@DeleteMapping("{passengerId}")
+	public ResponseEntity<Object> delete(@PathVariable String passengerId) 
+
 	throws ConnectException, SQLException {
 
 		try {
-			Integer formattedId = Integer.parseInt(id);
+			Integer formattedId = Integer.parseInt(passengerId);
 			passengerService.delete(formattedId);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 

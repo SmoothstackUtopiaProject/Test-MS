@@ -47,8 +47,8 @@ public class RouteService {
 	}
 
 	public Route insert(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
-		Optional<Airport> optionalDest = routeRepository.findAirportByIataId(route.getDestination().getIataId());
-		Optional<Airport> optionalOrig = routeRepository.findAirportByIataId(route.getOrigin().getIataId());
+		Optional<Airport> optionalDest = routeRepository.findAirportByIataId(route.getDestination().getAirportIataId());
+		Optional<Airport> optionalOrig = routeRepository.findAirportByIataId(route.getOrigin().getAirportIataId());
 		
 		if(!optionalDest.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getDestination() + " exist.");
 		if(!optionalOrig.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getOrigin() + " exist.");
@@ -59,8 +59,8 @@ public class RouteService {
 		route.setDestination(dest);
 		route.setOrigin(orig);
 			
-		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getIataId(), orig.getIataId());
-		if(!existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getIataId() + " to destination: " + dest.getIataId() + ".");
+		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getAirportIataId(), orig.getAirportIataId());
+		if(!existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getAirportIataId() + " to destination: " + dest.getAirportIataId() + ".");
 		return routeRepository.save(route);
 	}
 
