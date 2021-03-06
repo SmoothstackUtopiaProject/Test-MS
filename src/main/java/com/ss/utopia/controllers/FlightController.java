@@ -1,7 +1,10 @@
 package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ss.utopia.exceptions.AirplaneAlreadyInUseException;
+import com.ss.utopia.exceptions.FlightAlreadyExistsException;
 import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
 import com.ss.utopia.models.HttpError;
@@ -62,29 +67,64 @@ public class FlightController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Flight> create(@Valid @RequestBody Flight flight ) {
-		return new ResponseEntity<>(flightService.insert(flight), HttpStatus.CREATED);
+	public ResponseEntity<Object> create(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
+		
+		try {
+			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
+			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
+			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
+			Integer duration = Integer.parseInt(flightMap.get("duration"));
+			String status = flightMap.get("status");
+			
+			return new ResponseEntity<>(flightService.insert(routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
+		} catch (AirplaneAlreadyInUseException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
+		} 
 	}
 	
-	// @PutMapping
-	// public ResponseEntity<Flight> update(@Valid @RequestBody Flight flight){
-	// 	return flightService.findById(flightId)
-	// 			.map(flightObj -> {
-	// 				flight.setId(flightObj.getId());
-	// 				return ResponseEntity.ok(flightService.update(flight));
-	// 			})
-	// 			.orElseGet(() -> ResponseEntity.notFound().build());
-	// }
+	@PutMapping
+	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
+		
+		try {
+			Integer id = Integer.parseInt(flightMap.get("id"));
+			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
+			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
+			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
+			Integer duration = Integer.parseInt(flightMap.get("duration"));
+			String status = flightMap.get("status");
+			
+			return new ResponseEntity<>(flightService.update(id, routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
+		} catch (AirplaneAlreadyInUseException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
+		} catch (FlightNotFoundException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
+		} 
+	}
 	
-	// @DeleteMapping("{flightId}")
-	// public ResponseEntity<Flight> deleteById(@PathVariable Integer flightId) {
-	// 	return flightService.findById(flightId)
-	// 			.map(flight -> {
-	// 				flightService.deleteById(flightId);
-	// 				return ResponseEntity.ok(flight);
-	// 			})
-	// 			.orElseGet(() -> ResponseEntity.notFound().build());
-	// }
+	/*
+	 * @PutMapping public ResponseEntity<Object> update(@RequestBody Flight flight){
+	 * try { Flight newAirplane = flightService.update(flight); return new
+	 * ResponseEntity<>(newAirplane, HttpStatus.OK); } catch
+	 * (FlightNotFoundException err) { return new ResponseEntity<>(new
+	 * HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND); }
+	 * catch(ConnectException | IllegalArgumentException | SQLException err) {
+	 * return new ResponseEntity<>(new HttpError("Cannot process flightId: " +
+	 * flightId, 400), HttpStatus.BAD_REQUEST); } }
+	 */
+	
+	@DeleteMapping("{flightId}")
+	public ResponseEntity<Object> deleteById(@PathVariable Integer flightId) {
+		try {
+			flightService.deleteById(flightId);
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} catch(FlightNotFoundException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+		} catch(ConnectException | IllegalArgumentException | SQLException err) {
+			return new ResponseEntity<>(new HttpError("Cannot process flightId: " + flightId, 400), HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	@PostMapping("/search")
 	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
@@ -97,16 +137,16 @@ public class FlightController {
 	
 	@ExceptionHandler(ConnectException.class)
 	public ResponseEntity<Object> invalidConnection() {
-		return new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Object> invalidMessage() {
-		return new ResponseEntity<>("Invalid Message Content!", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new HttpError("Invalid HTTP message content.", 400), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<Object> invalidSQL() {
-		return new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
 	}
 }
