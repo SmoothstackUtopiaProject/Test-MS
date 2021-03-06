@@ -61,6 +61,7 @@ public class Flight {
 			@NotNull(message = "Duration should not be empty") Integer duration,
 			@NotNull(message = "Status should not be empty") String status) {
 		super();
+
 		this.id = id;
 		this.routeId = routeId;
 		this.airplaneId = airplaneId;
@@ -69,7 +70,6 @@ public class Flight {
 		this.duration = duration;
 		this.status = status;
 	}
-
 
 	public Flight(Integer routeId, Integer airplaneId, Timestamp dateTime, Integer seatingId, Integer duration,String status) 
 	{

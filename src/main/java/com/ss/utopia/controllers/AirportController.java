@@ -2,6 +2,7 @@ package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ss.utopia.exceptions.AirportAlreadyExistsException;
 import com.ss.utopia.exceptions.AirportNotFoundException;
 import com.ss.utopia.models.Airport;
@@ -47,16 +45,16 @@ public class AirportController {
 		
 		List<Airport> airports = airportService.findAll();
 		return !airports.isEmpty()
-		? new ResponseEntity<>(airports, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(airports, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
-	@GetMapping("/{iataId}")
-	public ResponseEntity<Object> findByIataId(@PathVariable String iataId)
+	@GetMapping("/{airportIataId}")
+	public ResponseEntity<Object> findByIataId(@PathVariable String airportIataId)
 	throws ConnectException, SQLException {
 
 		try {
-			Airport airport = airportService.findByIataId(iataId);
+			Airport airport = airportService.findByIataId(airportIataId);
 			return new ResponseEntity<>(airport, HttpStatus.OK);
 
 		} catch(AirportNotFoundException err) {
@@ -67,42 +65,45 @@ public class AirportController {
 		}
 	}
 
-	@GetMapping("/search")
-	public ResponseEntity<Object> findByCityName(@RequestParam String city)
+	@PostMapping("/search")
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap)
 	throws ConnectException, SQLException {
 
-		List<Airport> airports = airportService.findByCityName(city);
+		List<Airport> airports = airportService.findBySearchAndFilter(filterMap);
 		return !airports.isEmpty()
-		? new ResponseEntity<>(airports, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(airports, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody String body)
+	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> airportMap)
 	throws ConnectException, SQLException {
 
 		try {
-			Airport airport = new ObjectMapper().readValue(body, Airport.class);
-			Airport newAirport = airportService.insert(airport.getIataId(), airport.getCity());
+			String airportIataId = airportMap.get("airportIataId");
+			String airportCityName = airportMap.get("airportCityName");
+			Airport newAirport = airportService.insert(airportIataId, airportCityName);
 			return new ResponseEntity<>(newAirport, HttpStatus.CREATED);
 
 		} catch(AirportAlreadyExistsException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 409), HttpStatus.CONFLICT);
 
-		} catch(IllegalArgumentException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
-
-		} catch(JsonProcessingException | NullPointerException err) {
-			return new ResponseEntity<>(new HttpError("Invalid Airport formatting!", 404), HttpStatus.BAD_REQUEST);
+		} catch(IllegalArgumentException | NullPointerException err) {
+			String errorMessage = "Cannot process Airport, " + err.getMessage()
+			.substring(0, 1).toLowerCase() + err.getMessage()
+			.substring(1, err.getMessage().length());
+			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@PutMapping("{iataId}")
-	public ResponseEntity<Object> update(@PathVariable String iataId, @RequestBody String body)
+	@PutMapping
+	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> airportMap)
 	throws ConnectException, SQLException {
 
 		try {
-			Airport newAirport = airportService.update(iataId, body);
+			String airportIataId = airportMap.get("airportIataId");
+			String airportCityName = airportMap.get("airportCityName");
+			Airport newAirport = airportService.update(airportIataId, airportCityName);
 			return new ResponseEntity<>(newAirport, HttpStatus.ACCEPTED);
 
 		} catch(AirportNotFoundException err) {
@@ -116,18 +117,22 @@ public class AirportController {
 		} 
 	}
 
-	@DeleteMapping("{iataId}")
-	public ResponseEntity<Object> delete(@PathVariable String iataId) 
+	@DeleteMapping("{airportIataId}")
+	public ResponseEntity<Object> delete(@PathVariable String airportIataId) 
 	throws ConnectException, SQLException {
 
 		try {
-			airportService.delete(iataId);
+			airportService.delete(airportIataId);
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
-		} catch(IllegalArgumentException | NullPointerException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
 		} catch(AirportNotFoundException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+		
+		} catch(IllegalArgumentException | NullPointerException err) {
+			String errorMessage = "Cannot process Airport, " + err.getMessage()
+			.substring(0, 1).toLowerCase() + err.getMessage()
+			.substring(1, err.getMessage().length());
+			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
 		}
 	}
 

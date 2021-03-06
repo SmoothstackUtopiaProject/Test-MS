@@ -87,8 +87,8 @@ public class BookingGuestService {
 
 		try {
 			BookingGuest bookingGuest = findByBookingId(bookingId);
-			bookingGuest.setEmail(formattedEmail);
-			bookingGuest.setPhone(formattedPhone);
+			bookingGuest.setBookingEmail(formattedEmail);
+			bookingGuest.setBookingPhone(formattedPhone);
 			return bookingGuestRepository.save(bookingGuest);
 		} catch(BookingGuestNotFoundException err) {
 			return bookingGuestRepository.save(new BookingGuest(bookingId, formattedEmail, formattedPhone));

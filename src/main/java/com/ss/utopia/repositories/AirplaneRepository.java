@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface AirplaneRepository extends JpaRepository<Airplane, Integer> {
 	
 	@Query(value = "SELECT * FROM airplane WHERE type_id = ?1", nativeQuery = true)
-	List<Airplane> findByTypeId(Integer typeId);
+	List<Airplane> findAirplanesByTypeId(Integer airplaneTypeId);
 	
 	@Query(value = "SELECT * FROM airplane_type WHERE id = ?1", nativeQuery = true)
-	Optional<AirplaneType> findAirplaneTypeById(Integer id);
+	Optional<AirplaneType> findAirplaneTypeByAirplaneTypeId(Integer airplaneTypeId);
 }
