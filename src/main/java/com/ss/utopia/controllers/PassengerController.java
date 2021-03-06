@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.PassengerAlreadyExistsException;
@@ -47,8 +46,8 @@ public class PassengerController {
 		
 		List<Passenger> passengers = passengerService.findAll();
 		return !passengers.isEmpty()
-		? new ResponseEntity<>(passengers, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(passengers, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("{id}")
@@ -71,51 +70,14 @@ public class PassengerController {
 		}
 	}
 
-	@GetMapping("/booking/{id}")
-	public ResponseEntity<Object> findByBookingId(@PathVariable String id)
-	throws ConnectException, SQLException {
-
-		try {
-			Integer formattedId = Integer.parseInt(id);
-			List<Passenger> passengerList = passengerService.findByBookingId(formattedId);
-			return !passengerList.isEmpty()
-				? new ResponseEntity<>(passengerList, HttpStatus.OK)
-				: new ResponseEntity<>(new HttpError("No Passenger(s) with Booking ID: " + id + " exists.", 404), HttpStatus.NOT_FOUND);
-
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger Booking ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@GetMapping("/passport/{id}")
-	public ResponseEntity<Object> findByPassportId(@PathVariable String id)
-	throws ConnectException, SQLException {
-
-		try {
-			List<Passenger> passengerList = passengerService.findByPassportId(id);
-			return passengerList.isEmpty()
-				? new ResponseEntity<>(passengerList, HttpStatus.OK)
-				: new ResponseEntity<>(new HttpError("No Passenger with Passport ID: " + id + " exists.", 404), HttpStatus.NOT_FOUND);
-			
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger Passport ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
-	}
-
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestParam HashMap<String, String> filterMap)
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap)
 	throws ConnectException, SQLException {
 
 		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
 		return !passengers.isEmpty()
-		? new ResponseEntity<>(passengers, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			? new ResponseEntity<>(passengers, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping

@@ -25,7 +25,7 @@ public class TestMSController {
 	RestTemplate restTemplate;
 
 	@RequestMapping(path = "/services")
-	public ResponseEntity<Object> services(RequestEntity<String> incomingRequest) {
+	public ResponseEntity<Object> services() {
 		List<String> services = Arrays.asList(
 			"airplane-service",
 			"airport-service",
@@ -37,5 +37,10 @@ public class TestMSController {
 			"user-service"
 		);
 		return new ResponseEntity<>(services.toString(), HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "/actuator/health")
+	public ResponseEntity<Object> health() {
+		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
 	}
 }

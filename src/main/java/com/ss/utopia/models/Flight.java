@@ -52,9 +52,7 @@ public class Flight {
 	@Column(name = "available_seats", nullable = true)
 	private Integer availableSeats;
 
-	public Flight() {
-	};
-	
+	public Flight() {}
 	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice) {
 		super();
 		this.id = id;
@@ -64,7 +62,6 @@ public class Flight {
 		this.time = time;
 		this.seatPrice = seatPrice;
 	}
-	
 	
 	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice,
 			Integer availableSeats) {

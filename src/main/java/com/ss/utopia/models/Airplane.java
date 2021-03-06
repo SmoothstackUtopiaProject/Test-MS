@@ -14,34 +14,34 @@ public class Airplane {
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
-	private Integer id;
+	private Integer airplaneId;
 	
 	@NotNull(message = "Type ID should not be empty")
 	@Column(name = "type_id", nullable = false)
-	private Integer typeId;
+	private Integer airplaneTypeId;
 
 	public Airplane() {}
-	public Airplane(Integer typeId) {
-		this.typeId = typeId;
+	public Airplane(Integer airplaneTypeId) {
+		this.airplaneTypeId = airplaneTypeId;
 	}
-	public Airplane(Integer id, Integer typeId) {
-		this.id = id;
-		this.typeId = typeId;
-	}
-
-	public Integer getId() {
-		return id;
+	public Airplane(Integer airplaneId, Integer airplaneTypeId) {
+		this.airplaneId = airplaneId;
+		this.airplaneTypeId = airplaneTypeId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Integer getAirplaneId() {
+		return airplaneId;
 	}
 
-	public Integer getTypeId() {
-		return typeId;
+	public void setAirplaneId(Integer airplaneId) {
+		this.airplaneId = airplaneId;
 	}
 
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public Integer getAirplaneTypeId() {
+		return airplaneTypeId;
+	}
+
+	public void setAirplaneTypeId(Integer airplaneTypeId) {
+		this.airplaneTypeId = airplaneTypeId;
 	}
 }
