@@ -59,8 +59,8 @@ public class RouteService {
 		route.setDestination(dest);
 		route.setOrigin(orig);
 			
-		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getIataId(), orig.getIataId());
-		if(existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getIataId() + " to destination: " + dest.getIataId() + ".");
+		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getAirportIataId(), orig.getAirportIataId());
+		if(existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getAirportIataId() + " to destination: " + dest.getAirportIataId() + ".");
 
 		return routeRepository.save(route);
 	}
