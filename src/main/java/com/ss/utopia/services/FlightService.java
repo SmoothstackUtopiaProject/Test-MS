@@ -1,14 +1,9 @@
 package com.ss.utopia.services;
 
 import java.net.ConnectException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +16,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ss.utopia.exceptions.AirplaneAlreadyInUseException;
-import com.ss.utopia.exceptions.FlightAlreadyExistsException;
 import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
-import com.ss.utopia.models.Route;
 import com.ss.utopia.repositories.FlightRepository;
 
 // some random comment
@@ -116,6 +109,21 @@ public class FlightService {
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
+		
+		// Destination
+		String destination = "destination";
+		if(filterMap.keySet().contains(destination)) {
+			try {
+				List<Integer> routeIdList = routeService.findByDestination(filterMap.get(destination))
+						.stream().map(i -> i.getId())
+						.collect(Collectors.toList());
+				System.out.println(routeIdList);
+				System.out.println("======================================================================");
+				filteredFlights = filteredFlights.stream()
+				.filter(i -> routeIdList.contains(i.getRouteId()))
+				.collect(Collectors.toList());
+			} catch(Exception err){/*Do nothing*/}
+		}
 
 		// Origin Date
 		String originDate = "originDate";
@@ -134,7 +142,11 @@ public class FlightService {
 			throws ConnectException, IllegalArgumentException, SQLException, AirplaneAlreadyInUseException {
 		List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
 				.stream().filter(i -> 
-				Duration.between(dateTime.toLocalDateTime(), i.getDateTime().toLocalDateTime()).toHours() < 2)
+				Math.abs(Duration.between(
+						dateTime.toLocalDateTime(), 
+						i.getDateTime().toLocalDateTime()
+						).toHours()) < 2
+				)
 				.collect(Collectors.toList());
 		if(!flightsWithAirplaneId.isEmpty())
 			throw new AirplaneAlreadyInUseException("Airplane with id: " + airplaneId +" already has flights within two hours of what you are trying to create");
@@ -149,23 +161,12 @@ public class FlightService {
 		
 		List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
 				.stream().filter(i -> 
-				Duration.between(
+				Math.abs(Duration.between(
 						dateTime.toLocalDateTime(), 
 						i.getDateTime().toLocalDateTime()
-						).toHours() < 2
+						).toHours()) < 2
 				)
 				.collect(Collectors.toList());
-		
-		System.out.println(flightsWithAirplaneId);
-		
-		System.out.println(
-				Duration.between(
-						Timestamp.valueOf("2021-02-03 5:00:00.0000000").toLocalDateTime(), 
-						Timestamp.valueOf("2021-02-04 5:00:00.0000000").toLocalDateTime() 
-						).toHours()
-				);
-		
-		System.out.println("====================================");
 		
 		if(!flightsWithAirplaneId.isEmpty())
 			throw new AirplaneAlreadyInUseException("Airplane with id: " + airplaneId +" already has flights within two hours of what you are trying to create");
