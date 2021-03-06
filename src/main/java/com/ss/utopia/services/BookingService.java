@@ -86,8 +86,8 @@ public class BookingService {
 			}
 			
 			for(Passenger passenger : passengers) {
-				if(passenger.getBookingId().equals(newBookingWithReferenceData.getBookingId())) {
-					newBookingWithReferenceData.setBookingPassengerId(passenger.getId());
+				if(passenger.getPassengerBookingId().equals(newBookingWithReferenceData.getBookingId())) {
+					newBookingWithReferenceData.setBookingPassengerId(passenger.getPassengerId());
 				}
 			}
 			bookingsWithNames.add(newBookingWithReferenceData);
@@ -120,7 +120,7 @@ public class BookingService {
 		if(optionalFlightBooking.isPresent()) bookingWithReferenceData.setBookingFlightId(optionalFlightBooking.get().getFlightId());
 
 		Optional<Passenger> optionalPassenger = passengerRepository.findByBookingId(bookingId);
-		if(optionalPassenger.isPresent()) bookingWithReferenceData.setBookingPassengerId(optionalPassenger.get().getId());
+		if(optionalPassenger.isPresent()) bookingWithReferenceData.setBookingPassengerId(optionalPassenger.get().getPassengerId());
 
 		try {
 			BookingUser bookingUser = bookingUserService.findByBookingId(bookingId);

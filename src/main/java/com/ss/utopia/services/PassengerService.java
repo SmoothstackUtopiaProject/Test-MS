@@ -35,14 +35,14 @@ public class PassengerService {
 		return optionalPassenger.get();
 	}
 
-	public Passenger findByBookingId(Integer bookingId) throws PassengerNotFoundException {
-		Optional<Passenger> optionalPassenger = passengerRepository.findByBookingId(bookingId);
-		if(!optionalPassenger.isPresent()) throw new PassengerNotFoundException("No Passenger with Booking ID: " + bookingId + " exist!");
+	public Passenger findByBookingId(Integer passengerBookingId) throws PassengerNotFoundException {
+		Optional<Passenger> optionalPassenger = passengerRepository.findByBookingId(passengerBookingId);
+		if(!optionalPassenger.isPresent()) throw new PassengerNotFoundException("No Passenger with Booking ID: " + passengerBookingId + " exist!");
 		return optionalPassenger.get();
 	}
 
-	public List<Passenger> findByPassportId(String passportId) {
-		return passengerRepository.findByPassportId(passportId);
+	public List<Passenger> findByPassportId(String passengerPassportId) {
+		return passengerRepository.findByPassportId(passengerPassportId);
 	}
 
 	public List<Passenger> findBySearchAndFilter(HashMap<String, String> filterMap) {
@@ -58,133 +58,133 @@ public class PassengerService {
 			try {
 				Integer parsedPassengerId = Integer.parseInt(filterMap.get(passengerId));
 				passengers = passengers.stream()
-				.filter(i -> i.getId().equals(parsedPassengerId))
+				.filter(i -> i.getPassengerId().equals(parsedPassengerId))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Booking ID
-		String bookingId = "bookingId";
-		if(filterMap.keySet().contains(bookingId)) {
+		String passengerBookingId = "passengerBookingId";
+		if(filterMap.keySet().contains(passengerBookingId)) {
 			try {
-				Integer parsedBookingId = Integer.parseInt(filterMap.get(bookingId));
+				Integer parsedPassengerBookingId = Integer.parseInt(filterMap.get(passengerBookingId));
 				passengers = passengers.stream()
-				.filter(i -> i.getBookingId().equals(parsedBookingId))
+				.filter(i -> i.getPassengerBookingId().equals(parsedPassengerBookingId))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Passport ID
-		String passportId = "passportId";
-		if(filterMap.keySet().contains(passportId)) {
+		String passengerPassportId = "passengerPassportId";
+		if(filterMap.keySet().contains(passengerPassportId)) {
 			try {
-				String parsedPassportId = filterMap.get(passportId);
+				String parsedPassengerPassportId = filterMap.get(passengerPassportId);
 				passengers = passengers.stream()
-				.filter(i -> i.getPassportId().equals(parsedPassportId))
+				.filter(i -> i.getPassengerPassportId().equals(parsedPassengerPassportId))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// First Name
-		String firstName = "firstName";
-		if(filterMap.keySet().contains(firstName)) {
+		String passengerFirstName = "passengerFirstName";
+		if(filterMap.keySet().contains(passengerFirstName)) {
 			try {
-				String parsedFirstName = filterMap.get(firstName);
+				String parsedPassengerFirstName = filterMap.get(passengerFirstName);
 				passengers = passengers.stream()
-				.filter(i -> i.getFirstName().equals(parsedFirstName))
+				.filter(i -> i.getPassengerFirstName().equals(parsedPassengerFirstName))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Last Name
-		String lastName = "lastName";
-		if(filterMap.keySet().contains(lastName)) {
+		String passengerLastName = "passengerLastName";
+		if(filterMap.keySet().contains(passengerLastName)) {
 			try {
-				String parsedLastName = filterMap.get(lastName);
+				String parsedPassengerLastName = filterMap.get(passengerLastName);
 				passengers = passengers.stream()
-				.filter(i -> i.getLastName().equals(parsedLastName))
+				.filter(i -> i.getPassengerLastName().equals(parsedPassengerLastName))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// DateOfBirth
-		String dateOfBirth = "dateOfBirth";
-		if(filterMap.keySet().contains(dateOfBirth)) {
+		String passengerDateOfBirth = "passengerDateOfBirth";
+		if(filterMap.keySet().contains(passengerDateOfBirth)) {
 			try {
-				Date parsedDateOfBirth = Date.valueOf(filterMap.get(dateOfBirth));
+				Date parsedPassengerDateOfBirth = Date.valueOf(filterMap.get(passengerDateOfBirth));
 				passengers = passengers.stream()
-				.filter(i -> i.getDateOfBirth().equals(parsedDateOfBirth))
+				.filter(i -> i.getPassengerDateOfBirth().equals(parsedPassengerDateOfBirth))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Sex
-		String sex = "sex";
-		if(filterMap.keySet().contains(sex)) {
+		String passengerSex = "passengerSex";
+		if(filterMap.keySet().contains(passengerSex)) {
 			try {
-				String parsedSex = filterMap.get(sex);
+				String parsedPassengerSex = filterMap.get(passengerSex);
 				passengers = passengers.stream()
-				.filter(i -> i.getSex().equals(parsedSex))
+				.filter(i -> i.getPassengerSex().equals(parsedPassengerSex))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Address
-		String address = "address";
-		if(filterMap.keySet().contains(address)) {
+		String passengerAddress = "passengerAddress";
+		if(filterMap.keySet().contains(passengerAddress)) {
 			try {
-				String parsedAddress = filterMap.get(address);
+				String parsedPassengerAddress = filterMap.get(passengerAddress);
 				passengers = passengers.stream()
-				.filter(i -> i.getAddress().equals(parsedAddress))
+				.filter(i -> i.getPassengerAddress().equals(parsedPassengerAddress))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Veteran
-		String isVeteran = "isVeteran";
-		if(filterMap.keySet().contains(isVeteran)) {
+		String passengerIsVeteran = "passengerIsVeteran";
+		if(filterMap.keySet().contains(passengerIsVeteran)) {
 			try {
-				Boolean parsedVeteran = Boolean.valueOf(filterMap.get(isVeteran));
+				Boolean parsedPassengerIsVeteran = Boolean.valueOf(filterMap.get(passengerIsVeteran));
 				passengers = passengers.stream()
-				.filter(i -> i.getIsVeteran().equals(parsedVeteran))
+				.filter(i -> i.getPassengerIsVeteran().equals(parsedPassengerIsVeteran))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
 		// Age - Exact Match
-		String age = "age";
-		if(filterMap.keySet().contains(age)) {
+		String passengerAge = "passengerAge";
+		if(filterMap.keySet().contains(passengerAge)) {
 			try {
-				Integer parsedAge = Integer.parseInt(filterMap.get(age));
+				Integer parsedPassengerAge = Integer.parseInt(filterMap.get(passengerAge));
 				passengers = passengers.stream()
-				.filter(i -> Period.between(i.getDateOfBirth().toLocalDate(), LocalDate.now()).getYears() == parsedAge)
+				.filter(i -> Period.between(i.getPassengerDateOfBirth().toLocalDate(), LocalDate.now()).getYears() == parsedPassengerAge)
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}	
 
 		// Age - Greater Than
-		String ageGreaterThan = "ageGreaterThan";
-		if(filterMap.keySet().contains(ageGreaterThan)) {
+		String passengerAgeGreaterThan = "passengerAgeGreaterThan";
+		if(filterMap.keySet().contains(passengerAgeGreaterThan)) {
 			try {
-				Integer parsedAgeGreaterThan = Integer.parseInt(filterMap.get(ageGreaterThan));
+				Integer parsedPassengerAgeGreaterThan = Integer.parseInt(filterMap.get(passengerAgeGreaterThan));
 				passengers = passengers.stream()
-				.filter(i -> Period.between(i.getDateOfBirth().toLocalDate(), LocalDate.now()).getYears() > parsedAgeGreaterThan)
+				.filter(i -> Period.between(i.getPassengerDateOfBirth().toLocalDate(), LocalDate.now()).getYears() > parsedPassengerAgeGreaterThan)
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}	
 
 		// Age - Less Than
-		String ageLessThan = "ageLessThan";
-		if(filterMap.keySet().contains(ageLessThan)) {
+		String passengerAgeLessThan = "passengerAgeLessThan";
+		if(filterMap.keySet().contains(passengerAgeLessThan)) {
 			try {
-				Integer parsedAgeLessThan = Integer.parseInt(filterMap.get(ageLessThan));
+				Integer parsedPassengerAgeLessThan = Integer.parseInt(filterMap.get(passengerAgeLessThan));
 				passengers = passengers.stream()
-				.filter(i -> Period.between(i.getDateOfBirth().toLocalDate(), LocalDate.now()).getYears() < parsedAgeLessThan)
+				.filter(i -> Period.between(i.getPassengerDateOfBirth().toLocalDate(), LocalDate.now()).getYears() < parsedPassengerAgeLessThan)
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 
-		// Search - (applied last due to save CPU usage
+		// Search - (applied last due to save CPU uspassengerAge
 		return applySearch(passengers, filterMap);
 	}
 
@@ -206,14 +206,14 @@ public class PassengerService {
 					String passengerAsString = mapper.writeValueAsString(passenger)
 					.toLowerCase()
 					.replace("passenderid", "")
-					.replace("bookingid", "")
-					.replace("passportid", "")
-					.replace("firstname", "")
-					.replace("lastname", "")
-					.replace("dateofbirth", "")
-					.replace("sex", "")
-					.replace("address", "")
-					.replace("isveteran", "");
+					.replace("passengerbookingid", "")
+					.replace("passengerpassportid", "")
+					.replace("passengerfirstname", "")
+					.replace("passengerlastname", "")
+					.replace("passengerdateofbirth", "")
+					.replace("passengersex", "")
+					.replace("passengeraddress", "")
+					.replace("passengerisveteran", "");
 					
 					for(String term : splitTerms) {
 						if(!passengerAsString.contains(term)) {
@@ -233,26 +233,26 @@ public class PassengerService {
 		return passengersWithSearchTerms;
 	}
 
-	public Passenger insert(Integer bookingId, String passportId, String firstName, 
-		String lastName, Date dateOfBirth, String sex, String address,Boolean isVeteran) 
+	public Passenger insert(Integer passengerBookingId, String passengerPassportId, String passengerFirstName, 
+		String passengerLastName, Date passengerDateOfBirth, String passengerSex, String passengerAddress,Boolean passengerIsVeteran) 
 		throws PassengerAlreadyExistsException {
 
-		List<Passenger> passengerExistCheck = findByPassportId(passportId);
+		List<Passenger> passengerExistCheck = findByPassportId(passengerPassportId);
 		if(!passengerExistCheck.isEmpty()) throw new PassengerAlreadyExistsException(
-			"A Passenger with the Passport ID: " + passportId + " already exists.");
+			"A Passenger with the Passport ID: " + passengerPassportId + " already exists.");
 
 		return passengerRepository.save(new Passenger(
-			bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran
+			passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
 		));
 	}
 
-	public Passenger update(Integer id, Integer bookingId, String passportId, String firstName, 
-	String lastName, Date dateOfBirth, String sex, String address,Boolean isVeteran) 
+	public Passenger update(Integer id, Integer passengerBookingId, String passengerPassportId, String passengerFirstName, 
+	String passengerLastName, Date passengerDateOfBirth, String passengerSex, String passengerAddress,Boolean passengerIsVeteran) 
 	throws PassengerNotFoundException {	
 
 		findById(id);
 		return passengerRepository.save(
-			new Passenger(id, bookingId, passportId, firstName, lastName, dateOfBirth, sex, address, isVeteran)
+			new Passenger(id, passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran)
 		);
 	}
 
