@@ -88,7 +88,6 @@ public class UserService {
 	}
 	
 	public User verifyUser(String email, String password) throws UserNotFoundException, IncorrectPasswordException {
-		System.out.println("test");
 		Optional<User> checkUser = userRepository.findByEmail(email);
 		
 		if(!checkUser.isPresent()) {

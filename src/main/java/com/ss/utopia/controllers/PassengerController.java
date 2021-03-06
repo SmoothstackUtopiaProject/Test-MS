@@ -3,7 +3,6 @@ package com.ss.utopia.controllers;
 import java.net.ConnectException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ss.utopia.exceptions.PassengerAlreadyExistsException;
 import com.ss.utopia.exceptions.PassengerNotFoundException;
 import com.ss.utopia.models.Passenger;
@@ -74,15 +71,19 @@ public class PassengerController {
 	}
 
 	@GetMapping("/booking/{id}")
-	public ResponseEntity<Object> findByBookingId(@PathVariable String id) {
+	public ResponseEntity<Object> findByBookingId(@PathVariable String bookingId) {
 
 		try {
-			Integer formattedId = Integer.parseInt(id);
-			List<Passenger> passengerList = passengerService.findByBookingId(formattedId);
-			return !passengerList.isEmpty()
-				? new ResponseEntity<>(passengerList, HttpStatus.OK)
-				: new ResponseEntity<>(new HttpError("No Passenger(s) with Booking ID: " + id + " exists.", 404), HttpStatus.NOT_FOUND);
+			Integer formattedBookingId = Integer.parseInt(bookingId);
+			Passenger passenger = passengerService.findByBookingId(formattedBookingId);
+			return new ResponseEntity<>(passenger, HttpStatus.OK);
+			// return !passengerList.isEmpty()
+			// 	? new ResponseEntity<>(passengerList, HttpStatus.OK)
+			// 	: new ResponseEntity<>(new HttpError("No Passenger(s) with Booking ID: " + bookingId + " exists.", 404), HttpStatus.NOT_FOUND);
 
+		} catch (PassengerNotFoundException err) {
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+		
 		} catch(IllegalArgumentException | NullPointerException err) {
 			String errorMessage = "Cannot process Passenger Booking ID " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
@@ -120,9 +121,6 @@ public class PassengerController {
 	@PostMapping
 	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> passengerMap) {
 
-		System.out.println("======================");
-		System.out.println(passengerMap);
-
 		try {
 			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
 			String passengerPassportId = passengerMap.get("passengerPassportId");
@@ -155,9 +153,6 @@ public class PassengerController {
 	@PutMapping
 	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> passengerMap) {
 
-		System.out.println("======================");
-		System.out.println(passengerMap);
-
 		try {
 			Integer passengerId = Integer.parseInt(passengerMap.get("passengerId"));
 			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
@@ -172,15 +167,12 @@ public class PassengerController {
 			Passenger newPassenger = passengerService.update(
 				passengerId, passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
 			);
-
-			System.out.println("======RETURN=======");
-			System.out.println(new ObjectMapper().writeValueAsString(newPassenger));
 			return new ResponseEntity<>(newPassenger, HttpStatus.ACCEPTED);
 
 		} catch(PassengerNotFoundException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
 
-		} catch(IllegalArgumentException | NullPointerException | JsonProcessingException err) {
+		} catch(IllegalArgumentException | NullPointerException err) {
 			String errorMessage = "Cannot process Passenger, " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
 			.substring(1, err.getMessage().length());

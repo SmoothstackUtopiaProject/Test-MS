@@ -16,9 +16,6 @@ import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
 import com.ss.utopia.repositories.FlightRespository;
 
-// some random comment
-// this is a comment
-
 @Service
 public class FlightService {
 
