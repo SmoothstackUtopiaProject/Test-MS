@@ -46,6 +46,7 @@ public class PassengerService {
 	}
 
 	public List<Passenger> findBySearchAndFilter(HashMap<String, String> filterMap) {
+
 		List<Passenger> passengers = findAll();
 		if(!filterMap.keySet().isEmpty()) passengers = applyFilters(passengers, filterMap);
 		return passengers;
