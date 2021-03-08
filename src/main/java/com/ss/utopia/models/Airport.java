@@ -18,7 +18,6 @@ public class Airport {
 
 	public Airport() {}
 	public Airport(String airportIataId, String airportCityName) {
-		super();
 		this.airportIataId = airportIataId;
 		this.airportCityName = airportCityName;
 	}

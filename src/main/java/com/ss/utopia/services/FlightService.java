@@ -99,8 +99,6 @@ public class FlightService {
 				List<Integer> routeIdList = routeService.findByOrigin(filterMap.get(origin))
 						.stream().map(i -> i.getId())
 						.collect(Collectors.toList());
-				System.out.println(routeIdList);
-				System.out.println("======================================================================");
 				filteredFlights = filteredFlights.stream()
 				.filter(i -> routeIdList.contains(i.getRouteId()))
 				.collect(Collectors.toList());
@@ -114,8 +112,6 @@ public class FlightService {
 				List<Integer> routeIdList = routeService.findByDestination(filterMap.get(destination))
 						.stream().map(i -> i.getId())
 						.collect(Collectors.toList());
-				System.out.println(routeIdList);
-				System.out.println("======================================================================");
 				filteredFlights = filteredFlights.stream()
 				.filter(i -> routeIdList.contains(i.getRouteId()))
 				.collect(Collectors.toList());
@@ -156,17 +152,17 @@ public class FlightService {
 		Optional<Flight> optionalFlight = flightRepository.findById(id);
 		if(!optionalFlight.isPresent()) throw new FlightNotFoundException("No flight with the id: " + id + " exists!");
 		
-		List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
-				.stream().filter(i -> 
-				Math.abs(Duration.between(
-						dateTime.toLocalDateTime(), 
-						i.getDateTime().toLocalDateTime()
-						).toHours()) < 2
-				)
-				.collect(Collectors.toList());
+		// List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
+		// 		.stream().filter(i -> 
+		// 		Math.abs(Duration.between(
+		// 				dateTime.toLocalDateTime(), 
+		// 				i.getDateTime().toLocalDateTime()
+		// 				).toHours()) < 2
+		// 		)
+		// 		.collect(Collectors.toList());
 		
-		if(!flightsWithAirplaneId.isEmpty())
-			throw new AirplaneAlreadyInUseException("Airplane with id: " + airplaneId +" already has flights within two hours of what you are trying to create");
+		// if(!flightsWithAirplaneId.isEmpty())
+		// 	throw new AirplaneAlreadyInUseException("Airplane with id: " + airplaneId +" already has flights within two hours of what you are trying to create");
 		return flightRepository.save(new Flight(id, routeId, airplaneId, dateTime, seatingId, duration, status));
 		
 	}	

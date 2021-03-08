@@ -3,7 +3,6 @@ package com.ss.utopia.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import com.ss.utopia.models.Airport;
 import com.ss.utopia.models.Route;
 
 import org.springframework.data.jpa.repository.Query;
@@ -23,9 +22,5 @@ public interface RouteRepository extends JpaRepository<Route, Integer> {
 	List<Route> findByOrigin(String origin);
 
 	@Query(value = "SELECT * FROM route WHERE destination_id = ?1 AND origin_id = ?2", nativeQuery = true)
-	Optional<Route> findByDestinationAndOrigin(String destination, String origin);
-	
-	@Query(value = "SELECT * FROM airport WHERE iata_id = ?1", nativeQuery = true)
-	Optional<Airport> findAirportByIataId(String id);
-	
+	Optional<Route> findByDestinationAndOrigin(String destination, String origin);	
 }

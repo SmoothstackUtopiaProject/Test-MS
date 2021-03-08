@@ -199,7 +199,7 @@ public class PassengerService {
 			.replace(", ", ",");
 			String[] splitTerms = formattedSearch.split(",");
 			ObjectMapper mapper = new ObjectMapper();
-			
+
 			for(Passenger passenger : passengers) {
 				boolean containsSearchTerms = true;
 				

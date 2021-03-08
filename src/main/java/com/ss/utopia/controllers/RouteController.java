@@ -1,5 +1,6 @@
 package com.ss.utopia.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.ss.utopia.exceptions.AirportNotFoundException;
@@ -71,9 +72,11 @@ public class RouteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Route> insert(@RequestBody Route route) {
+	public ResponseEntity<Route> insert(@RequestBody HashMap<String, String> routeMap) {
 		try {
-			Route newRoute = routeService.insert(route);
+			String origin = routeMap.get("origin");
+			String destination = routeMap.get("destination");
+			Route newRoute = routeService.insert(origin, destination);
 			return new ResponseEntity<>(newRoute, HttpStatus.CREATED);
 		}	catch (AirportNotFoundException err) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -92,17 +95,17 @@ public class RouteController {
 		}
 	}
 	
-	@PutMapping
-	public ResponseEntity<Route> update(@RequestBody Route route) {
-		try {
-			Route newRoute = routeService.update(route);
-			return new ResponseEntity<>(newRoute, HttpStatus.NO_CONTENT);
-		}	catch (AirportNotFoundException err) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		} 	catch (RouteAlreadyExistsException err) {
-			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-		}
-	}
+	// @PutMapping
+	// public ResponseEntity<Route> update(@RequestBody Route route) {
+	// 	try {
+	// 		Route newRoute = routeService.update(route);
+	// 		return new ResponseEntity<>(newRoute, HttpStatus.NO_CONTENT);
+	// 	}	catch (AirportNotFoundException err) {
+	// 		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+	// 	} 	catch (RouteAlreadyExistsException err) {
+	// 		return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+	// 	}
+	// }
 	
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
 	public ResponseEntity<Object> invalidRequestContent() {

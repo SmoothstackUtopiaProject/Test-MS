@@ -18,6 +18,9 @@ import com.ss.utopia.repositories.RouteRepository;
 public class RouteService {
 	
 	@Autowired
+	private AirportService airportService;
+
+	@Autowired
 	private RouteRepository routeRepository;
 
 	public List<Route> findAllRoutes() {
@@ -46,23 +49,17 @@ public class RouteService {
 			: null;
 	}
 
-	public Route insert(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
-		Optional<Airport> optionalDest = routeRepository.findAirportByIataId(route.getDestination().getAirportIataId());
-		Optional<Airport> optionalOrig = routeRepository.findAirportByIataId(route.getOrigin().getAirportIataId());
-		
-		if(!optionalDest.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getDestination() + " exist.");
-		if(!optionalOrig.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getOrigin() + " exist.");
-		
-		Airport dest = optionalDest.get();
-		Airport orig = optionalOrig.get();
+	public Route insert(String originIataId, String destinationIataId) throws RouteAlreadyExistsException, AirportNotFoundException {
 
-		route.setDestination(dest);
-		route.setOrigin(orig);
+		Airport dest = airportService.findByIataId(destinationIataId);
+		Airport orig = airportService.findByIataId(originIataId);
+
+		if(orig.equals(dest)) throw new RouteAlreadyExistsException("Route Origin must be different from Route Destination.");
 			
 		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getAirportIataId(), orig.getAirportIataId());
 		if(existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getAirportIataId() + " to destination: " + dest.getAirportIataId() + ".");
 
-		return routeRepository.save(route);
+		return routeRepository.save(new Route(originIataId, destinationIataId));
 	}
 
 	public void deleteById(Integer id) throws RouteNotFoundException {
@@ -71,13 +68,13 @@ public class RouteService {
 		routeRepository.deleteById(id);
 	}
 
-	public Route update(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
-		try {
-			return insert(route);
-		} catch (RouteAlreadyExistsException err) {
-			throw new RouteAlreadyExistsException("This route already exists.");
-		} catch (AirportNotFoundException err) {
-			throw new AirportNotFoundException("Airport(s) does not exist");
-		}
-	}
+	// public Route update(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
+	// 	try {
+	// 		return insert(route);
+	// 	} catch (RouteAlreadyExistsException err) {
+	// 		throw new RouteAlreadyExistsException("This route already exists.");
+	// 	} catch (AirportNotFoundException err) {
+	// 		throw new AirportNotFoundException("Airport(s) does not exist");
+	// 	}
+	// }
 }
