@@ -72,10 +72,15 @@ public class FlightController {
 		try {
 			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
 			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			String dateTime = flightMap.get("dateTime");
 			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
 			Integer duration = Integer.parseInt(flightMap.get("duration"));
 			String status = flightMap.get("status");
+			
+			System.out.println(dateTime);
+			System.out.println(flightMap.get("dateTime"));
+			System.out.println("==============================================================");
+			//2021-03-25 01:00:00
 			
 			return new ResponseEntity<>(flightService.insert(routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
 		} catch (AirplaneAlreadyInUseException err) {
@@ -90,7 +95,7 @@ public class FlightController {
 			Integer id = Integer.parseInt(flightMap.get("id"));
 			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
 			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			String dateTime = flightMap.get("dateTime");
 			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
 			Integer duration = Integer.parseInt(flightMap.get("duration"));
 			String status = flightMap.get("status");

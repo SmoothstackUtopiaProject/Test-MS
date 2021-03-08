@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ public class FlightService {
 	RouteService routeService;
 
 	public List<Flight> findAll() {
-		return flightRepository.findAll();
+		return flightRepository.findAll();		
 	}
 	
 	public Flight findById(Integer id) throws FlightNotFoundException, ConnectException, IllegalArgumentException, SQLException {
@@ -135,13 +138,14 @@ public class FlightService {
 		return filteredFlights;
 	}
 
-	public Flight insert(Integer routeId ,Integer airplaneId , Timestamp dateTime, Integer seatingId, Integer duration, String status) 
+	public Flight insert(Integer routeId ,Integer airplaneId , String dateTime, Integer seatingId, Integer duration, String status) 
 			throws ConnectException, IllegalArgumentException, SQLException, AirplaneAlreadyInUseException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
 				.stream().filter(i -> 
 				Math.abs(Duration.between(
-						dateTime.toLocalDateTime(), 
-						i.getDateTime().toLocalDateTime()
+						LocalDateTime.parse(dateTime,formatter), 
+						LocalDateTime.parse(i.getDateTime(),formatter)
 						).toHours()) < 2
 				)
 				.collect(Collectors.toList());
@@ -150,17 +154,18 @@ public class FlightService {
 		return flightRepository.save(new Flight(routeId, airplaneId, dateTime, seatingId, duration, status));
 	}
 	
-	public Flight update(Integer id, Integer routeId, Integer airplaneId, Timestamp dateTime, Integer seatingId,
+	public Flight update(Integer id, Integer routeId, Integer airplaneId, String dateTime, Integer seatingId,
 			Integer duration, String status) 
 			throws ConnectException, IllegalArgumentException, SQLException, AirplaneAlreadyInUseException, FlightNotFoundException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		Optional<Flight> optionalFlight = flightRepository.findById(id);
 		if(!optionalFlight.isPresent()) throw new FlightNotFoundException("No flight with the id: " + id + " exists!");
 		
 		List<Flight> flightsWithAirplaneId = flightRepository.findFlightsByAirplaneId(airplaneId)
 				.stream().filter(i -> 
 				Math.abs(Duration.between(
-						dateTime.toLocalDateTime(), 
-						i.getDateTime().toLocalDateTime()
+						LocalDateTime.parse(dateTime, formatter), 
+						LocalDateTime.parse(i.getDateTime(),formatter)
 						).toHours()) < 2
 				)
 				.collect(Collectors.toList());
