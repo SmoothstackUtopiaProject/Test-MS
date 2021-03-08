@@ -32,6 +32,7 @@ public class AuthController {
 	
 	@GetMapping("/login")
 	public ResponseEntity<Object> login(Principal principal) throws ConnectException, IllegalArgumentException, SQLException, UserNotFoundException{
+		System.out.println("test");
 		if(principal == null) {
 			return ResponseEntity.ok(principal);
 		}
