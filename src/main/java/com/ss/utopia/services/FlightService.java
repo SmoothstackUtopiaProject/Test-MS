@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
@@ -45,8 +44,6 @@ public class FlightService {
 	public List<Flight> findBySearchAndFilter(HashMap<String, String> filterMap) {
 
 		List<Flight> flights = findAll();
-		// List<Flight> searchedFlights = applySearch(flights, filterMap);
-		// if(searchedFlights.isEmpty()) return searchedFlights;
 		return applyFilters(flights, filterMap);
 	}
 
@@ -170,7 +167,13 @@ public class FlightService {
 				)
 				.collect(Collectors.toList());
 		
-		if(!flightsWithAirplaneId.isEmpty())
+		boolean sameFlight = false;
+		for(Flight f: flightsWithAirplaneId) {
+			if(f.getId() == id) 
+				sameFlight = true;		
+		}
+		
+		if(!flightsWithAirplaneId.isEmpty() && sameFlight == false)
 			throw new AirplaneAlreadyInUseException("Airplane with id: " + airplaneId +" already has flights within two hours of what you are trying to create");
 		return flightRepository.save(new Flight(id, routeId, airplaneId, dateTime, seatingId, duration, status));
 		
