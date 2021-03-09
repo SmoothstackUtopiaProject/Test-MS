@@ -1,7 +1,5 @@
 package com.ss.utopia.models;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,8 +27,8 @@ public class Flight {
 	private Integer airplaneId;
 
 	@NotNull(message = "Departure time should not be empty")
-	@Column(name = "departure_timestamp")
-	private Timestamp dateTime;
+	@Column(name = "departure_time")
+	private String dateTime;
 	
 	@NotNull(message = "Seating id should not be empty")
 	@GeneratedValue
@@ -49,7 +47,7 @@ public class Flight {
 	public Flight(Integer id, 
 		@NotNull(message = "Route id should not be empty") Integer routeId,
 		@NotNull(message = "Airplane id should not be empty") Integer airplaneId,
-		@NotNull(message = "Departure time should not be empty") Timestamp dateTime,
+		@NotNull(message = "Departure time should not be empty") String dateTime,
 		@NotNull(message = "Seating id should not be empty") Integer seatingId,
 		@NotNull(message = "Duration should not be empty") Integer duration,
 		@NotNull(message = "Status should not be empty") String status) {
@@ -63,7 +61,7 @@ public class Flight {
 		this.status = status;
 	}
 
-	public Flight(Integer routeId, Integer airplaneId, Timestamp dateTime, Integer seatingId, Integer duration,String status) {
+	public Flight(Integer routeId, Integer airplaneId, String dateTime, Integer seatingId, Integer duration,String status) {
 		this.routeId = routeId;
 		this.airplaneId = airplaneId;
 		this.dateTime = dateTime;
@@ -75,17 +73,17 @@ public class Flight {
 	public Flight(
 		@NotNull(message = "Route id should not be empty") Integer routeId,
 		@NotNull(message = "Airplane id should not be empty") Integer airplaneId,
-		@NotNull(message = "Departure time should not be empty") Timestamp dateTime) {
+		@NotNull(message = "Departure time should not be empty") String dateTime) {
 		this.routeId = routeId;
 		this.airplaneId = airplaneId;
 		this.dateTime = dateTime;
 	}
 
-	public Timestamp getDateTime() {
+	public String getDateTime() {
 		return dateTime;
 	}
 
-	public void setDateTime(Timestamp dateTime) {
+	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
 

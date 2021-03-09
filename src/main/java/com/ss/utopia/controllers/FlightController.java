@@ -1,14 +1,10 @@
 package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.AirplaneAlreadyInUseException;
-import com.ss.utopia.exceptions.FlightAlreadyExistsException;
 import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
 import com.ss.utopia.models.HttpError;
@@ -72,7 +67,7 @@ public class FlightController {
 		try {
 			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
 			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			String dateTime = flightMap.get("dateTime");
 			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
 			Integer duration = Integer.parseInt(flightMap.get("duration"));
 			String status = flightMap.get("status");
@@ -90,7 +85,7 @@ public class FlightController {
 			Integer id = Integer.parseInt(flightMap.get("id"));
 			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
 			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			Timestamp dateTime = Timestamp.valueOf(flightMap.get("dateTime"));
+			String dateTime = flightMap.get("dateTime");
 			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
 			Integer duration = Integer.parseInt(flightMap.get("duration"));
 			String status = flightMap.get("status");
