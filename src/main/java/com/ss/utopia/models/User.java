@@ -1,12 +1,9 @@
 package com.ss.utopia.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,99 +13,104 @@ public class User {
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
-	private Integer id;
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "role_id")
-	private UserRole userRole;
+	private Integer userId;
+
+	@Column(name = "role_id")
+	private Integer userRoleId;
+
 	@Column(name = "first_name")
-	private String firstName;
+	private String userFirstName;
+
 	@Column(name = "last_name")
-	private String lastName;
+	private String userLastName;
+
 	@Column(name = "email")
-	private String email;
+	private String userEmail;
+
 	@Column(name = "password")
-	private String password;
+	private String userPassword;
+
 	@Column(name = "phone")
-	private String phone;
+	private String userPhone;
 	
 	
 	public User() {}
-	public User(Integer id, UserRole userRole, String firstName, 
-	String lastName, String email, String password, String phone) {
+	public User(Integer userId, Integer userRoleId, String userFirstName, 
+	String userLastName, String userEmail, String userPassword, String userPhone) {
 		super();
-		this.id = id;
-		this.userRole = userRole;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
+		this.userId = userId;
+		this.userRoleId = userRoleId;
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userPhone = userPhone;
 	}
 
-	public User(UserRole userRole, String firstName, 
-	String lastName, String email, String password, String phone) {
+	public User(Integer userRoleId, String userFirstName, 
+	String userLastName, String userEmail, String userPassword, String userPhone) {
 		super();
-		this.userRole = userRole;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
+		this.userRoleId = userRoleId;
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userPhone = userPhone;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public UserRole getUserRole() {
-		return userRole;
+	public Integer getInteger() {
+		return userRoleId;
 	}
 
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
+	public void setInteger(Integer userRoleId) {
+		this.userRoleId = userRoleId;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getUserFirstName() {
+		return userFirstName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getUserLastName() {
+		return userLastName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getUserPassword() {
+		return userPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getUserPhone() {
+		return userPhone;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}
 }

@@ -11,31 +11,31 @@ public class UserRole {
 	
 	@Id
 	@Column(name = "id")
-	private Integer id;
+	private Integer userRoleId;
 	
 	@Column(name = "name")
-	private String name;
+	private String userRoleName;
 	
 	public UserRole() {}
-	public UserRole(Integer id, String name) {
+	public UserRole(Integer userRoleId, String userRoleName) {
 		super();
-		this.id = id;
-		this.name = name;
+		this.userRoleId = userRoleId;
+		this.userRoleName = userRoleName;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getUserRoleId() {
+		return userRoleId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserRoleId(Integer userRoleId) {
+		this.userRoleId = userRoleId;
 	}
 
-	public String getName() {
-		return name;
+	public String getUserRoleName() {
+		return userRoleName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUserRoleName(String userRoleName) {
+		this.userRoleName = userRoleName;
 	}
 }

@@ -56,7 +56,7 @@ public class UserService {
 		User user = findByEmail(email);
 		// getting current date and subtracting 15 minutes to check if token already issued
 		Date currentDateTimeMinuts15Minutes = new Date(System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(15));
-		boolean userTokens = userTokenService.verifyIfTokenBeenIssuedin15Min(user.getId(), currentDateTimeMinuts15Minutes);
+		boolean userTokens = userTokenService.verifyIfTokenBeenIssuedin15Min(user.getUserId(), currentDateTimeMinuts15Minutes);
 		if(!userTokens) throw new TokenAlreadyIssuedException("You can only request a link once every 15 minutes!");
 		
 		// if token has't been issued in the last 15 minutes, issue a token and send an email to user. 
@@ -67,9 +67,9 @@ public class UserService {
 	}
 	
 	public void ChangePassword(UserToken userToken, String password) throws ConnectException, IllegalArgumentException, SQLException, UserNotFoundException, PasswordNotAllowedException {
-		User user = findById(userToken.getUser().getId());
-		if(user.getPassword().equals(password)) throw new PasswordNotAllowedException("Previously used password not allowed");
-		user.setPassword(password);
+		User user = findById(userToken.getUser().getUserId());
+		if(user.getUserPassword().equals(password)) throw new PasswordNotAllowedException("Previously used password not allowed");
+		user.setUserPassword(password);
 		userRepository.save(user);
 	}
 	
@@ -77,12 +77,12 @@ public class UserService {
 		Map<String, Object> modelsMap = new HashMap<>();
 		
 		String recoveryCode = userToken.getToken();
-		String userName = user.getFirstName();
+		String userName = user.getUserFirstName();
 		
 		modelsMap.put("name", userName);
 		modelsMap.put("confirmation", recoveryCode);
 		
-		MailRequest mailRequest = new MailRequest(user.getEmail());
+		MailRequest mailRequest = new MailRequest(user.getUserEmail());
 		return emailService.sendEmail(mailRequest, modelsMap);
 		
 	}
@@ -92,7 +92,7 @@ public class UserService {
 		
 		if(!checkUser.isPresent()) {
 			throw new UserNotFoundException("Invalid Email");
-		} else if(!checkUser.get().getPassword().equals(password)) {
+		} else if(!checkUser.get().getUserPassword().equals(password)) {
 			throw new IncorrectPasswordException("Invalid password");
 		} else return checkUser.get();
 		
@@ -132,14 +132,14 @@ public class UserService {
 		IllegalArgumentException, SQLException, UserRoleNotFoundException {
 
 		UserRole role = userRoleService.findById(userRoleId);
-		return userRepository.findByRoleId(role.getId());
+		return userRepository.findByRoleId(role.getUserRoleId());
 	}
 
 	public List<User> findByRoleName(String userRoleName) throws ConnectException,
 	IllegalArgumentException, SQLException, UserRoleNotFoundException {
 
 		UserRole role = userRoleService.findByName(userRoleName);
-		return userRepository.findByRoleId(role.getId());
+		return userRepository.findByRoleId(role.getUserRoleId());
 	}
 
 	public User insert(Integer userRoleId, String firstName,
@@ -159,6 +159,7 @@ public class UserService {
 		if(!validatePhone(formattedPhone)) throw new IllegalArgumentException("The phone number: \"" + phone + "\" is not valid!");
 
 		try {
+			userRoleService.findById(userRoleId);
 			Optional<User> optionalUser1 = userRepository.findByEmail(formattedEmail);
 			Optional<User> optionalUser2 = userRepository.findByPhone(formattedPhone);
 			
@@ -169,8 +170,8 @@ public class UserService {
 			if( optionalUser2.isPresent()) {
 				throw new UserAlreadyExistsException("A user with this phone number already exists!");
 			}
-			UserRole userRole = userRoleService.findById(userRoleId);
-			return userRepository.save(new User(userRole, formattedFirstName, formattedLastName, formattedEmail, password, formattedPhone));
+
+			return userRepository.save(new User(userRoleId, formattedFirstName, formattedLastName, formattedEmail, password, formattedPhone));
 		
 		} catch(UserRoleNotFoundException err) {
 			throw new IllegalArgumentException(err.getMessage());
@@ -195,8 +196,8 @@ public class UserService {
 
 		try {
 			findById(id);
-			UserRole userRole = userRoleService.findById(userRoleId);
-			return userRepository.save(new User(id, userRole, formattedFirstName, formattedLastName, formattedEmail, password, formattedPhone));
+			userRoleService.findById(userRoleId);
+			return userRepository.save(new User(id, userRoleId, formattedFirstName, formattedLastName, formattedEmail, password, formattedPhone));
 		} catch(UserRoleNotFoundException err) {
 			throw new IllegalArgumentException(err.getMessage());
 		}

@@ -67,7 +67,7 @@ public class AirplaneService {
 		if(filterMap.keySet().contains(airplaneTypeName)) {
 			try {
 				String parsedAirplaneTypeName = filterMap.get(airplaneTypeName);
-				List<Integer> airplaneTypeIDsWithName = new ArrayList<Integer>(); // findAirplaneTypesByName(filterMap.get(parsedTypeName));
+				List<Integer> airplaneTypeIDsWithName = new ArrayList<Integer>(); // TODO findAirplaneTypesByName(filterMap.get(parsedTypeName));
 
 				airplanes = airplanes.stream()
 				.filter(i -> airplaneTypeIDsWithName.contains(i.getAirplaneTypeId()))

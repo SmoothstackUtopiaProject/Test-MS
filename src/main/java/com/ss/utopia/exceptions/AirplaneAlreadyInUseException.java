@@ -9,5 +9,4 @@ public class AirplaneAlreadyInUseException extends Exception {
 	public AirplaneAlreadyInUseException(String message) {
 		super(message);
 	}
-
 }

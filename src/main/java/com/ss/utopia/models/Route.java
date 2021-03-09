@@ -14,53 +14,48 @@ public class Route {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer routeId;
 	
-	@Column(name = "origin_id")
-	private String origin;
+	@Column(name = "origin_routeId")
+	private String routeOriginIataId;
 
-	@Column(name = "destination_id")
-	private String destination;
+	@Column(name = "destination_routeId")
+	private String routeDestinationIataId;
 
 	public Route() {}
-	
-	public Route(Integer id) {
-		this.id = id;
-	}
-
-	public Route(Integer id, String origin, String destination) {
-		this.id = id;
-		this.origin = origin;
-		this.destination = destination;
+	public Route(Integer routeId, String routeOriginIataId, String routeDestinationIataId) {
+		this.routeId = routeId;
+		this.routeOriginIataId = routeOriginIataId;
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
 	
-	public Route(String origin, String destination) {
-		this.origin = origin;
-		this.destination = destination;
+	public Route(String routeOriginIataId, String routeDestinationIataId) {
+		this.routeOriginIataId = routeOriginIataId;
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
 	
 	
-	public Integer getId() {
-		return id;
+	public Integer getRouteId() {
+		return routeId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setRouteId(Integer routeId) {
+		this.routeId = routeId;
 	}
 
-	public String getOrigin() {
-		return origin;
+	public String getRouteOriginIataId() {
+		return routeOriginIataId;
 	}
 
-	public void setOrigin(String origin) {
-		this.origin = origin;
+	public void setRouteOriginIataId(String routeOriginIataId) {
+		this.routeOriginIataId = routeOriginIataId;
 	}
 
-	public String getDestination() {
-		return destination;
+	public String getRouteDestinationIataId() {
+		return routeDestinationIataId;
 	}
 
-	public void setDestination(String destination) {
-		this.destination = destination;
+	public void setRouteDestinationIataId(String routeDestinationIataId) {
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
 }

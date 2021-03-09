@@ -201,8 +201,8 @@ public class UserController {
 			User user = new ObjectMapper().readValue(body, User.class);
 			Integer userRole = 1;
 			
-			User newUser = userService.insert(userRole, user.getFirstName(), 
-			user.getLastName(), user.getEmail(), user.getPassword(), user.getPhone());
+			User newUser = userService.insert(userRole, user.getUserFirstName(), 
+			user.getUserLastName(), user.getUserEmail(), user.getUserPassword(), user.getUserPhone());
 
 			return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 
@@ -226,8 +226,8 @@ public class UserController {
 			User user = new ObjectMapper().readValue(body, User.class);
 			Integer userRole = Integer.parseInt(body.replaceAll("[^a-zA-Z0-9,]", "").split("userRoleid")[1].split(",")[0]);
 
-			User newUser = userService.update(userId, userRole, user.getFirstName(), 
-			user.getLastName(), user.getEmail(), user.getPassword(), user.getPhone());
+			User newUser = userService.update(userId, userRole, user.getUserFirstName(), 
+			user.getUserLastName(), user.getUserEmail(), user.getUserPassword(), user.getUserPhone());
 			return new ResponseEntity<>(newUser, HttpStatus.ACCEPTED);
 
 		} catch(ArrayIndexOutOfBoundsException | JsonProcessingException  err) {

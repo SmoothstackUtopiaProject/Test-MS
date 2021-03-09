@@ -54,7 +54,10 @@ public class FlightService {
 		
 		String searchTerms = "searchTerms";
 		if(filterMap.keySet().contains(searchTerms)) {
-			String[] splitTerms = filterMap.get(searchTerms).split("c");
+			String formattedSearch = filterMap.get(searchTerms)
+			.toLowerCase()
+			.replace(", ", ",");
+			String[] splitTerms = formattedSearch.split(",");
 			ObjectMapper mapper = new ObjectMapper();
 			
 			for(Flight flight : flights) {
@@ -89,39 +92,25 @@ public class FlightService {
 			try {
 				Integer parsedFlightId = Integer.parseInt(filterMap.get(flightId));
 				filteredFlights = filteredFlights.stream()
-				.filter(i -> i.getId().equals(parsedFlightId))
+				.filter(i -> i.getFlightId().equals(parsedFlightId))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
 		
-		// Origin
+		// Origin & Destination
 		String origin = "origin";
-		if(filterMap.keySet().contains(origin)) {
-			try {
-				List<Integer> routeIdList = routeService.findByOrigin(filterMap.get(origin))
-						.stream().map(i -> i.getId())
-						.collect(Collectors.toList());
-				System.out.println(routeIdList);
-				System.out.println("======================================================================");
-				filteredFlights = filteredFlights.stream()
-				.filter(i -> routeIdList.contains(i.getRouteId()))
-				.collect(Collectors.toList());
-			} catch(Exception err){/*Do nothing*/}
-		}
-		
-		// Destination
 		String destination = "destination";
-		if(filterMap.keySet().contains(destination)) {
-			try {
-				List<Integer> routeIdList = routeService.findByDestination(filterMap.get(destination))
-						.stream().map(i -> i.getId())
-						.collect(Collectors.toList());
-				System.out.println(routeIdList);
-				System.out.println("======================================================================");
-				filteredFlights = filteredFlights.stream()
-				.filter(i -> routeIdList.contains(i.getRouteId()))
-				.collect(Collectors.toList());
-			} catch(Exception err){/*Do nothing*/}
+		if(filterMap.keySet().contains(origin) || filterMap.keySet().contains(destination)) {
+			
+			HashMap<String, String> routeIdFilterMap = new HashMap<String, String>();
+			if(filterMap.keySet().contains(origin)) routeIdFilterMap.put("routeOriginIataId", filterMap.get(origin));
+			if(filterMap.keySet().contains(destination)) routeIdFilterMap.put("routeDestinationIataId", filterMap.get(destination));
+			List<Integer> routeIdList = routeService.findBySearchAndFilter(routeIdFilterMap).stream()
+			.map(i -> i.getRouteId()).collect(Collectors.toList());
+
+			filteredFlights = filteredFlights.stream()
+			.filter(i -> routeIdList.contains(i.getFlightId()))
+			.collect(Collectors.toList());
 		}
 
 		// Origin Date
@@ -130,7 +119,7 @@ public class FlightService {
 			try {
 				Timestamp parsedOriginDate = Timestamp.valueOf(filterMap.get(originDate));
 				filteredFlights = filteredFlights.stream()
-				.filter(i -> i.getDateTime().equals(parsedOriginDate))
+				.filter(i -> i.getFlightDepartureTime().equals(parsedOriginDate))
 				.collect(Collectors.toList());
 			} catch(Exception err){/*Do nothing*/}
 		}
@@ -144,7 +133,7 @@ public class FlightService {
 		// 		.stream().filter(i -> 
 		// 		Math.abs(Duration.between(
 		// 				LocalDateTime.parse(dateTime,formatter), 
-		// 				LocalDateTime.parse(i.getDateTime(),formatter)
+		// 				LocalDateTime.parse(i.getFlightDepartureTime(),formatter)
 		// 				).toHours()) < 2
 		// 		)
 		// 		.collect(Collectors.toList());
@@ -164,7 +153,7 @@ public class FlightService {
 				.stream().filter(i -> 
 				Math.abs(Duration.between(
 						LocalDateTime.parse(dateTime, formatter), 
-						LocalDateTime.parse(i.getDateTime(),formatter)
+						LocalDateTime.parse(i.getFlightDepartureTime(),formatter)
 						).toHours()) < 2
 				)
 				.collect(Collectors.toList());
