@@ -15,7 +15,7 @@ public class Flight {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "flightId")
+	@Column(name = "id")
 	private Integer flightId;
 
 	@NotNull(message = "Route ID should not be empty")
