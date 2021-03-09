@@ -19,7 +19,7 @@ public class Flight {
 	private Integer flightId;
 
 	@NotNull(message = "Route ID should not be empty")
-	@JoinColumn(name = "route_id")
+	@Column(name = "route_id")
 	private Integer flightRouteId;
 
 	@NotNull(message = "Airplane ID should not be empty")
