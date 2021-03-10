@@ -149,6 +149,8 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="/JWKss"/>
+	<classpathentry kind="src" path="/server-product-management"/>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -158,7 +160,5 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="/JWKss"/>
-	<classpathentry kind="src" path="/server-product-management"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

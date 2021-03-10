@@ -1,103 +1,158 @@
 package com.ss.utopia.models;
 
 import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "passenger")
 public class Passenger {
-  @Id
-	@Column(name = "id")
-	private Integer id;
 
-	@Column(name = "booking_id")
-	private Integer bookingId;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private Integer passengerId;
+
+  @Column(name = "booking_id")
+  private Integer passengerBookingId;
+
+  @Column(name = "passport_id")
+  private String passengerPassportId;
 
   @Column(name = "first_name")
-	private String firstName;
+  private String passengerFirstName;
 
   @Column(name = "last_name")
-	private String lastName;
+  private String passengerLastName;
 
   @Column(name = "date_of_birth")
-	private Date dateOfBirth;
+  private Date passengerDateOfBirth;
 
   @Column(name = "gender")
-	private String sex;
+  private String passengerSex;
 
   @Column(name = "address")
-	private String address;
+  private String passengerAddress;
 
-  public Passenger(){}
-  public Passenger(Integer id, Integer bookingId, String firstName, String lastName, Date dateOfBirth, String sex, String address) {
-    super();
-		this.id = id;
-    this.bookingId = bookingId;
-    this.firstName = firstName;
-		this.lastName = lastName;
-    this.dateOfBirth = dateOfBirth;
-    this.sex = sex;
-    this.address = address;
+  @Column(name = "veteran_status")
+  private Boolean passengerIsVeteran;
+
+  public Passenger() {}
+
+  public Passenger(
+    Integer passengerBookingId,
+    String passengerPassportId,
+    String passengerFirstName,
+    String passengerLastName,
+    Date passengerDateOfBirth,
+    String passengerSex,
+    String passengerAddress,
+    Boolean passengerIsVeteran
+  ) {
+    this.passengerBookingId = passengerBookingId;
+    this.passengerPassportId = passengerPassportId;
+    this.passengerFirstName = passengerFirstName;
+    this.passengerLastName = passengerLastName;
+    this.passengerDateOfBirth = passengerDateOfBirth;
+    this.passengerSex = passengerSex;
+    this.passengerAddress = passengerAddress;
+    this.passengerIsVeteran = passengerIsVeteran;
   }
 
-	public Integer getId() {
-		return id;
-	}
+  public Passenger(
+    Integer passengerId,
+    Integer passengerBookingId,
+    String passengerPassportId,
+    String passengerFirstName,
+    String passengerLastName,
+    Date passengerDateOfBirth,
+    String passengerSex,
+    String passengerAddress,
+    Boolean passengerIsVeteran
+  ) {
+    this.passengerId = passengerId;
+    this.passengerBookingId = passengerBookingId;
+    this.passengerPassportId = passengerPassportId;
+    this.passengerFirstName = passengerFirstName;
+    this.passengerLastName = passengerLastName;
+    this.passengerDateOfBirth = passengerDateOfBirth;
+    this.passengerSex = passengerSex;
+    this.passengerAddress = passengerAddress;
+    this.passengerIsVeteran = passengerIsVeteran;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public Integer getPassengerId() {
+    return passengerId;
+  }
 
-	public Integer getBookingId() {
-		return this.bookingId;
-	}
+  public void setPassengerId(Integer passengerId) {
+    this.passengerId = passengerId;
+  }
 
-	public void setBookingId(Integer bookingId) {
-		this.bookingId = bookingId;
-	}
+  public Integer getPassengerBookingId() {
+    return this.passengerBookingId;
+  }
 
-	public String getFirstName() {
-		return firstName;
-	}
+  public void setPassengerBookingId(Integer passengerBookingId) {
+    this.passengerBookingId = passengerBookingId;
+  }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+  public String getPassengerPassportId() {
+    return passengerPassportId;
+  }
 
+  public void setPassengerPassportId(String passengerPassportId) {
+    this.passengerPassportId = passengerPassportId;
+  }
 
-	public String getLastName() {
-		return lastName;
-	}
+  public String getPassengerFirstName() {
+    return passengerFirstName;
+  }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public void setPassengerFirstName(String passengerFirstName) {
+    this.passengerFirstName = passengerFirstName;
+  }
 
-  public Date getDateOfBirth() {
-		return this.dateOfBirth;
-	}
+  public String getPassengerLastName() {
+    return passengerLastName;
+  }
 
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+  public void setPassengerLastName(String passengerLastName) {
+    this.passengerLastName = passengerLastName;
+  }
 
-  public String getSex() {
-		return this.sex;
-	}
+  public Date getPassengerDateOfBirth() {
+    return this.passengerDateOfBirth;
+  }
 
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+  public void setPassengerDateOfBirth(Date passengerDateOfBirth) {
+    this.passengerDateOfBirth = passengerDateOfBirth;
+  }
 
-  public String getAddress() {
-		return this.address;
-	}
+  public String getPassengerSex() {
+    return this.passengerSex;
+  }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+  public void setPassengerSex(String passengerSex) {
+    this.passengerSex = passengerSex;
+  }
+
+  public String getPassengerAddress() {
+    return this.passengerAddress;
+  }
+
+  public void setPassengerAddress(String passengerAddress) {
+    this.passengerAddress = passengerAddress;
+  }
+
+  public Boolean getPassengerIsVeteran() {
+    return this.passengerIsVeteran;
+  }
+
+  public void setPassengerIsVeteran(Boolean passengerIsVeteran) {
+    this.passengerIsVeteran = passengerIsVeteran;
+  }
 }

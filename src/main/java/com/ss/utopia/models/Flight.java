@@ -1,22 +1,13 @@
 package com.ss.utopia.models;
 
-
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-
 
 @Entity
 @Table(name = "flight")
@@ -25,117 +16,123 @@ public class Flight {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private Integer flightId;
 
-	@NotNull(message = "Route id should not be empty")
-	@ManyToOne
-	@JoinColumn(name = "route_id")
-	private Route routeId;
+	@NotNull(message = "Route ID should not be empty")
+	@Column(name = "route_id")
+	private Integer flightRouteId;
 
-	@NotNull(message = "Airplane id should not be empty")
+	@NotNull(message = "Airplane ID should not be empty")
 	@Column(name = "airplane_id")
-	private Integer airplaneId;
-
-	@NotNull(message = "Departure date should not be empty")
-	@Column(name = "departure_date")
-	private LocalDate date;
+	private Integer flightAirplaneId;
 
 	@NotNull(message = "Departure time should not be empty")
 	@Column(name = "departure_time")
-	private LocalTime time;
+	private String flightDepartureTime;
 
-	@NotNull(message = "Seat price should not be empty")
-	@Min(1)
-	@Column(name = "seat_price")
-	private Double seatPrice;
+	@NotNull(message = "Seating ID should not be empty")
+	@GeneratedValue
+	@Column(name = "seating_id")
+	private Integer flightSeatingId;
 
-	@Column(name = "available_seats", nullable = true)
-	private Integer availableSeats;
-	
-	
+	@NotNull(message = "Duration should not be empty")
+	@Column(name = "duration")
+	private Integer flightDuration;
+
+	@NotNull(message = "Status should not be empty")
+	@Column(name = "status")
+	private String flightStatus;
 
 	public Flight() {
-	};
-	
-	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice) {
-		super();
-		this.id = id;
-		this.routeId = routeId;
-		this.airplaneId = airplaneId;
-		this.date = date;
-		this.time = time;
-		this.seatPrice = seatPrice;
-	}
-	
-	
-	public Flight(Integer id, Route routeId, Integer airplaneId, LocalDate date, LocalTime time, double seatPrice,
-			Integer availableSeats) {
-		super();
-		this.id = id;
-		this.routeId = routeId;
-		this.airplaneId = airplaneId;
-		this.date = date;
-		this.time = time;
-		this.seatPrice = seatPrice;
-		this.availableSeats = availableSeats;
 	}
 
-	public Integer getId() {
-		return id;
+	public Flight(Integer flightId, @NotNull(message = "Route ID should not be empty") Integer flightRouteId,
+			@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
+			@NotNull(message = "Departure time should not be empty") String flightDepartureTime,
+			@NotNull(message = "Seating ID should not be empty") Integer flightSeatingId,
+			@NotNull(message = "Duration should not be empty") Integer flightDuration,
+			@NotNull(message = "Status should not be empty") String flightStatus) {
+
+		this.flightId = flightId;
+		this.flightRouteId = flightRouteId;
+		this.flightAirplaneId = flightAirplaneId;
+		this.flightDepartureTime = flightDepartureTime;
+		this.flightSeatingId = flightSeatingId;
+		this.flightDuration = flightDuration;
+		this.flightStatus = flightStatus;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Flight(Integer flightRouteId, Integer flightAirplaneId, String flightDepartureTime, Integer flightSeatingId,
+			Integer flightDuration, String flightStatus) {
+		this.flightRouteId = flightRouteId;
+		this.flightAirplaneId = flightAirplaneId;
+		this.flightDepartureTime = flightDepartureTime;
+		this.flightSeatingId = flightSeatingId;
+		this.flightDuration = flightDuration;
+		this.flightStatus = flightStatus;
 	}
 
-	public Route getRouteId() {
-		return routeId;
+	public Flight(@NotNull(message = "Route ID should not be empty") Integer flightRouteId,
+			@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
+			@NotNull(message = "Departure time should not be empty") String flightDepartureTime) {
+		this.flightRouteId = flightRouteId;
+		this.flightAirplaneId = flightAirplaneId;
+		this.flightDepartureTime = flightDepartureTime;
 	}
 
-	public void setRouteId(Route routeId) {
-		this.routeId = routeId;
+	public String getFlightDepartureTime() {
+		return flightDepartureTime;
 	}
 
-	public Integer getAirplaneId() {
-		return airplaneId;
+	public void setFlightDepartureTime(String flightDepartureTime) {
+		this.flightDepartureTime = flightDepartureTime;
 	}
 
-	public void setAirplaneId(Integer airplaneId) {
-		this.airplaneId = airplaneId;
+	public Integer getFlightSeatingId() {
+		return flightSeatingId;
 	}
 
-	public double getSeatPrice() {
-		return seatPrice;
+	public void setFlightSeatingId(Integer flightSeatingId) {
+		this.flightSeatingId = flightSeatingId;
 	}
 
-	public void setSeatPrice(double seatPrice) {
-		this.seatPrice = seatPrice;
+	public Integer getFlightDuration() {
+		return flightDuration;
 	}
 
-	public Integer getAvailableSeats() {
-		return availableSeats;
+	public void setFlightDuration(Integer flightDuration) {
+		this.flightDuration = flightDuration;
 	}
 
-	public void setAvailableSeats(Integer availableSeats) {
-		this.availableSeats = availableSeats;
+	public String getFlightStatus() {
+		return flightStatus;
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public void setFlightStatus(String flightStatus) {
+		this.flightStatus = flightStatus;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public Integer getFlightId() {
+		return flightId;
 	}
 
-	public LocalTime getTime() {
-		return time;
+	public void setFlightId(Integer flightId) {
+		this.flightId = flightId;
 	}
 
-	public void setTime(LocalTime time) {
-		this.time = time;
+	public Integer getFlightRouteId() {
+		return flightRouteId;
 	}
-	
-	
 
+	public void setFlightRouteId(Integer flightRouteId) {
+		this.flightRouteId = flightRouteId;
+	}
+
+	public Integer getFlightAirplaneId() {
+		return flightAirplaneId;
+	}
+
+	public void setFlightAirplaneId(Integer flightAirplaneId) {
+		this.flightAirplaneId = flightAirplaneId;
+	}
 }

@@ -14,17 +14,17 @@ public class BookingGuest {
 	private Integer bookingId;
 
   @Column(name = "contact_email")
-	private String email;
+	private String bookingEmail;
 
   @Column(name = "contact_phone")
-	private String phone;
+	private String bookingPhone;
 
   public BookingGuest(){}
-  public BookingGuest(Integer bookingId, String email, String phone) {
+  public BookingGuest(Integer bookingId, String bookingEmail, String bookingPhone) {
     super();
     this.bookingId = bookingId;
-    this.email = email;
-    this.phone = phone;
+    this.bookingEmail = bookingEmail;
+    this.bookingPhone = bookingPhone;
   }
 
 	public Integer getBookingId() {
@@ -35,19 +35,19 @@ public class BookingGuest {
 		this.bookingId = bookingId;
 	}
 
-  public String getEmail() {
-		return this.email;
+  public String getBookingEmail() {
+		return this.bookingEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setBookingEmail(String bookingEmail) {
+		this.bookingEmail = bookingEmail;
 	}
 
-  public String getPhone() {
-		return this.phone;
+  public String getBookingPhone() {
+		return this.bookingPhone;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setBookingPhone(String bookingPhone) {
+		this.bookingPhone = bookingPhone;
 	}
 }

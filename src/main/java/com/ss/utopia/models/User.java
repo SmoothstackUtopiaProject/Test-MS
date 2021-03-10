@@ -1,19 +1,15 @@
 package com.ss.utopia.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
 
 @Entity
 @Table(name = "user")
@@ -40,27 +36,28 @@ public class User {
 	@Column(name = "phone")
 	private String phone;
 	@NotNull(message = "Role should not be empty")
-    @Enumerated(EnumType.STRING)
-    @Column(name="role")
-    private Role role;
-	
-    @Transient
-    private String token;
-    
-    public User() {
-    };    
-    public User(Role role, String firstName,String lastName,String email,String password,String phone) {
-    	
-    	this.role = role;
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.email = email;
-    	this.password = password;
-    	this.phone = phone;
-    }
- 
-	public User(Role role, String firstName,String lastName,String email,String password,String phone,
-			 String token) {
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
+	private Role role;
+
+	@Transient
+	private String token;
+
+	public User() {
+	};
+
+	public User(Role role, String firstName, String lastName, String email, String password, String phone) {
+
+		this.role = role;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.phone = phone;
+	}
+
+	public User(Role role, String firstName, String lastName, String email, String password, String phone,
+			String token) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -70,7 +67,7 @@ public class User {
 		this.role = role;
 		this.token = token;
 	}
-	
+
 	public Role getRole() {
 		return role;
 	}
@@ -87,53 +84,51 @@ public class User {
 		this.token = token;
 	}
 
-
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-
-	public String getFirstName() {
-		return firstName;
+	public String getUserFirstName() {
+		return userFirstName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getUserLastName() {
+		return userLastName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getUserPassword() {
+		return userPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getUserPhone() {
+		return userPhone;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}
 }

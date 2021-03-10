@@ -1,11 +1,16 @@
 package com.ss.utopia.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ss.utopia.exceptions.AirportNotFoundException;
 import com.ss.utopia.exceptions.RouteAlreadyExistsException;
 import com.ss.utopia.exceptions.RouteNotFoundException;
@@ -18,65 +23,138 @@ import com.ss.utopia.repositories.RouteRepository;
 public class RouteService {
 	
 	@Autowired
+	private AirportService airportService;
+
+	@Autowired
 	private RouteRepository routeRepository;
 
-	public List<Route> findAllRoutes() {
-		return routeRepository.findAllRoutes();
+	public List<Route> findAll() {
+		return routeRepository.findAll();
 	}
 	
-	public Route findById(Integer id) {
+	public Route findById(Integer id) throws RouteNotFoundException {
 		Optional<Route> optionalRoute = routeRepository.findById(id);
-		return optionalRoute.isPresent()
-		? optionalRoute.get()
-		: null;
-	}
-	
-	public List<Route> findByDestination(String destination) {
-		return routeRepository.findByDestination(destination);
+		if(!optionalRoute.isPresent()) throw new RouteNotFoundException("No Route with ID: " + id + " exists.");
+		return optionalRoute.get();
 	}
 
-	public List<Route> findByOrigin(String destination) {
-		return routeRepository.findByOrigin(destination);
-	}
-	
-	public Route findByDestinationAndOrigin(String destination, String origin) {
-		Optional<Route> optionalRoute = routeRepository.findByDestinationAndOrigin(destination, origin);
-		return optionalRoute.isPresent()
-			? optionalRoute.get()
-			: null;
+	public List<Route> findBySearchAndFilter(HashMap<String, String> filterMap) {
+		List<Route> routes = findAll();
+		if(!filterMap.keySet().isEmpty()) routes = applyFilters(routes, filterMap);
+		return routes;
 	}
 
-	public Route insert(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
-		Optional<Airport> optionalDest = routeRepository.findAirportByIataId(route.getDestination().getIataId());
-		Optional<Airport> optionalOrig = routeRepository.findAirportByIataId(route.getOrigin().getIataId());
+	public List<Route> applyFilters(List<Route> routes, HashMap<String, String> filterMap) {
+				
+		// Route ID
+		String routeId = "routeId";
+		if(filterMap.keySet().contains(routeId)) {
+			try {
+				Integer parsedRouteId = Integer.parseInt(filterMap.get(routeId));
+				routes = routes.stream()
+				.filter(i -> i.getRouteId().equals(parsedRouteId))
+				.collect(Collectors.toList());
+			} catch(Exception err){/*Do nothing*/}
+		}
+
+		// Origin IATA ID
+		String routeOriginIataId = "routeOriginIataId";
+		if(filterMap.keySet().contains(routeOriginIataId)) {
+			String parsedRouteOriginIataId = filterMap.get(routeOriginIataId);
+			routes = routes.stream()
+			.filter(i -> i.getRouteOriginIataId().equals(parsedRouteOriginIataId))
+			.collect(Collectors.toList());
+		}
+
+		// Destination IATA ID
+		String routeDestinationIataId = "routeDestinationIataId";
+		if(filterMap.keySet().contains(routeDestinationIataId)) {
+			String parsedRouteDestinationIataId = filterMap.get(routeDestinationIataId);
+			routes = routes.stream()
+			.filter(i -> i.getRouteDestinationIataId().equals(parsedRouteDestinationIataId))
+			.collect(Collectors.toList());
+		}
+
+		// Search - (applied last due to save CPU usage
+		return applySearch(routes, filterMap);
+	}
+
+	public List<Route> applySearch(List<Route> routes, HashMap<String, String> filterMap) {
+		List<Route> routesWithSearchTerms = new ArrayList<Route>();
 		
-		if(!optionalDest.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getDestination() + " exist.");
-		if(!optionalOrig.isPresent()) throw new AirportNotFoundException("No Airport with IATA Code: " + route.getOrigin() + " exist.");
-		
-		Airport dest = optionalDest.get();
-		Airport orig = optionalOrig.get();
-
-		route.setDestination(dest);
-		route.setOrigin(orig);
+		String searchTerms = "searchTerms";
+		if(filterMap.keySet().contains(searchTerms)) {
+			String formattedSearch = filterMap.get(searchTerms)
+			.toLowerCase()
+			.replace(", ", ",");
+			String[] splitTerms = formattedSearch.split(",");
+			ObjectMapper mapper = new ObjectMapper();
 			
-		Optional<Route> existingRoute = routeRepository.findByDestinationAndOrigin(dest.getIataId(), orig.getIataId());
-		if(!existingRoute.isPresent()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + orig.getIataId() + " to destination: " + dest.getIataId() + ".");
+			for(Route route : routes) {
+				boolean containsSearchTerms = true;
+				
+				try {
+					String routeAsString = mapper.writeValueAsString(route)
+					.toLowerCase()
+					.replace("routeid", "")
+					.replace("routeoriginiataid", "")
+					.replace("routedestinationiataid", "");
+					
+					for(String term : splitTerms) {
+						if(!routeAsString.contains(term)) {
+							containsSearchTerms = false;
+							break;
+						}
+					}
+				} catch(JsonProcessingException err){
+					containsSearchTerms = false;
+				}
+
+				if(containsSearchTerms) {
+					routesWithSearchTerms.add(route);
+				}
+			}
+		} else {
+			return routes;
+		}
+		return routesWithSearchTerms;
+	}
+
+	public Route insert(String originIataId, String destinationIataId) throws RouteAlreadyExistsException, AirportNotFoundException {
+
+		Airport dest = airportService.findByIataId(destinationIataId);
+		Airport orig = airportService.findByIataId(originIataId);
+
+		if(orig.equals(dest)) throw new RouteAlreadyExistsException("Route Origin must be different from Route Destination.");
+			
+		HashMap<String, String> filterMap = new HashMap<String, String>();
+		filterMap.put("routeOriginIataId", originIataId);
+		filterMap.put("routeDestinationIataId", destinationIataId);
+
+		List<Route> existingRouteList = findBySearchAndFilter(filterMap);
+		if(!existingRouteList.isEmpty()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + originIataId + " to destination: " + destinationIataId + ".");
+
+		return routeRepository.save(new Route(originIataId, destinationIataId));
+	}
+
+	public Route update(Integer routeId, String originIataId, String destinationIataId)
+	throws AirportNotFoundException, RouteAlreadyExistsException, RouteNotFoundException {
+
+		Route route = findById(routeId);
+
+		HashMap<String, String> filterMap = new HashMap<String, String>();
+		filterMap.put("routeOriginIataId", originIataId);
+		filterMap.put("routeDestinationIataId", destinationIataId);
+		List<Route> existingRouteList = findBySearchAndFilter(filterMap);
+		if(!existingRouteList.isEmpty()) throw new RouteAlreadyExistsException("A Route already exist for origin: " + originIataId + " to destination: " + destinationIataId + ".");
+
+		route.setRouteOriginIataId(originIataId);
+		route.setRouteDestinationIataId(destinationIataId);
 		return routeRepository.save(route);
 	}
 
 	public void deleteById(Integer id) throws RouteNotFoundException {
-		if(findById(id) == null) 
-			throw new RouteNotFoundException("This route does not exist.");
+		findById(id);
 		routeRepository.deleteById(id);
-	}
-
-	public Route update(Route route) throws RouteAlreadyExistsException, AirportNotFoundException {
-		try {
-			return insert(route);
-		} catch (RouteAlreadyExistsException err) {
-			throw new RouteAlreadyExistsException("This route already exists.");
-		} catch (AirportNotFoundException err) {
-			throw new AirportNotFoundException("Airport(s) does not exist");
-		}
 	}
 }

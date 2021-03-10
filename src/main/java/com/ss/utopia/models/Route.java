@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,55 +14,48 @@ public class Route {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer routeId;
 	
-	@ManyToOne
-	@JoinColumn(name = "origin_id")
-	private Airport origin;
+	@Column(name = "origin_Id")
+	private String routeOriginIataId;
 
-	@ManyToOne
-	@JoinColumn(name = "destination_id")
-	private Airport destination;
+	@Column(name = "destination_Id")
+	private String routeDestinationIataId;
 
-	public Route() {
-	}
-
-	public Route(Integer id, Airport origin, Airport destination) {
-		super();
-		this.id = id;
-		this.origin = origin;
-		this.destination = destination;
+	public Route() {}
+	public Route(Integer routeId, String routeOriginIataId, String routeDestinationIataId) {
+		this.routeId = routeId;
+		this.routeOriginIataId = routeOriginIataId;
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
 	
-	public Route(Airport origin, Airport destination) {
-		super();
-		this.origin = origin;
-		this.destination = destination;
+	public Route(String routeOriginIataId, String routeDestinationIataId) {
+		this.routeOriginIataId = routeOriginIataId;
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
 	
 	
-	public Integer getId() {
-		return id;
+	public Integer getRouteId() {
+		return routeId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setRouteId(Integer routeId) {
+		this.routeId = routeId;
 	}
 
-	public Airport getOrigin() {
-		return origin;
+	public String getRouteOriginIataId() {
+		return routeOriginIataId;
 	}
 
-	public void setOrigin(Airport origin) {
-		this.origin = origin;
+	public void setRouteOriginIataId(String routeOriginIataId) {
+		this.routeOriginIataId = routeOriginIataId;
 	}
 
-	public Airport getDestination() {
-		return destination;
+	public String getRouteDestinationIataId() {
+		return routeDestinationIataId;
 	}
 
-	public void setDestination(Airport destination) {
-		this.destination = destination;
+	public void setRouteDestinationIataId(String routeDestinationIataId) {
+		this.routeDestinationIataId = routeDestinationIataId;
 	}
-
 }

@@ -14,24 +14,33 @@ public class AirplaneType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private Integer airplaneTypeId;
 	
 	@Column(name = "max_capacity")
 	private Integer capacity;
+
+	@Column(name = "name")
+	private String airplaneTypeName;
 	
-	public AirplaneType() {};
-	
-	public AirplaneType(Integer id) {
-		super();
-		this.id = id;
+	public AirplaneType() {}
+	public AirplaneType(Integer airplaneTypeId) {
+		this.airplaneTypeId = airplaneTypeId;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getAirplaneTypeId() {
+		return airplaneTypeId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setAirplaneTypeId(Integer airplaneTypeId) {
+		this.airplaneTypeId = airplaneTypeId;
+	}
+
+	public String getAirplaneTypeName() {
+		return airplaneTypeName;
+	}
+
+	public void setAirplaneTypeName(String airplaneTypeName) {
+		this.airplaneTypeName = airplaneTypeName;
 	}
 
 	public Integer getCapacity() {
