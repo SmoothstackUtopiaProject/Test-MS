@@ -18,117 +18,117 @@ public class User {
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
-	private Integer id;
+	private Integer userId;
 	@NotNull(message = "First name should not be empty")
 	@Column(name = "first_name")
-	private String firstName;
+	private String userFirstName;
 	@NotNull(message = "Last name should not be empty")
 	@Column(name = "last_name")
-	private String lastName;
+	private String userLastName;
 	@NotNull(message = "Email should not be empty")
 	@Column(name = "email")
 	@Email(message = "Email should be valid")
-	private String email;
+	private String userEmail;
 	@NotNull(message = "Password should not be empty")
 	@Column(name = "password")
-	private String password;
+	private String userPassword;
 	@NotNull(message = "Phone number should not be empty")
 	@Column(name = "phone")
-	private String phone;
+	private String userPhone;
 	@NotNull(message = "Role should not be empty")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
-	private Role role;
+	private Role userRole;
 
 	@Transient
-	private String token;
+	private String userToken;
 
 	public User() {
 	};
 
-	public User(Role role, String firstName, String lastName, String email, String password, String phone) {
+	public User(Role userRole, String userFirstName, String userLastName, String userEmail, String userPassword, String userPhone) {
 
-		this.role = role;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
+		this.userRole = userRole;
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userPhone = userPhone;
 	}
 
-	public User(Role role, String firstName, String lastName, String email, String password, String phone,
-			String token) {
+	public User(Role userRole, String userFirstName, String userLastName, String userEmail, String userPassword, String userPhone,
+			String userToken) {
 
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
-		this.role = role;
-		this.token = token;
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userPhone = userPhone;
+		this.userRole = userRole;
+		this.userToken = userToken;
 	}
 
-	public Role getRole() {
-		return role;
+	public Role getUserRole() {
+		return userRole;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setUserRole(Role userRole) {
+		this.userRole = userRole;
 	}
 
-	public String getToken() {
-		return token;
+	public String getUserToken() {
+		return userToken;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserUserId(Integer userId) {
 		this.userId = userId;
 	}
 
-	public String getUserFirstName() {
+	public String getUserUserFirstName() {
 		return userFirstName;
 	}
 
-	public void setUserFirstName(String userFirstName) {
+	public void setUserUserFirstName(String userFirstName) {
 		this.userFirstName = userFirstName;
 	}
 
-	public String getUserLastName() {
+	public String getUserUserLastName() {
 		return userLastName;
 	}
 
-	public void setUserLastName(String userLastName) {
+	public void setUserUserLastName(String userLastName) {
 		this.userLastName = userLastName;
 	}
 
-	public String getUserEmail() {
+	public String getUserUserEmail() {
 		return userEmail;
 	}
 
-	public void setUserEmail(String userEmail) {
+	public void setUserUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
 
-	public String getUserPassword() {
+	public String getUserUserPassword() {
 		return userPassword;
 	}
 
-	public void setUserPassword(String userPassword) {
+	public void setUserUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserPhone() {
+	public String getUserUserPhone() {
 		return userPhone;
 	}
 
-	public void setUserPhone(String userPhone) {
+	public void setUserUserPhone(String userPhone) {
 		this.userPhone = userPhone;
 	}
 }

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.ExpiredTokenExpception;
-import com.ss.utopia.exceptions.IncorrectPasswordException;
 import com.ss.utopia.exceptions.PasswordNotAllowedException;
 import com.ss.utopia.exceptions.TokenAlreadyIssuedException;
 import com.ss.utopia.exceptions.TokenNotFoundExpection;
@@ -75,7 +74,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password")
-	public ResponseEntity<?> forgotPassword(@RequestBody LinkedHashMap uMap)
+	public ResponseEntity<?> forgotPassword(@RequestBody HashMap<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
 		String email = (String) uMap.get("email");
 		try {
@@ -89,7 +88,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/verify-token")
-	public ResponseEntity<?> verifyToken(@RequestBody LinkedHashMap uMap) {
+	public ResponseEntity<?> verifyToken(@RequestBody HashMap<String, String> uMap) {
 
 		String recoveryCode = (String) uMap.get("recoveryCode");
 		try {
@@ -102,7 +101,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/recover")
-	public ResponseEntity<?> passwordRecovery(@RequestBody LinkedHashMap uMap)
+	public ResponseEntity<?> passwordRecovery(@RequestBody HashMap<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
 
 		String recoveryCode = (String) uMap.get("recoveryCode");

@@ -91,10 +91,10 @@ public class UserService {
 
 	public void ChangePassword(UserToken userToken, String password) throws ConnectException, IllegalArgumentException,
 			SQLException, UserNotFoundException, PasswordNotAllowedException {
-		User user = findById(userToken.getUser().getId());
-		if (user.getPassword().equals(password))
+		User user = findById(userToken.getUser().getUserId());
+		if (user.getUserPassword().equals(password))
 			throw new PasswordNotAllowedException("Previously used password not allowed");
-		user.setPassword(password);
+		user.setUserPassword(password);
 		userRepository.save(user);
 	}
 
@@ -102,12 +102,12 @@ public class UserService {
 		Map<String, Object> modelsMap = new HashMap<>();
 
 		String recoveryCode = userToken.getToken();
-		String userName = user.getFirstName();
+		String userName = user.getUserFirstName();
 
 		modelsMap.put("name", userName);
 		modelsMap.put("confirmation", recoveryCode);
 
-		MailRequest mailRequest = new MailRequest(user.getEmail());
+		MailRequest mailRequest = new MailRequest(user.getUserEmail());
 		return emailService.sendEmail(mailRequest, modelsMap);
 
 	}
