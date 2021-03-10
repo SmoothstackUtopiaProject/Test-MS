@@ -45,6 +45,7 @@ public class RouteService {
 	}
 
 	public List<Route> applyFilters(List<Route> routes, HashMap<String, String> filterMap) {
+				
 		// Route ID
 		String routeId = "routeId";
 		if(filterMap.keySet().contains(routeId)) {
@@ -59,23 +60,19 @@ public class RouteService {
 		// Origin IATA ID
 		String routeOriginIataId = "routeOriginIataId";
 		if(filterMap.keySet().contains(routeOriginIataId)) {
-			try {
-				String parsedRouteOriginIataId = filterMap.get(routeOriginIataId);
-				routes = routes.stream()
-				.filter(i -> i.getRouteOriginIataId().equals(parsedRouteOriginIataId))
-				.collect(Collectors.toList());
-			} catch(Exception err){/*Do nothing*/}
+			String parsedRouteOriginIataId = filterMap.get(routeOriginIataId);
+			routes = routes.stream()
+			.filter(i -> i.getRouteOriginIataId().equals(parsedRouteOriginIataId))
+			.collect(Collectors.toList());
 		}
 
 		// Destination IATA ID
 		String routeDestinationIataId = "routeDestinationIataId";
 		if(filterMap.keySet().contains(routeDestinationIataId)) {
-			try {
-				String parsedRouteDestinationIataId = filterMap.get(routeDestinationIataId);
-				routes = routes.stream()
-				.filter(i -> i.getRouteDestinationIataId().equals(parsedRouteDestinationIataId))
-				.collect(Collectors.toList());
-			} catch(Exception err){/*Do nothing*/}
+			String parsedRouteDestinationIataId = filterMap.get(routeDestinationIataId);
+			routes = routes.stream()
+			.filter(i -> i.getRouteDestinationIataId().equals(parsedRouteDestinationIataId))
+			.collect(Collectors.toList());
 		}
 
 		// Search - (applied last due to save CPU usage
@@ -117,6 +114,8 @@ public class RouteService {
 					routesWithSearchTerms.add(route);
 				}
 			}
+		} else {
+			return routes;
 		}
 		return routesWithSearchTerms;
 	}

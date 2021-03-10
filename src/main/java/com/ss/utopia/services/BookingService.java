@@ -264,6 +264,8 @@ public class BookingService {
 					bookingsWithSearchTerms.add(booking);
 				}
 			}
+		} else {
+			return bookings;
 		}
 		return bookingsWithSearchTerms;
 	}

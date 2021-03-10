@@ -16,10 +16,10 @@ public class Route {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer routeId;
 	
-	@Column(name = "origin_routeId")
+	@Column(name = "origin_Id")
 	private String routeOriginIataId;
 
-	@Column(name = "destination_routeId")
+	@Column(name = "destination_Id")
 	private String routeDestinationIataId;
 
 	public Route() {}

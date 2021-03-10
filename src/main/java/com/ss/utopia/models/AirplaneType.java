@@ -18,11 +18,12 @@ public class AirplaneType {
 	
 	@Column(name = "max_capacity")
 	private Integer capacity;
+
+	@Column(name = "name")
+	private String airplaneTypeName;
 	
-	public AirplaneType() {};
-	
+	public AirplaneType() {}
 	public AirplaneType(Integer airplaneTypeId) {
-		super();
 		this.airplaneTypeId = airplaneTypeId;
 	}
 
@@ -32,6 +33,14 @@ public class AirplaneType {
 
 	public void setAirplaneTypeId(Integer airplaneTypeId) {
 		this.airplaneTypeId = airplaneTypeId;
+	}
+
+	public String getAirplaneTypeName() {
+		return airplaneTypeName;
+	}
+
+	public void setAirplaneTypeName(String airplaneTypeName) {
+		this.airplaneTypeName = airplaneTypeName;
 	}
 
 	public Integer getCapacity() {

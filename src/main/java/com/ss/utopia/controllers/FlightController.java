@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ss.utopia.exceptions.AirplaneAlreadyInUseException;
 import com.ss.utopia.exceptions.FlightNotFoundException;
 import com.ss.utopia.models.Flight;
+import com.ss.utopia.models.FlightWithReferenceData;
 import com.ss.utopia.models.HttpError;
 import com.ss.utopia.services.FlightService;
 
@@ -36,8 +37,9 @@ public class FlightController {
 	@GetMapping
 	public ResponseEntity<Object> findAll() throws ConnectException, SQLException{
 		List<Flight> allFlights = flightService.findAll();
-		return !allFlights.isEmpty() ? new ResponseEntity<>(allFlights, HttpStatus.OK)
-				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		return !allFlights.isEmpty() 
+			? new ResponseEntity<>(allFlights, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 	
 
@@ -60,17 +62,26 @@ public class FlightController {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@PostMapping("/search")
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
+
+		List<FlightWithReferenceData> flights = flightService.findBySearchAndFilter(filterMap);
+		return !flights.isEmpty() 
+			? new ResponseEntity<>(flights, HttpStatus.OK)
+			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	}
 	
 	@PostMapping
 	public ResponseEntity<Object> create(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
 		
 		try {
-			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
-			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			String dateTime = flightMap.get("dateTime");
-			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
-			Integer duration = Integer.parseInt(flightMap.get("duration"));
-			String status = flightMap.get("status");
+			Integer routeId = Integer.parseInt(flightMap.get("flightRouteId"));
+			Integer airplaneId = Integer.parseInt(flightMap.get("flightAirplaneId"));
+			String dateTime = flightMap.get("flightDepartureTime");
+			Integer seatingId = Integer.parseInt(flightMap.get("flightSeatingId"));
+			Integer duration = Integer.parseInt(flightMap.get("flightDuration"));
+			String status = flightMap.get("flightStatus");
 			
 			return new ResponseEntity<>(flightService.insert(routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
 		} catch (AirplaneAlreadyInUseException err) {
@@ -82,13 +93,13 @@ public class FlightController {
 	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
 		
 		try {
-			Integer id = Integer.parseInt(flightMap.get("id"));
-			Integer routeId = Integer.parseInt(flightMap.get("routeId"));
-			Integer airplaneId = Integer.parseInt(flightMap.get("airplaneId"));
-			String dateTime = flightMap.get("dateTime");
-			Integer seatingId = Integer.parseInt(flightMap.get("seatingId"));
-			Integer duration = Integer.parseInt(flightMap.get("duration"));
-			String status = flightMap.get("status");
+			Integer id = Integer.parseInt(flightMap.get("flightId"));
+			Integer routeId = Integer.parseInt(flightMap.get("flightRouteId"));
+			Integer airplaneId = Integer.parseInt(flightMap.get("flightAirplaneId"));
+			String dateTime = flightMap.get("flightDepartureTime");
+			Integer seatingId = Integer.parseInt(flightMap.get("flightSeatingId"));
+			Integer duration = Integer.parseInt(flightMap.get("flightDuration"));
+			String status = flightMap.get("flightStatus");
 			
 			return new ResponseEntity<>(flightService.update(id, routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
 		} catch (AirplaneAlreadyInUseException err) {
@@ -119,15 +130,6 @@ public class FlightController {
 		} catch(ConnectException | IllegalArgumentException | SQLException err) {
 			return new ResponseEntity<>(new HttpError("Cannot process flightId: " + flightId, 400), HttpStatus.BAD_REQUEST);
 		}
-	}
-	
-	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
-
-		List<Flight> flights = flightService.findBySearchAndFilter(filterMap);
-		return !flights.isEmpty() 
-			? new ResponseEntity<>(flights, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 	
 	@ExceptionHandler(ConnectException.class)

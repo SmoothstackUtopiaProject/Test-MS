@@ -26,6 +26,10 @@ public class AirplaneService {
 	public List<Airplane> findAll() {
 		return airplaneRepository.findAll();
 	}
+
+	public List<AirplaneType> findAllAirplaneTypes() {
+		return airplaneRepository.findAllAirplaneTypes();
+	}
 	
 	public Airplane findById(Integer airplaneId) throws AirplaneNotFoundException {
 		Optional<Airplane> optionalAirplane = airplaneRepository.findById(airplaneId);
