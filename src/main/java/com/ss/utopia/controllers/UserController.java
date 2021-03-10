@@ -84,9 +84,9 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password")
-	public ResponseEntity<?> forgotPassword(@RequestBody HashMap<String, String> uMap)
+	public ResponseEntity<Object> forgotPassword(@RequestBody HashMap<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
-		String email = (String) uMap.get("email");
+		String email = uMap.get("email");
 		try {
 			userService.sendRecoveryEmail(email);
 			return new ResponseEntity<>(null, HttpStatus.OK);
@@ -98,9 +98,9 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/verify-token")
-	public ResponseEntity<?> verifyToken(@RequestBody HashMap<String, String> uMap) {
+	public ResponseEntity<Object> verifyToken(@RequestBody HashMap<String, String> uMap) {
 
-		String recoveryCode = (String) uMap.get("recoveryCode");
+		String recoveryCode = uMap.get("recoveryCode");
 		try {
 			userTokenService.verifyToken(recoveryCode);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -111,11 +111,11 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/recover")
-	public ResponseEntity<?> passwordRecovery(@RequestBody HashMap<String, String> uMap)
+	public ResponseEntity<Object> passwordRecovery(@RequestBody HashMap<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
 
-		String recoveryCode = (String) uMap.get("recoveryCode");
-		String password = (String) uMap.get("password");
+		String recoveryCode = uMap.get("recoveryCode");
+		String password = uMap.get("password");
 
 		try {
 			userService.ChangePassword(userTokenService.verifyToken(recoveryCode), password);
