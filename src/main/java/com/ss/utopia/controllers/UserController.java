@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ss.utopia.exceptions.ExpiredTokenExpception;
 import com.ss.utopia.exceptions.PasswordNotAllowedException;
 import com.ss.utopia.exceptions.TokenAlreadyIssuedException;
@@ -55,6 +57,14 @@ public class UserController {
 
 	@PostMapping()
 	public ResponseEntity<Object> insert(@RequestBody User user) {
+		System.out.println("=============================");
+		try {
+			System.out.println(new ObjectMapper().writeValueAsString(user));
+		} catch(JsonProcessingException err) {
+			System.out.println(err.getMessage());
+		}
+
+
 		try {
 			user.setUserRole(Role.USER);
 			return new ResponseEntity<>(userService.insert(user), HttpStatus.CREATED);

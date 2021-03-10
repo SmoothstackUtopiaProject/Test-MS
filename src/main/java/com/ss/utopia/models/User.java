@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Email;
+// import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -19,22 +19,28 @@ public class User {
 	@GeneratedValue
 	@Column(name = "id")
 	private Integer userId;
+
 	@NotNull(message = "First name should not be empty")
 	@Column(name = "first_name")
 	private String userFirstName;
+
 	@NotNull(message = "Last name should not be empty")
 	@Column(name = "last_name")
 	private String userLastName;
+
 	@NotNull(message = "Email should not be empty")
 	@Column(name = "email")
-	@Email(message = "Email should be valid")
+	// @Email(message = "Email should be valid")
 	private String userEmail;
+
 	@NotNull(message = "Password should not be empty")
 	@Column(name = "password")
 	private String userPassword;
+
 	@NotNull(message = "Phone number should not be empty")
 	@Column(name = "phone")
 	private String userPhone;
+
 	@NotNull(message = "Role should not be empty")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")

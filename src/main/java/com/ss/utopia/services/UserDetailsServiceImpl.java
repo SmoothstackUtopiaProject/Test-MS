@@ -28,11 +28,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(email);
         }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
+                user.getUserEmail(),
+                user.getUserPassword(),
                 grantedAuthorities
         );
     }
