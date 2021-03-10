@@ -41,7 +41,7 @@ public class AuthController {
 		}
 		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
 		User user = userService.findByEmail(authenticationToken.getName());
-		user.setToken(tokenProvider.generateToken(authenticationToken));
+		user.setUserToken(tokenProvider.generateToken(authenticationToken));
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
 		
@@ -63,9 +63,4 @@ public class AuthController {
 	public ResponseEntity<Object> invalidConnection() {
 		return new ResponseEntity<>("Invalid username of", HttpStatus.UNAUTHORIZED);
 	}
-	
-	
-
-	
-	
 }

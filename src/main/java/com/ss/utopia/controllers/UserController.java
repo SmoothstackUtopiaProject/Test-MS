@@ -56,7 +56,7 @@ public class UserController {
 	@PostMapping()
 	public ResponseEntity<Object> insert(@RequestBody User user) {
 		try {
-			user.setRole(Role.USER);
+			user.setUserRole(Role.USER);
 			return new ResponseEntity<>(userService.insert(user), HttpStatus.CREATED);
 		} catch (UserAlreadyExistsException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -36,13 +35,13 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication auth){
         String authorities = auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining());
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining());
 
         return Jwts.builder().setSubject(auth.getName())
-                .claim("roles", authorities)
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+            .claim("roles", authorities)
+            .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
+            .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
     public Authentication getAuthentication(HttpServletRequest request){
@@ -53,9 +52,9 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
         String username = claims.getSubject();
         final List<GrantedAuthority> authorities = Arrays.stream(claims.get("roles").toString().split(","))
-                .map(role -> role.startsWith("ROLE_")?role:"ROLE_"+role)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+            .map(role -> role.startsWith("ROLE_")?role:"ROLE_"+role)
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
         return username!= null ? new UsernamePasswordAuthenticationToken(username, null, authorities): null;
     }
 
@@ -79,7 +78,4 @@ public class JwtTokenProvider {
         }
         return null;
     }
-
-
-
 }

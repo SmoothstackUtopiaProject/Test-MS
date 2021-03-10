@@ -23,9 +23,7 @@ import com.ss.utopia.exceptions.PasswordNotAllowedException;
 import com.ss.utopia.exceptions.TokenAlreadyIssuedException;
 import com.ss.utopia.exceptions.UserAlreadyExistsException;
 import com.ss.utopia.exceptions.UserNotFoundException;
-import com.ss.utopia.exceptions.UserRoleNotFoundException;
 import com.ss.utopia.models.User;
-import com.ss.utopia.models.Role;
 import com.ss.utopia.models.UserToken;
 import com.ss.utopia.repositories.UserRepository;
 import com.ss.utopia.repositories.UserTokenRepository;
@@ -54,8 +52,8 @@ public class UserService {
 
 	public User insert(User user) throws UserAlreadyExistsException {
 
-		Optional<User> checkIfEmailExist = userRepository.findByEmail(user.getEmail());
-		Optional<User> checkIfPhoneExist = userRepository.findByPhone(user.getPhone());
+		Optional<User> checkIfEmailExist = userRepository.findByEmail(user.getUserEmail());
+		Optional<User> checkIfPhoneExist = userRepository.findByPhone(user.getUserPhone());
 		if (checkIfEmailExist.isPresent()) {
 			System.out.println("email");
 			throw new UserAlreadyExistsException("A user with this email already exists!");
@@ -65,7 +63,7 @@ public class UserService {
 			throw new UserAlreadyExistsException("A user with this phone number already exists!");
 		}
 
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		return userRepository.save(user);
 	}
 
@@ -76,7 +74,7 @@ public class UserService {
 		// getting current date and subtracting 15 minutes to check if token already
 		// issued
 		Date currentDateTimeMinuts15Minutes = new Date(System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(15));
-		boolean userTokens = userTokenService.verifyIfTokenBeenIssuedin15Min(user.getId(),
+		boolean userTokens = userTokenService.verifyIfTokenBeenIssuedin15Min(user.getUserId(),
 				currentDateTimeMinuts15Minutes);
 		if (!userTokens)
 			throw new TokenAlreadyIssuedException("You can only request a link once every 15 minutes!");
@@ -117,7 +115,7 @@ public class UserService {
 
 		if (!checkUser.isPresent()) {
 			throw new UserNotFoundException("Invalid Email");
-		} else if (!checkUser.get().getPassword().equals(password)) {
+		} else if (!checkUser.get().getUserPassword().equals(password)) {
 			throw new IncorrectPasswordException("Invalid password");
 		} else
 			return checkUser.get();
@@ -204,7 +202,7 @@ public class UserService {
 	public User update(Integer id, User user)
 			throws ConnectException, IllegalArgumentException, SQLException, UserNotFoundException {
 		User u = findById(id);
-		user.setRole(u.getRole());
+		user.setUserRole(u.getUserRole());
 		return userRepository.save(user);
 	}
 
@@ -226,14 +224,6 @@ public class UserService {
 		Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 		Matcher matcher = pattern.matcher(email);
 		return email != null && matcher.matches() && email.length() < 256 && !email.isEmpty();
-	}
-
-	private Boolean validateName(String name) {
-		return name != null && name.length() < 256 && !name.isEmpty();
-	}
-
-	private Boolean validatePassword(String password) {
-		return password != null && password.length() < 256 && !password.isEmpty();
 	}
 
 	private Boolean validatePhone(String phone) {

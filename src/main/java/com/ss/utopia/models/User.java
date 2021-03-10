@@ -43,9 +43,7 @@ public class User {
 	@Transient
 	private String userToken;
 
-	public User() {
-	};
-
+	public User() {}
 	public User(Role userRole, String userFirstName, String userLastName, String userEmail, String userPassword, String userPhone) {
 
 		this.userRole = userRole;
@@ -68,67 +66,68 @@ public class User {
 		this.userToken = userToken;
 	}
 
+	public Integer getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getUserFirstName() {
+		return this.userFirstName;
+	}
+
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
+	}
+
+	public String getUserLastName() {
+		return this.userLastName;
+	}
+
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
+	}
+
+	public String getUserEmail() {
+		return this.userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getUserPassword() {
+		return this.userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
+	public String getUserPhone() {
+		return this.userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
 	public Role getUserRole() {
-		return userRole;
+		return this.userRole;
 	}
 
 	public void setUserRole(Role userRole) {
 		this.userRole = userRole;
 	}
 
+
 	public String getUserToken() {
-		return userToken;
+		return this.userToken;
 	}
 
 	public void setUserToken(String userToken) {
 		this.userToken = userToken;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public String getUserUserFirstName() {
-		return userFirstName;
-	}
-
-	public void setUserUserFirstName(String userFirstName) {
-		this.userFirstName = userFirstName;
-	}
-
-	public String getUserUserLastName() {
-		return userLastName;
-	}
-
-	public void setUserUserLastName(String userLastName) {
-		this.userLastName = userLastName;
-	}
-
-	public String getUserUserEmail() {
-		return userEmail;
-	}
-
-	public void setUserUserEmail(String userEmail) {
-		this.userEmail = userEmail;
-	}
-
-	public String getUserUserPassword() {
-		return userPassword;
-	}
-
-	public void setUserUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
-
-	public String getUserUserPhone() {
-		return userPhone;
-	}
-
-	public void setUserUserPhone(String userPhone) {
-		this.userPhone = userPhone;
 	}
 }
