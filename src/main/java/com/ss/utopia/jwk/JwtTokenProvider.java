@@ -60,12 +60,11 @@ public class JwtTokenProvider {
 
     public boolean validateToken(HttpServletRequest request){
         String token = resolveToken(request);
-        if(token == null){
-            return false;
-        }
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        if(claims.getExpiration().before(new Date())){
-            return false;
+        if(token != null){
+            Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+            if(claims.getExpiration().before(new Date())){
+                return false;
+            }
         }
         return true;
     }

@@ -45,7 +45,7 @@ public class AuthController {
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
 		
-	};
+	}
 	
 	@DeleteMapping("{userId}")
 	public ResponseEntity<Object> delete(@PathVariable Integer userId) throws ConnectException, IllegalArgumentException, SQLException{

@@ -2,7 +2,6 @@ package com.ss.utopia.services;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -164,7 +163,7 @@ public class FlightService {
 		String originDate = "originDate";
 		if(filterMap.keySet().contains(originDate)) {
 			try {
-				Timestamp parsedOriginDate = Timestamp.valueOf(filterMap.get(originDate));
+				String parsedOriginDate = filterMap.get(originDate);
 				flights = flights.stream()
 				.filter(i -> i.getFlightDepartureTime().equals(parsedOriginDate))
 				.collect(Collectors.toList());

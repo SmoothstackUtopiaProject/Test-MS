@@ -21,10 +21,7 @@ public class UserTokenService {
 	
 	public boolean verifyIfTokenBeenIssuedin15Min(Integer userId, Date before) {
 		List<UserToken> userTokes = userTokenRepository.findTokenIssuedInLast15Min(userId, before);
-		if(userTokes.isEmpty()) {
-			return true;
-		} else return false; 
-		
+		return userTokes.isEmpty(); 
 	}
 	
 	// verify if token is exists and if not expired. 

@@ -6,6 +6,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ss.utopia.models.Airplane;
 import com.ss.utopia.models.Airport;
 import com.ss.utopia.models.Flight;
 import com.ss.utopia.models.Route;
@@ -13,6 +14,9 @@ import com.ss.utopia.models.Route;
 @Service
 public class SqlPopulateService {
 	
+  @Autowired
+  private AirplaneService airplaneService;
+
   @Autowired
   private AirportService airportService;
 
@@ -23,30 +27,37 @@ public class SqlPopulateService {
   private RouteService routeService;
 
 	public List<Flight> populateFlights() {
+    List<Airplane> airplaneList = airplaneService.findAll();
     List<Flight> flightList = flightService.findAll();
     List<Route> routeList = routeService.findAll();
 
     Random random = new Random(980610);
 
+    Integer index = 1;
     for(Route route : routeList) {
       System.out.println("Route origin: " + route.getRouteOriginIataId() + 
         " to destination: " + route.getRouteDestinationIataId()
       );
 
+      
       for(int month = 1; month < 13; month++) {
         for(int day = 1; day < 3; day++) {
 
           if(random.nextInt(2) == 1) {
+            int airplaneIndex = random.nextInt(airplaneList.size());
             int hour = random.nextInt(11) + 1;
             int minute = random.nextInt(58) + 1;
+            int duration = random.nextInt(20000) + 7201;
+
             try {
               Flight flight = flightService.insert(
-                route.getRouteId(), 1, "2021" + "-" + 
+                route.getRouteId(), airplaneList.get(airplaneIndex).getAirplaneId(),
+                "2021" + "-" + 
                 (month < 10 ? "0" + month : month) + "-" + 
                 (day < 10 ? "01" : day * 15) + " " +
                 (hour < 10 ? "0" + hour : hour) + ":" + 
                 (minute < 10 ? "0" + minute : minute) + ":00",
-                1, 2, "GROUNDED"
+                index, duration, "GROUNDED"
               );
               
               System.out.println(
@@ -57,6 +68,7 @@ public class SqlPopulateService {
               );
 
               flightList.add(flight);
+              index++;
             } catch(Exception err){
               System.out.println(err.getMessage());
             }

@@ -103,7 +103,7 @@ public class FlightController {
 			
 			return new ResponseEntity<>(flightService.update(id, routeId, airplaneId, dateTime, seatingId, duration, status), HttpStatus.CREATED);
 		} catch (AirplaneAlreadyInUseException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new HttpError(err.getMessage(), 409), HttpStatus.CONFLICT);
 		} catch (FlightNotFoundException err) {
 			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
 		} 

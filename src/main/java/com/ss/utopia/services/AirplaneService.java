@@ -67,17 +67,17 @@ public class AirplaneService {
 		}
 
 		// Type Name
-		String airplaneTypeName = "airplaneTypeName";
-		if(filterMap.keySet().contains(airplaneTypeName)) {
-			try {
-				String parsedAirplaneTypeName = filterMap.get(airplaneTypeName);
-				List<Integer> airplaneTypeIDsWithName = new ArrayList<Integer>(); // TODO findAirplaneTypesByName(filterMap.get(parsedTypeName));
+		// String airplaneTypeName = "airplaneTypeName";
+		// if(filterMap.keySet().contains(airplaneTypeName)) {
+		// 	try {
+		// 		String parsedAirplaneTypeName = filterMap.get(airplaneTypeName);
+		// 		List<Integer> airplaneTypeIDsWithName = new ArrayList<Integer>(); // TODO findAirplaneTypesByName(filterMap.get(parsedTypeName));
 
-				airplanes = airplanes.stream()
-				.filter(i -> airplaneTypeIDsWithName.contains(i.getAirplaneTypeId()))
-				.collect(Collectors.toList());
-			} catch(Exception err){/*Do nothing*/}
-		}
+		// 		airplanes = airplanes.stream()
+		// 		.filter(i -> airplaneTypeIDsWithName.contains(i.getAirplaneTypeId()))
+		// 		.collect(Collectors.toList());
+		// 	} catch(Exception err){/*Do nothing*/}
+		// }
 
 		// Search - (applied last due to save CPU usage
 		return applySearch(airplanes, filterMap);

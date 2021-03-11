@@ -57,9 +57,5 @@ public class UserToken {
 
 	public void setDate(Date date) {
 		this.date = date;
-	};
-	
-	
-	
-
+	}
 }

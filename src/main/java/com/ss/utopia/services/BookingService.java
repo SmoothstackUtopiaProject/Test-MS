@@ -321,7 +321,7 @@ public class BookingService {
 						newBookingWithReferenceData.setBookingFlightId(bookingFlightId);
 					} catch(Exception override) {/*Do Nothing*/}
 				}
-			} catch(Exception ignoreAll){}
+			} catch(Exception ignoreAll){/*Do Nothing*/}
 		}
 		return newBookingWithReferenceData;
 	}
@@ -392,7 +392,7 @@ public class BookingService {
 						}
 					} catch(Exception override) {/*Do Nothing*/}
 				}
-			} catch(Exception ignoreAll){}
+			} catch(Exception ignoreAll){/*Do Nothing*/}
 		}
 		return newBookingWithReferenceData;
 	}

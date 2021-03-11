@@ -63,6 +63,9 @@ public class UserService {
 			throw new UserAlreadyExistsException("A user with this phone number already exists!");
 		}
 
+		user.setUserFirstName(user.getUserFirstName().toUpperCase());
+		user.setUserLastName(user.getUserLastName().toUpperCase());
+		user.setUserEmail(user.getUserEmail().toUpperCase());
 		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		return userRepository.save(user);
 	}

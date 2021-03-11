@@ -56,10 +56,9 @@ public class RouteController {
 	@PostMapping("/search")
 	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
 		List<Route> routeList = routeService.findBySearchAndFilter(filterMap);
-		return !filterMap.isEmpty()
+		return !routeList.isEmpty()
 			? new ResponseEntity<>(routeList, HttpStatus.OK)
 			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-
 	}
 	
 	@PostMapping
