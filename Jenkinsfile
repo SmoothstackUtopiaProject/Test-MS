@@ -20,7 +20,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build...'            
-                sh "docker build --tag utopiaairportms:$COMMIT_HASH -e DB_URL=$DB_URL DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD ."
+                sh "docker build --tag utopiaairportms:$COMMIT_HASH --build_arg DBUrl=$DB_URL --build_arg DBUsername=$DB_USERNAME --build_arg DBPassword=$DB_PASSWORD ."
                 sh "docker tag utopiaairportms:$COMMIT_HASH 466486113081.dkr.ecr.us-east-1.amazonaws.com/utopiaairlines/airportms:$COMMIT_HASH"
             }
         }
