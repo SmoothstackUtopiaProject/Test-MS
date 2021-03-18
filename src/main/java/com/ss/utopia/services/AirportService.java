@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 public class AirportService {
 
   @Autowired
-  private AirportRepository airportRepository;
+  AirportRepository airportRepository;
 
   private static final Pattern airportIataIdValidation = Pattern.compile(
-    "\\p{IsLatin}"
+    "\\p{IsAlphabetic}"
   );
   private static final Pattern airportCityNameValidation = Pattern.compile(
     "^\\p{IsAlphabetic}"
@@ -35,12 +35,12 @@ public class AirportService {
   public Airport findByIataId(String airportIataId)
     throws AirportNotFoundException {
     String formattedAirportIataId = formatAirportIataId(airportIataId);
-    boolean isValidIataId = validateAirportIataId(airportIataId);
-    if (!isValidIataId) {
-      throw new IllegalArgumentException(
-        "Not a valid IATA code: " + formattedAirportIataId + "."
-      );
-    }
+    // boolean isValidIataId = validateAirportIataId(airportIataId);
+    // if (!isValidIataId) {
+    //   throw new IllegalArgumentException(
+    //     "Not a valid IATA code: " + formattedAirportIataId + "."
+    //   );
+    // }
 
     Optional<Airport> optionalAirpot = airportRepository.findById(
       formattedAirportIataId

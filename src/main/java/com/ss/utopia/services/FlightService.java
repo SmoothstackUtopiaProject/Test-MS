@@ -51,6 +51,8 @@ public class FlightService {
 		List<Airport> airports = airportService.findAll();
 		List<Route> routes = routeService.findAll();
 
+		System.out.println(flights);
+
 		List<FlightWithReferenceData> flightsWithReferenceData = new ArrayList<FlightWithReferenceData>();
 		for(Flight flight : flights) {
 			Integer flightId = flight.getFlightId();

@@ -22,7 +22,7 @@ import com.ss.utopia.repositories.AirplaneRepository;
 public class AirplaneService {
 	
 	@Autowired
-	private AirplaneRepository airplaneRepository;
+	AirplaneRepository airplaneRepository;
 
 	public List<Airplane> findAll() {
 		return airplaneRepository.findAll();

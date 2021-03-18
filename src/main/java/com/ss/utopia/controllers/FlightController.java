@@ -39,10 +39,9 @@ public class FlightController {
 		List<Flight> allFlights = flightService.findAll();
 		return !allFlights.isEmpty() 
 			? new ResponseEntity<>(allFlights, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-
 	@GetMapping("{path}")
 	public ResponseEntity<Object> findById(@PathVariable String path)
 	throws ConnectException, SQLException {
@@ -52,7 +51,7 @@ public class FlightController {
 			Flight flight = flightService.findById(flightId);
 			return new ResponseEntity<>(flight, HttpStatus.OK);
 
-		} catch(IllegalArgumentException | NullPointerException err) {
+		} catch(IllegalArgumentException err) {
 			String errorMessage = "Cannot process Flight ID " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
 			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");

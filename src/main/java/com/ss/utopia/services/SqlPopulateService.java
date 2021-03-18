@@ -51,6 +51,7 @@ public class SqlPopulateService {
 
             try {
               Flight flight = flightService.insert(
+                index,
                 route.getRouteId(), airplaneList.get(airplaneIndex).getAirplaneId(),
                 "2021" + "-" + 
                 (month < 10 ? "0" + month : month) + "-" + 
