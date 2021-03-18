@@ -29,10 +29,5 @@ pipeline {
                sh "docker run utopiaairportms:$COMMIT_HASH"
            }
         }
-        stage('Cleanup...') {
-            steps {
-                sh "docker system prune -f"
-            }
-        }
     }
 }
