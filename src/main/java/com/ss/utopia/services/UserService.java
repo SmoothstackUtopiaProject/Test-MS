@@ -3,9 +3,9 @@ package com.ss.utopia.services;
 import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -100,7 +100,7 @@ public class UserService {
 	}
 
 	public MailResponse sendEmail(User user, UserToken userToken) {
-		Map<String, Object> modelsMap = new Map<>();
+		Map<String, Object> modelsMap = new HashMap<>();
 
 		String recoveryCode = userToken.getToken();
 		String userName = user.getUserFirstName();
