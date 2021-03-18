@@ -95,7 +95,7 @@ public class FlightService {
 			.filter(i -> i.getAirplaneTypeId().equals(airplane.getAirplaneTypeId()))
 			.collect(Collectors.toList()).get(0);
 			
-			flightAirplaneTypeName = airplaneType.getAirplaneTypeName();
+			flightAirplaneTypeName = airplaneType.getAirplaneTypeId().toString();
 
 			// New FlightWithReferenceData
 			flightsWithReferenceData.add(new FlightWithReferenceData(
