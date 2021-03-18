@@ -2,6 +2,7 @@ package com.ss.utopia.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,13 +39,13 @@ public class RouteService {
 		return optionalRoute.get();
 	}
 
-	public List<Route> findBySearchAndFilter(HashMap<String, String> filterMap) {
+	public List<Route> findBySearchAndFilter(Map<String, String> filterMap) {
 		List<Route> routes = findAll();
 		if(!filterMap.keySet().isEmpty()) routes = applyFilters(routes, filterMap);
 		return routes;
 	}
 
-	public List<Route> applyFilters(List<Route> routes, HashMap<String, String> filterMap) {
+	public List<Route> applyFilters(List<Route> routes, Map<String, String> filterMap) {
 				
 		// Route ID
 		String routeId = "routeId";
@@ -79,7 +80,7 @@ public class RouteService {
 		return applySearch(routes, filterMap);
 	}
 
-	public List<Route> applySearch(List<Route> routes, HashMap<String, String> filterMap) {
+	public List<Route> applySearch(List<Route> routes, Map<String, String> filterMap) {
 		List<Route> routesWithSearchTerms = new ArrayList<Route>();
 		
 		String searchTerms = "searchTerms";
@@ -127,7 +128,7 @@ public class RouteService {
 
 		if(orig.equals(dest)) throw new RouteAlreadyExistsException("Route Origin must be different from Route Destination.");
 			
-		HashMap<String, String> filterMap = new HashMap<String, String>();
+		Map<String, String> filterMap = new HashMap<String, String>();
 		filterMap.put("routeOriginIataId", originIataId);
 		filterMap.put("routeDestinationIataId", destinationIataId);
 
@@ -142,7 +143,7 @@ public class RouteService {
 
 		Route route = findById(routeId);
 
-		HashMap<String, String> filterMap = new HashMap<String, String>();
+		Map<String, String> filterMap = new HashMap<String, String>();
 		filterMap.put("routeOriginIataId", originIataId);
 		filterMap.put("routeDestinationIataId", destinationIataId);
 		List<Route> existingRouteList = findBySearchAndFilter(filterMap);

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,14 +125,14 @@ public class FlightService {
 		return optionalFlight.get();
 	}
 	
-	public List<FlightWithReferenceData> findBySearchAndFilter(HashMap<String, String> filterMap) {
+	public List<FlightWithReferenceData> findBySearchAndFilter(Map<String, String> filterMap) {
 
 		List<Flight> flights = findAll();
 		if(!filterMap.keySet().isEmpty()) flights = applyFilters(flights, filterMap);
 		return findFlightReferenceData(flights);
 	}
 
-	public List<Flight> applyFilters(List<Flight> flights, HashMap<String, String> filterMap) {
+	public List<Flight> applyFilters(List<Flight> flights, Map<String, String> filterMap) {
 
 		// ID
 		String flightId = "flightId";
@@ -149,7 +150,7 @@ public class FlightService {
 		String destination = "flightRouteDestinationIataId";
 		if(filterMap.keySet().contains(origin) || filterMap.keySet().contains(destination)) {
 
-			HashMap<String, String> routeIdFilterMap = new HashMap<String, String>();
+			Map<String, String> routeIdFilterMap = new HashMap<String, String>();
 			if(filterMap.keySet().contains(origin)) routeIdFilterMap.put("routeOriginIataId", filterMap.get(origin));
 			if(filterMap.keySet().contains(destination)) routeIdFilterMap.put("routeDestinationIataId", filterMap.get(destination));
 			
@@ -176,7 +177,7 @@ public class FlightService {
 		return applySearch(flights, filterMap);
 	}
 
-	public List<Flight> applySearch(List<Flight> flights, HashMap<String, String> filterMap) {
+	public List<Flight> applySearch(List<Flight> flights, Map<String, String> filterMap) {
 		List<Flight> flightsWithSearchTerms = new ArrayList<Flight>();
 		
 		String searchTerms = "searchTerms";

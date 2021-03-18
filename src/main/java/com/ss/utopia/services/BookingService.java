@@ -3,7 +3,7 @@ package com.ss.utopia.services;
 import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,14 +136,14 @@ public class BookingService {
 		return bookingWithReferenceData;
 	}
 	
-	public List<BookingWithReferenceData> findBySearchAndFilter(HashMap<String, String> filterMap) 
+	public List<BookingWithReferenceData> findBySearchAndFilter(Map<String, String> filterMap) 
 	throws ConnectException, SQLException {
 		List<BookingWithReferenceData> bookings = findAllWithReferenceData();
 		if(!filterMap.keySet().isEmpty()) bookings = applyFilters(bookings, filterMap);
 		return bookings;
 	}
 
-	public List<BookingWithReferenceData> applyFilters(List<BookingWithReferenceData> bookings, HashMap<String, String> filterMap) {
+	public List<BookingWithReferenceData> applyFilters(List<BookingWithReferenceData> bookings, Map<String, String> filterMap) {
 		// Booking ID
 		String bookingId = "bookingId";
 		if(filterMap.keySet().contains(bookingId)) {
@@ -225,7 +225,7 @@ public class BookingService {
 		return applySearch(bookings, filterMap);
 	}
 
-	public List<BookingWithReferenceData> applySearch(List<BookingWithReferenceData> bookings, HashMap<String, String> filterMap) {
+	public List<BookingWithReferenceData> applySearch(List<BookingWithReferenceData> bookings, Map<String, String> filterMap) {
 		List<BookingWithReferenceData> bookingsWithSearchTerms = new ArrayList<BookingWithReferenceData>();
 		
 		String searchTerms = "searchTerms";
@@ -270,7 +270,7 @@ public class BookingService {
 		return bookingsWithSearchTerms;
 	}
 
-	public BookingWithReferenceData insert(HashMap<String, String> bookingMap) 
+	public BookingWithReferenceData insert(Map<String, String> bookingMap) 
 	throws BookingUserNotFoundException, ConnectException, IllegalArgumentException, 
 	NullPointerException, SQLException {
 
@@ -326,7 +326,7 @@ public class BookingService {
 		return newBookingWithReferenceData;
 	}
 
-	public BookingWithReferenceData update(HashMap<String, String> bookingMap) 
+	public BookingWithReferenceData update(Map<String, String> bookingMap) 
 	throws BookingNotFoundException, BookingUserNotFoundException, ConnectException, 
 	IllegalArgumentException, NullPointerException, SQLException {
 

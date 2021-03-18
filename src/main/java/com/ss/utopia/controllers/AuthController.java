@@ -22,9 +22,9 @@ import com.ss.utopia.jwk.JwtTokenProvider;
 import com.ss.utopia.models.User;
 import com.ss.utopia.services.UserService;
 
+@CrossOrigin(origins = "http://3.235.67.202:8080")
 @RestController
-@CrossOrigin()
-@RequestMapping(value = "/auth")
+@RequestMapping("/auth")
 public class AuthController {
 	
 	@Autowired

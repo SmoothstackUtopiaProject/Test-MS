@@ -2,14 +2,24 @@ package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.BookingNotFoundException;
 import com.ss.utopia.exceptions.BookingUserNotFoundException;
@@ -20,6 +30,7 @@ import com.ss.utopia.services.BookingGuestService;
 import com.ss.utopia.services.BookingService;
 import com.ss.utopia.services.BookingUserService;
 
+@CrossOrigin(origins = "http://3.235.67.202:8080")
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
@@ -40,7 +51,7 @@ public class BookingController {
 		List<Booking> bookingList = bookingService.findAll();
 		return !bookingList.isEmpty() 
 		? new ResponseEntity<>(bookingList, HttpStatus.OK)
-		: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("/referencedata")
@@ -50,7 +61,7 @@ public class BookingController {
 		List<BookingWithReferenceData> bookingList = bookingService.findAllWithReferenceData();
 		return !bookingList.isEmpty() 
 			? new ResponseEntity<>(bookingList, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("{path}")
@@ -62,29 +73,35 @@ public class BookingController {
 			BookingWithReferenceData bookingWithReferenceData = bookingService.findByIdWithReferenceData(bookingId);
 			return new ResponseEntity<>(bookingWithReferenceData, HttpStatus.OK);
 
-		} catch(IllegalArgumentException | NullPointerException err) {
+		} catch(IllegalArgumentException err) {
 			String errorMessage = "Cannot process Booking ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
+			.substring(0, 1).toLowerCase(Locale.getDefault()) + err.getMessage()
 			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new HttpError(
+				errorMessage, HttpStatus.BAD_REQUEST.value()),
+				HttpStatus.BAD_REQUEST
+			);
 			
 		} catch(BookingNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new HttpError(
+				err.getMessage(), HttpStatus.NOT_FOUND.value()), 
+				HttpStatus.NOT_FOUND
+			);
 		}
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap)
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap)
 	throws ConnectException, SQLException {
 
 		List<BookingWithReferenceData> bookings = bookingService.findBySearchAndFilter(filterMap);
 		return !bookings.isEmpty()
 			? new ResponseEntity<>(bookings, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping()
-	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> bookingMap)
+	public ResponseEntity<Object> insert(@RequestBody Map<String, String> bookingMap)
 	throws ConnectException, SQLException {
 
 		try {
@@ -98,12 +115,12 @@ public class BookingController {
 			String errorMessage = "Cannot process User ID " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
 			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new HttpError(errorMessage, HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		} 
 	}
 
 	@PutMapping()
-	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> bookingMap)
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> bookingMap)
 	throws ConnectException, SQLException {
 
 		try {
@@ -111,13 +128,13 @@ public class BookingController {
 			return new ResponseEntity<>(updatedBooking, HttpStatus.ACCEPTED);
 
 		} catch(BookingNotFoundException | BookingUserNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new HttpError(err.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
 		
 		} catch(IllegalArgumentException | NullPointerException err) {
 			String errorMessage = "Cannot process User ID " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
 			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new HttpError(errorMessage, HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		} 
 	}
 
@@ -128,16 +145,16 @@ public class BookingController {
 		try {
 			Integer bookingId = Integer.parseInt(bookingIdString);
 			bookingService.delete(bookingId);
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 		} catch(IllegalArgumentException | NullPointerException err) {
 			String errorMessage = "Cannot process BookingID " + err.getMessage()
 			.substring(0, 1).toLowerCase() + err.getMessage()
 			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new HttpError(errorMessage, HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 
 		} catch(BookingNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new HttpError(err.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -148,7 +165,7 @@ public class BookingController {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Object> invalidMessage() {
-		return new ResponseEntity<>(new HttpError("Invalid http request body.", 404), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new HttpError("Invalid http request body.", HttpStatus.NOT_FOUND.value()), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(SQLException.class)

@@ -2,7 +2,7 @@ package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -63,7 +63,7 @@ public class FlightController {
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap) {
 
 		List<FlightWithReferenceData> flights = flightService.findBySearchAndFilter(filterMap);
 		return !flights.isEmpty() 
@@ -72,7 +72,7 @@ public class FlightController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
+	public ResponseEntity<Object> create(@RequestBody Map<String, String> flightMap) throws ConnectException, SQLException{
 		
 		try {
 			Integer routeId = Integer.parseInt(flightMap.get("flightRouteId"));
@@ -89,7 +89,7 @@ public class FlightController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> flightMap) throws ConnectException, SQLException{
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> flightMap) throws ConnectException, SQLException{
 		
 		try {
 			Integer id = Integer.parseInt(flightMap.get("flightId"));

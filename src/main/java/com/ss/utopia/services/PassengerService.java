@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,14 +45,14 @@ public class PassengerService {
 		return passengerRepository.findByPassportId(passengerPassportId);
 	}
 
-	public List<Passenger> findBySearchAndFilter(HashMap<String, String> filterMap) {
+	public List<Passenger> findBySearchAndFilter(Map<String, String> filterMap) {
 
 		List<Passenger> passengers = findAll();
 		if(!filterMap.keySet().isEmpty()) passengers = applyFilters(passengers, filterMap);
 		return passengers;
 	}
 
-	public List<Passenger> applyFilters(List<Passenger> passengers, HashMap<String, String> filterMap) {
+	public List<Passenger> applyFilters(List<Passenger> passengers, Map<String, String> filterMap) {
 		// ID
 		String passengerId = "passengerId";
 		if(filterMap.keySet().contains(passengerId)) {
@@ -189,7 +189,7 @@ public class PassengerService {
 		return applySearch(passengers, filterMap);
 	}
 
-	public List<Passenger> applySearch(List<Passenger> passengers, HashMap<String, String> filterMap) {
+	public List<Passenger> applySearch(List<Passenger> passengers, Map<String, String> filterMap) {
 		List<Passenger> passengersWithSearchTerms = new ArrayList<Passenger>();
 		
 		String searchTerms = "searchTerms";

@@ -3,7 +3,7 @@ package com.ss.utopia.controllers;
 import java.net.ConnectException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import com.ss.utopia.models.Passenger;
 import com.ss.utopia.models.HttpError;
 import com.ss.utopia.services.PassengerService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://3.235.67.202:8080/")
 @RestController
 @RequestMapping(
 	value = "/passengers",
@@ -109,7 +109,7 @@ public class PassengerController {
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap)
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap)
 	throws ConnectException, SQLException {
 
 		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
@@ -119,7 +119,7 @@ public class PassengerController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> passengerMap) {
+	public ResponseEntity<Object> insert(@RequestBody Map<String, String> passengerMap) {
 
 		try {
 			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
@@ -151,7 +151,7 @@ public class PassengerController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> passengerMap) {
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> passengerMap) {
 
 		try {
 			Integer passengerId = Integer.parseInt(passengerMap.get("passengerId"));

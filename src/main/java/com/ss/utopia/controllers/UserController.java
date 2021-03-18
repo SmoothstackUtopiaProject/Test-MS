@@ -3,7 +3,7 @@ package com.ss.utopia.controllers;
 import java.net.ConnectException;
 import java.sql.SQLException;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password")
-	public ResponseEntity<Object> forgotPassword(@RequestBody HashMap<String, String> uMap)
+	public ResponseEntity<Object> forgotPassword(@RequestBody Map<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
 		String email = uMap.get("email");
 		try {
@@ -98,7 +98,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/verify-token")
-	public ResponseEntity<Object> verifyToken(@RequestBody HashMap<String, String> uMap) {
+	public ResponseEntity<Object> verifyToken(@RequestBody Map<String, String> uMap) {
 
 		String recoveryCode = uMap.get("recoveryCode");
 		try {
@@ -111,7 +111,7 @@ public class UserController {
 	}
 
 	@PostMapping("/forgot-password/recover")
-	public ResponseEntity<Object> passwordRecovery(@RequestBody HashMap<String, String> uMap)
+	public ResponseEntity<Object> passwordRecovery(@RequestBody Map<String, String> uMap)
 			throws ConnectException, IllegalArgumentException, SQLException {
 
 		String recoveryCode = uMap.get("recoveryCode");

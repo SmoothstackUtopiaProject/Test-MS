@@ -2,7 +2,7 @@ package com.ss.utopia.controllers;
 
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import com.ss.utopia.exceptions.AirportNotFoundException;
@@ -54,7 +54,7 @@ public class RouteController {
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody HashMap<String, String> filterMap) {
+	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap) {
 		List<Route> routeList = routeService.findBySearchAndFilter(filterMap);
 		return !routeList.isEmpty()
 			? new ResponseEntity<>(routeList, HttpStatus.OK)
@@ -62,7 +62,7 @@ public class RouteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody HashMap<String, String> routeMap) {
+	public ResponseEntity<Object> insert(@RequestBody Map<String, String> routeMap) {
 		try {
 			String origin = routeMap.get("origin");
 			String destination = routeMap.get("destination");
@@ -78,7 +78,7 @@ public class RouteController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Object> update(@RequestBody HashMap<String, String> routeMap) {
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> routeMap) {
 		try {
 			Integer id = Integer.parseInt(routeMap.get("routeId"));
 			String origin = routeMap.get("routeOrigin");

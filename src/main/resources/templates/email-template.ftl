@@ -196,7 +196,7 @@
                                 <br>
 
 
-                                <a href="http://localhost:3000/password-recovery/?reset=${confirmation}">Reset Password</a>
+                                <a href="http://3.235.67.202:8080//password-recovery/?reset=${confirmation}">Reset Password</a>
                                 
 
 								<br>
