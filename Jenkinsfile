@@ -2,6 +2,9 @@ pipeline {
     agent any
     environment {
         COMMIT_HASH="${sh(script:'git rev-parse --short HEAD', returnStdout: true).trim()}"
+        DB_URL="$DB_URL"
+        DB_USERNAME="$DB_USERNAME"
+        DB_PASSWORD="$DB_PASSWORD"
     }
 
     stages {
