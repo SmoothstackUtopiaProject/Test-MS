@@ -22,14 +22,12 @@ com\ss\utopia\repositories\BookingGuestRepository.class
 com\ss\utopia\services\FlightService.class
 com\ss\utopia\exceptions\AirplaneNotFoundException.class
 com\ss\utopia\models\Airport.class
-com\ss\utopia\TestMS.class
 com\ss\utopia\exceptions\PassengerAlreadyExistsException.class
 com\ss\utopia\exceptions\TokenAlreadyIssuedException.class
 com\ss\utopia\repositories\FlightRepository.class
 com\ss\utopia\email\services\EmailService.class
 com\ss\utopia\services\BookingService.class
 com\ss\utopia\models\BookingUser.class
-com\ss\utopia\TomcatCustomizer.class
 com\ss\utopia\services\UserService.class
 com\ss\utopia\exceptions\BookingNotFoundException.class
 com\ss\utopia\exceptions\AirportAlreadyExistsException.class
@@ -57,6 +55,7 @@ com\ss\utopia\repositories\AirportRepository.class
 com\ss\utopia\controllers\SqlPopulateController.class
 com\ss\utopia\models\Airplane.class
 com\ss\utopia\models\FlightWithReferenceData.class
+com\ss\utopia\ServletInitializer.class
 com\ss\utopia\config\WebSecurityConfig$1.class
 com\ss\utopia\services\AirportService.class
 com\ss\utopia\exceptions\AirplaneTypeNotFoundException.class
@@ -69,7 +68,6 @@ com\ss\utopia\services\BookingGuestService.class
 com\ss\utopia\exceptions\IncorrectPasswordException.class
 com\ss\utopia\exceptions\UserNotFoundException.class
 com\ss\utopia\exceptions\PasswordNotAllowedException.class
-com\ss\utopia\TomcatCustomizer$1.class
 com\ss\utopia\controllers\AuthController.class
 com\ss\utopia\controllers\UserController.class
 com\ss\utopia\exceptions\UserRoleNotFoundException.class
@@ -82,4 +80,5 @@ com\ss\utopia\exceptions\TokenNotFoundExpection.class
 com\ss\utopia\controllers\PassengerController.class
 com\ss\utopia\exceptions\RouteAlreadyExistsException.class
 com\ss\utopia\services\PassengerService.class
+com\ss\utopia\TestMSApplication.class
 com\ss\utopia\SimpleCORSFilter.class
