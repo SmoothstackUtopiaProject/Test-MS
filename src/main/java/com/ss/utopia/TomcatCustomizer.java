@@ -15,6 +15,7 @@ public class TomcatCustomizer implements EmbeddedServletContainerCustomizer {
     TomcatEmbeddedServletContainerFactory tomcat = (TomcatEmbeddedServletContainerFactory) container;
     tomcat.addConnectorCustomizers(
       new TomcatConnectorCustomizer() {
+      
       @Override
       public void customize(Connector connector) {
         connector.setSecure(true);  
