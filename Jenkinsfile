@@ -12,6 +12,7 @@ pipeline {
             steps {
                 echo 'Packaging...'
                 script {
+                    sh "env"
                     sh "mvn clean package"
                 }
             }
