@@ -37,7 +37,6 @@ public class SimpleCORSFilter implements Filter {
       "Access-Control-Allow-Headers",
       "Content-Type, Accept, X-Requested-With, remember-me"
     );
-
     chain.doFilter(req, res);
   }
 }
