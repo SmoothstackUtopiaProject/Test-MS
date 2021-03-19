@@ -13,11 +13,16 @@ import org.springframework.web.client.RestTemplate;
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/status")
 public class TestMSController {
 
   @Autowired
 	RestTemplate restTemplate;
+
+	@GetMapping()
+	public ResponseEntity<Object> health() {
+		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
+	}
 
 	@GetMapping("/services")
 	public ResponseEntity<Object> services() {
@@ -32,10 +37,5 @@ public class TestMSController {
 			"user-service"
 		);
 		return new ResponseEntity<>(services, HttpStatus.OK);
-	}
-
-	@GetMapping("/health")
-	public ResponseEntity<Object> health() {
-		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
 	}
 }
