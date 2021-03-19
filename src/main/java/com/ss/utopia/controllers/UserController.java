@@ -4,6 +4,9 @@ import java.net.ConnectException;
 import java.sql.SQLException;
 
 import java.util.Map;
+
+import javax.validation.Valid;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +40,6 @@ import com.ss.utopia.services.UserService;
 import com.ss.utopia.services.UserTokenService;
 
 @RestController
-@CrossOrigin()
 @RequestMapping(value = "/users")
 public class UserController {
 
@@ -52,33 +54,27 @@ public class UserController {
 
 		List<User> userList = userService.findAll();
 		return !userList.isEmpty() ? new ResponseEntity<>(userList, HttpStatus.OK)
-				: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+				: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping()
-	public ResponseEntity<Object> insert(@RequestBody User user) {
-		System.out.println("=============================");
-		try {
-			System.out.println(new ObjectMapper().writeValueAsString(user));
-		} catch(JsonProcessingException err) {
-			System.out.println(err.getMessage());
-		}
-
-
+	public ResponseEntity<Object> insert(@RequestBody @Valid User user) {
 		try {
 			user.setUserRole(Role.USER);
 			return new ResponseEntity<>(userService.insert(user), HttpStatus.CREATED);
-		} catch (UserAlreadyExistsException e) {
+		} 
+		catch (UserAlreadyExistsException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody User user)
+	public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody @Valid User user)
 			throws ConnectException, IllegalArgumentException, SQLException {
 		try {
 			return new ResponseEntity<>(userService.update(id, user), HttpStatus.CREATED);
-		} catch (UserNotFoundException e) {
+		} 
+		catch (UserNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
@@ -90,9 +86,11 @@ public class UserController {
 		try {
 			userService.sendRecoveryEmail(email);
 			return new ResponseEntity<>(null, HttpStatus.OK);
-		} catch (UserNotFoundException err) {
+		} 
+		catch (UserNotFoundException err) {
 			return new ResponseEntity<>(err.getMessage(), HttpStatus.NOT_FOUND);
-		} catch (TokenAlreadyIssuedException err) {
+		} 
+		catch (TokenAlreadyIssuedException err) {
 			return new ResponseEntity<>(err.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
@@ -185,7 +183,7 @@ public class UserController {
 	// : userService.findByRoleName(role);
 	// return !userList.isEmpty()
 	// ? new ResponseEntity<>(userList, HttpStatus.OK)
-	// : new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	// : new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	//
 	// } catch(IllegalArgumentException | NullPointerException err) {
 	// return new ResponseEntity<>("Cannot process Role " + err.getMessage()
@@ -202,7 +200,7 @@ public class UserController {
 
 		try {
 			userService.delete(userId);
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 		} catch (IllegalArgumentException | NullPointerException err) {
 			return new ResponseEntity<>(err.getMessage(), HttpStatus.BAD_REQUEST);
