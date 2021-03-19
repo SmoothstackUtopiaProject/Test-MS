@@ -55,11 +55,9 @@ public class UserService {
 		Optional<User> checkIfEmailExist = userRepository.findByEmail(user.getUserEmail());
 		Optional<User> checkIfPhoneExist = userRepository.findByPhone(user.getUserPhone());
 		if (checkIfEmailExist.isPresent()) {
-			System.out.println("email");
 			throw new UserAlreadyExistsException("A user with this email already exists!");
 		}
 		if (checkIfPhoneExist.isPresent()) {
-			System.out.println("phone");
 			throw new UserAlreadyExistsException("A user with this phone number already exists!");
 		}
 

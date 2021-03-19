@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,6 @@ import com.ss.utopia.jwk.JwtTokenProvider;
 import com.ss.utopia.models.User;
 import com.ss.utopia.services.UserService;
 
-@CrossOrigin(origins = "http://3.235.67.202:8080")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
