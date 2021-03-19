@@ -38,7 +38,7 @@ public class TestMSController {
 		return new ResponseEntity<>(services.toString(), HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "/actuator/health")
+	@RequestMapping(path = "/health")
 	public ResponseEntity<Object> health() {
 		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
 	}
