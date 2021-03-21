@@ -138,7 +138,7 @@ public class SqlPopulateService {
         " to destination: " + route.getRouteDestinationIataId()
       );
 
-      for(int month = 1; month < 2; month++) {
+      for(int month = 1; month < 13; month++) {
         for(int day = 1; day < 3; day++) {
 
           if(random.nextInt(3) == 1) {
