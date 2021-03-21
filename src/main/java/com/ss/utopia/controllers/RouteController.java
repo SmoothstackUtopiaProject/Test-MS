@@ -8,7 +8,7 @@ import java.util.List;
 import com.ss.utopia.exceptions.AirportNotFoundException;
 import com.ss.utopia.exceptions.RouteAlreadyExistsException;
 import com.ss.utopia.exceptions.RouteNotFoundException;
-import com.ss.utopia.models.HttpError;
+import com.ss.utopia.models.ErrorMessage;
 import com.ss.utopia.models.Route;
 import com.ss.utopia.services.RouteService;
 
@@ -19,11 +19,12 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,25 +32,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteController {
 	
 	@Autowired
-	RouteService routeService;
+	private RouteService routeService;
 	
+	@GetMapping("/health")
+	public ResponseEntity<Object> health() {
+		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
+	}
+
 	@GetMapping
 	public ResponseEntity<Object> findAllRoutes(){
 		List<Route> routeList = routeService.findAll();
 		return !routeList.isEmpty()
 			? new ResponseEntity<>(routeList, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-	@GetMapping("/id")
-	public ResponseEntity<Object> findById(@RequestParam Integer id){
-		try {
-			Route route =  routeService.findById(id);
-			return new ResponseEntity<>(route, HttpStatus.OK);
-		
-		} catch(RouteNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		}
+	@GetMapping("{id}")
+	public ResponseEntity<Object> findById(@PathVariable Integer id) throws RouteNotFoundException{
+		Route route = routeService.findById(id);
+		return new ResponseEntity<>(route, HttpStatus.OK);
 	}
 
 	@PostMapping("/search")
@@ -57,68 +58,87 @@ public class RouteController {
 		List<Route> routeList = routeService.findBySearchAndFilter(filterMap);
 		return !routeList.isEmpty()
 			? new ResponseEntity<>(routeList, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody Map<String, String> routeMap) {
-		try {
-			String origin = routeMap.get("origin");
-			String destination = routeMap.get("destination");
-			Route newRoute = routeService.insert(origin, destination);
-			return new ResponseEntity<>(newRoute, HttpStatus.CREATED);
-
-		}	catch (AirportNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
-
-		}	catch(RouteAlreadyExistsException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 409), HttpStatus.CONFLICT);
-		} 
+	public ResponseEntity<Object> insert(@RequestBody Map<String, String> routeMap) 
+	throws AirportNotFoundException, RouteAlreadyExistsException {
+		String routeOriginIataId = routeMap.get("routeOriginIataId");
+		String routeDestinationIataId = routeMap.get("routeDestinationIataId");
+		Route newRoute = routeService.insert(routeOriginIataId, routeDestinationIataId);
+		return new ResponseEntity<>(newRoute, HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public ResponseEntity<Object> update(@RequestBody Map<String, String> routeMap) {
-		try {
-			Integer id = Integer.parseInt(routeMap.get("routeId"));
-			String origin = routeMap.get("routeOrigin");
-			String destination = routeMap.get("routeDestination");
-			Route newRoute = routeService.update(id, origin, destination);
-			return new ResponseEntity<>(newRoute, HttpStatus.NO_CONTENT);
-		
-		}	catch (AirportNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
-		
-		}	catch(RouteAlreadyExistsException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 409), HttpStatus.CONFLICT);
-		
-		}	catch (RouteNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		} 
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> routeMap) 
+	throws AirportNotFoundException, RouteAlreadyExistsException, RouteNotFoundException {
+		Integer routeId = Integer.parseInt(routeMap.get("routeId"));
+		String routeOriginIataId = routeMap.get("routeOriginIataId");
+		String routeDestinationIataId = routeMap.get("routeDestinationIataId");
+		Route newRoute = routeService.update(routeId, routeOriginIataId, routeDestinationIataId);
+		return new ResponseEntity<>(newRoute, HttpStatus.OK);
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<Object> delete(@RequestParam Integer id) {
-		try {
-			routeService.deleteById(id);
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+	@DeleteMapping("{routeId}")
+	public ResponseEntity<Object> delete(@PathVariable Integer routeId) throws RouteNotFoundException {
+		routeService.deleteById(routeId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	// Exception Handling
+	// ========================================================================
+	@ExceptionHandler(AirportNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<Object> airportNotFoundException(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
+			HttpStatus.NOT_FOUND
+		);
+	}
+	
+	@ExceptionHandler(RouteAlreadyExistsException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ResponseEntity<Object> routeAlreadyExistsException(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
+			HttpStatus.CONFLICT
+		);
+	}
 
-		} catch(RouteNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		}
+	@ExceptionHandler(RouteNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<Object> routeNotFoundException(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
+			HttpStatus.NOT_FOUND
+		);
 	}
-	
-@ExceptionHandler(ConnectException.class)
+
+	@ExceptionHandler(ConnectException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public ResponseEntity<Object> invalidConnection() {
-		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(
+			new ErrorMessage("Service temporarily unavailabe."), 
+			HttpStatus.SERVICE_UNAVAILABLE
+		);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<Object> invalidMessage() {
-		return new ResponseEntity<>(new HttpError("Invalid HTTP message content.", 400), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(
+			new ErrorMessage("Invalid HTTP message content."), 
+			HttpStatus.BAD_REQUEST
+		);
 	}
 
 	@ExceptionHandler(SQLException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public ResponseEntity<Object> invalidSQL() {
-		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(
+			new ErrorMessage("Service temporarily unavailabe."), 
+			HttpStatus.SERVICE_UNAVAILABLE
+		);
 	}
 }

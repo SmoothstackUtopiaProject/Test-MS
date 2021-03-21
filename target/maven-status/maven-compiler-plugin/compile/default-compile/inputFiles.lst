@@ -11,9 +11,9 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\User.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\config\WebSecurityConfig.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\ExpiredTokenExpception.java
-C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\HttpError.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\Role.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\BookingGuestRepository.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\timeformatting\FlightTimeFormatter.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\AirplaneType.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\PassengerNotFoundException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\Flight.java
@@ -25,6 +25,7 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\BookingGuest.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\BookingWithReferenceData.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\SimpleCORSFilter.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\sqldata\SQLPopulate.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\TokenNotFoundExpection.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\BookingAlreadyExistsException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\RouteNotFoundException.java
@@ -33,6 +34,7 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\email\services\EmailService.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\PasswordNotAllowedException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\UserRepository.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\filters\RouteFilters.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\BookingGuestNotFoundException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\email\models\MailRequest.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\jwk\JWTAuthorizationFilter.java
@@ -50,12 +52,15 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\AirplaneAlreadyInUseException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\UserRoleNotFoundException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\BookingService.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\filters\FlightFilters.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\TestMSController.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\utils\KitUtils.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\TokenAlreadyIssuedException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\email\EmailConfig.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\IncorrectPasswordException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\UserRoleAlreadyExistsException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\FlightService.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\filters\PassengerFilters.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\controllers\FlightController.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\Booking.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\UserRoleService.java
@@ -66,6 +71,7 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\BookingUser.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\AirplaneRepository.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\FlightRepository.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\ErrorMessage.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\AirplaneTypeNotFoundException.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\email\models\MailResponse.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\exceptions\BookingNotFoundException.java
@@ -74,6 +80,7 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\UserService.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\TestMSApplication.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\Route.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\AirplaneTypeRepository.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\RouteRepository.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\controllers\SqlPopulateController.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\UserTokenService.java
@@ -83,3 +90,4 @@ C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\repositories\PassengerRepository.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\services\BookingUserService.java
 C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\models\Passenger.java
+C:\Users\Joshua\Documents\GitHub\Smoothstack\Test-MS\src\main\java\com\ss\utopia\filters\BookingFilters.java

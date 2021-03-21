@@ -17,4 +17,5 @@ public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
 
   @Query(value = "SELECT * FROM passenger WHERE passport_id = ?1", nativeQuery = true)
   List<Passenger> findByPassportId(String passportId);
+  
 }
