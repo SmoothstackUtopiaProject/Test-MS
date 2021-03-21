@@ -1,7 +1,7 @@
 com\ss\utopia\controllers\AirportController.class
 com\ss\utopia\models\AirplaneType.class
 com\ss\utopia\email\EmailConfig.class
-com\ss\utopia\models\HttpError.class
+com\ss\utopia\repositories\AirplaneTypeRepository.class
 com\ss\utopia\controllers\RouteController.class
 com\ss\utopia\exceptions\AirportNotFoundException.class
 com\ss\utopia\exceptions\UserAlreadyExistsException.class
@@ -11,6 +11,7 @@ com\ss\utopia\services\UserTokenService.class
 com\ss\utopia\models\FlightBooking.class
 com\ss\utopia\exceptions\BookingGuestNotFoundException.class
 com\ss\utopia\models\BookingWithReferenceData.class
+com\ss\utopia\sqldata\SQLPopulate.class
 com\ss\utopia\models\Passenger.class
 com\ss\utopia\jwk\JWTAuthorizationFilter.class
 com\ss\utopia\controllers\BookingController.class
@@ -24,6 +25,7 @@ com\ss\utopia\exceptions\AirplaneNotFoundException.class
 com\ss\utopia\models\Airport.class
 com\ss\utopia\exceptions\PassengerAlreadyExistsException.class
 com\ss\utopia\exceptions\TokenAlreadyIssuedException.class
+com\ss\utopia\filters\PassengerFilters.class
 com\ss\utopia\repositories\FlightRepository.class
 com\ss\utopia\email\services\EmailService.class
 com\ss\utopia\services\BookingService.class
@@ -40,6 +42,7 @@ com\ss\utopia\services\SqlPopulateService.class
 com\ss\utopia\exceptions\AirplaneAlreadyInUseException.class
 com\ss\utopia\exceptions\PassengerNotFoundException.class
 com\ss\utopia\repositories\FlightBookingRepository.class
+com\ss\utopia\models\ErrorMessage.class
 com\ss\utopia\models\Route.class
 com\ss\utopia\repositories\BookingRepository.class
 com\ss\utopia\repositories\PassengerRepository.class
@@ -61,6 +64,8 @@ com\ss\utopia\services\AirportService.class
 com\ss\utopia\exceptions\AirplaneTypeNotFoundException.class
 com\ss\utopia\exceptions\RouteNotFoundException.class
 com\ss\utopia\models\BookingGuest.class
+com\ss\utopia\filters\BookingFilters.class
+com\ss\utopia\utils\KitUtils.class
 com\ss\utopia\jwk\JwtTokenProvider.class
 com\ss\utopia\controllers\FlightController.class
 com\ss\utopia\exceptions\UserRoleAlreadyExistsException.class
@@ -68,9 +73,11 @@ com\ss\utopia\services\BookingGuestService.class
 com\ss\utopia\exceptions\IncorrectPasswordException.class
 com\ss\utopia\exceptions\UserNotFoundException.class
 com\ss\utopia\exceptions\PasswordNotAllowedException.class
+com\ss\utopia\filters\RouteFilters.class
 com\ss\utopia\controllers\AuthController.class
 com\ss\utopia\controllers\UserController.class
 com\ss\utopia\exceptions\UserRoleNotFoundException.class
+com\ss\utopia\filters\FlightFilters.class
 com\ss\utopia\models\Role.class
 com\ss\utopia\models\UserToken.class
 com\ss\utopia\services\RouteService.class
@@ -80,5 +87,6 @@ com\ss\utopia\exceptions\TokenNotFoundExpection.class
 com\ss\utopia\controllers\PassengerController.class
 com\ss\utopia\exceptions\RouteAlreadyExistsException.class
 com\ss\utopia\services\PassengerService.class
+com\ss\utopia\timeformatting\FlightTimeFormatter.class
 com\ss\utopia\TestMSApplication.class
 com\ss\utopia\SimpleCORSFilter.class

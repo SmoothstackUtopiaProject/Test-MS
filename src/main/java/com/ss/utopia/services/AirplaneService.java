@@ -17,19 +17,23 @@ import com.ss.utopia.exceptions.AirplaneTypeNotFoundException;
 import com.ss.utopia.models.Airplane;
 import com.ss.utopia.models.AirplaneType;
 import com.ss.utopia.repositories.AirplaneRepository;
+import com.ss.utopia.repositories.AirplaneTypeRepository;
 
 @Service
 public class AirplaneService {
 	
 	@Autowired
-	AirplaneRepository airplaneRepository;
+	private AirplaneRepository airplaneRepository;
+
+	@Autowired
+	private AirplaneTypeRepository airplaneTypeRepository;
 
 	public List<Airplane> findAll() {
 		return airplaneRepository.findAll();
 	}
 
 	public List<AirplaneType> findAllAirplaneTypes() {
-		return airplaneRepository.findAllAirplaneTypes();
+		return airplaneTypeRepository.findAll();
 	}
 	
 	public Airplane findById(Integer airplaneId) throws AirplaneNotFoundException {
@@ -113,11 +117,35 @@ public class AirplaneService {
 	}
 
 	public Airplane insert(Integer airplaneTypeId) throws AirplaneTypeNotFoundException {
-		Optional<AirplaneType> optionalType = airplaneRepository.findAirplaneTypeByAirplaneTypeId(airplaneTypeId);
+		Optional<AirplaneType> optionalType = airplaneTypeRepository.findById(airplaneTypeId);
 		if(!optionalType.isPresent()) {
 			throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + airplaneTypeId + " exist.");
 		}
 		return airplaneRepository.save(new Airplane(airplaneTypeId));
+	}
+
+	public AirplaneType insertAirplaneType(
+		String airplaneTypeName,
+		Integer airplaneTypeCapacity,
+		Integer airplaneTypeFirstClassCapacity,
+		Integer airplaneTypeBusinessClassCapacity,
+		Integer airplaneTypeCoachClassCapacity,
+		Integer airplaneTypeFirstClassColumns,
+		Integer airplaneTypeBusinessClassColumns,
+		Integer airplaneTypeCoachClassColumns,
+		String airplaneTypeEmergencyExitRows
+	) {
+		return airplaneTypeRepository.save(new AirplaneType(
+			airplaneTypeName,
+			airplaneTypeCapacity,
+			airplaneTypeFirstClassCapacity,
+			airplaneTypeBusinessClassCapacity,
+			airplaneTypeCoachClassCapacity,
+			airplaneTypeFirstClassColumns,
+			airplaneTypeBusinessClassColumns,
+			airplaneTypeCoachClassColumns,
+			airplaneTypeEmergencyExitRows
+		));
 	}
 
 	public void delete(Integer airplaneId) throws AirplaneNotFoundException {
@@ -130,8 +158,7 @@ public class AirplaneService {
 
 	public Airplane update(Integer airplaneId, Integer airplaneTypeId) 
 	throws AirplaneNotFoundException, AirplaneTypeNotFoundException {
-
-		Optional<AirplaneType> optionalAirplaneType = airplaneRepository.findAirplaneTypeByAirplaneTypeId(airplaneTypeId);
+		Optional<AirplaneType> optionalAirplaneType = airplaneTypeRepository.findById(airplaneTypeId);
 		if(!optionalAirplaneType.isPresent()) {
 			throw new AirplaneTypeNotFoundException("No AirplaneType with ID: " + airplaneTypeId + " exists.");
 		}

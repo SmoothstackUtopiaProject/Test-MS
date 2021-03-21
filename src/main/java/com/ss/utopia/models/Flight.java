@@ -28,42 +28,30 @@ public class Flight {
 	@NotNull(message = "Departure time should not be empty")
 	@Column(name = "departure_time")
 	private String flightDepartureTime;
-
+	
 	@NotNull(message = "Seating ID should not be empty")
 	@GeneratedValue
 	@Column(name = "seating_id")
 	private Integer flightSeatingId;
-
-	@NotNull(message = "Duration should not be empty")
-	@Column(name = "duration")
+	
+	@NotNull(message="Duration should not be empty")
+	@Column(name="duration")
 	private Integer flightDuration;
-
-	@NotNull(message = "Status should not be empty")
-	@Column(name = "status")
+	
+	@NotNull(message="Status should not be empty")
+	@Column(name="status")
 	private String flightStatus;
+	
+	public Flight() {}
+	public Flight(Integer flightId, 
+		@NotNull(message = "Route ID should not be empty") Integer flightRouteId,
+		@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
+		@NotNull(message = "Departure time should not be empty") String flightDepartureTime,
+		@NotNull(message = "Seating ID should not be empty") Integer flightSeatingId,
+		@NotNull(message = "Duration should not be empty") Integer flightDuration,
+		@NotNull(message = "Status should not be empty") String flightStatus) {
 
-	public Flight() {
-	}
-
-	// public Flight(Integer flightId, @NotNull(message = "Route ID should not be empty") Integer flightRouteId,
-	// 		@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
-	// 		@NotNull(message = "Departure time should not be empty") String flightDepartureTime,
-	// 		@NotNull(message = "Seating ID should not be empty") Integer flightSeatingId,
-	// 		@NotNull(message = "Duration should not be empty") Integer flightDuration,
-	// 		@NotNull(message = "Status should not be empty") String flightStatus) {
-
-	// 	this.flightId = flightId;
-	// 	this.flightRouteId = flightRouteId;
-	// 	this.flightAirplaneId = flightAirplaneId;
-	// 	this.flightDepartureTime = flightDepartureTime;
-	// 	this.flightSeatingId = flightSeatingId;
-	// 	this.flightDuration = flightDuration;
-	// 	this.flightStatus = flightStatus;
-	// }
-
-	public Flight(Integer id, Integer flightRouteId, Integer flightAirplaneId, String flightDepartureTime, Integer flightSeatingId,
-			Integer flightDuration, String flightStatus) {
-				this.flightId = id;
+		this.flightId = flightId;
 		this.flightRouteId = flightRouteId;
 		this.flightAirplaneId = flightAirplaneId;
 		this.flightDepartureTime = flightDepartureTime;
@@ -72,8 +60,8 @@ public class Flight {
 		this.flightStatus = flightStatus;
 	}
 
-	public Flight(Integer flightRouteId, Integer flightAirplaneId, String flightDepartureTime, Integer flightSeatingId,
-			Integer flightDuration, String flightStatus) {
+	public Flight(Integer flightRouteId, Integer flightAirplaneId, String flightDepartureTime, 
+	Integer flightSeatingId, Integer flightDuration,String flightStatus) {
 		this.flightRouteId = flightRouteId;
 		this.flightAirplaneId = flightAirplaneId;
 		this.flightDepartureTime = flightDepartureTime;
@@ -82,9 +70,10 @@ public class Flight {
 		this.flightStatus = flightStatus;
 	}
 
-	public Flight(@NotNull(message = "Route ID should not be empty") Integer flightRouteId,
-			@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
-			@NotNull(message = "Departure time should not be empty") String flightDepartureTime) {
+	public Flight(
+		@NotNull(message = "Route ID should not be empty") Integer flightRouteId,
+		@NotNull(message = "Airplane ID should not be empty") Integer flightAirplaneId,
+		@NotNull(message = "Departure time should not be empty") String flightDepartureTime) {
 		this.flightRouteId = flightRouteId;
 		this.flightAirplaneId = flightAirplaneId;
 		this.flightDepartureTime = flightDepartureTime;

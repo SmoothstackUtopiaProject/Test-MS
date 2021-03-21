@@ -11,43 +11,43 @@ public class BookingGuest {
   
   @Id
 	@Column(name = "booking_id")
-	private Integer bookingId;
+	private Integer bookingGuestId;
 
   @Column(name = "contact_email")
-	private String bookingEmail;
+	private String bookingGuestEmail;
 
   @Column(name = "contact_phone")
-	private String bookingPhone;
+	private String bookingGuestPhone;
 
   public BookingGuest(){}
-  public BookingGuest(Integer bookingId, String bookingEmail, String bookingPhone) {
+  public BookingGuest(Integer bookingGuestId, String bookingGuestEmail, String bookingGuestPhone) {
     super();
-    this.bookingId = bookingId;
-    this.bookingEmail = bookingEmail;
-    this.bookingPhone = bookingPhone;
+    this.bookingGuestId = bookingGuestId;
+    this.bookingGuestEmail = bookingGuestEmail;
+    this.bookingGuestPhone = bookingGuestPhone;
   }
 
-	public Integer getBookingId() {
-		return this.bookingId;
+	public Integer getBookingGuestId() {
+		return this.bookingGuestId;
 	}
 
-	public void setBookingId(Integer bookingId) {
-		this.bookingId = bookingId;
+	public void setBookingGuestId(Integer bookingGuestId) {
+		this.bookingGuestId = bookingGuestId;
 	}
 
-  public String getBookingEmail() {
-		return this.bookingEmail;
+  public String getBookingGuestEmail() {
+		return this.bookingGuestEmail;
 	}
 
-	public void setBookingEmail(String bookingEmail) {
-		this.bookingEmail = bookingEmail;
+	public void setBookingGuestEmail(String bookingGuestEmail) {
+		this.bookingGuestEmail = bookingGuestEmail;
 	}
 
-  public String getBookingPhone() {
-		return this.bookingPhone;
+  public String getBookingGuestPhone() {
+		return this.bookingGuestPhone;
 	}
 
-	public void setBookingPhone(String bookingPhone) {
-		this.bookingPhone = bookingPhone;
+	public void setBookingGuestPhone(String bookingGuestPhone) {
+		this.bookingGuestPhone = bookingGuestPhone;
 	}
 }

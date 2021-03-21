@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,198 +18,151 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.utopia.exceptions.PassengerAlreadyExistsException;
 import com.ss.utopia.exceptions.PassengerNotFoundException;
 import com.ss.utopia.models.Passenger;
-import com.ss.utopia.models.HttpError;
+import com.ss.utopia.models.ErrorMessage;
 import com.ss.utopia.services.PassengerService;
 
 @RestController
-@RequestMapping(
-	value = "/passengers",
-	produces = { "application/json", "application/xml", "text/xml" },
-	consumes = MediaType.ALL_VALUE
-)
+@RequestMapping("/passengers")
 public class PassengerController {
 
 	@Autowired
-	PassengerService passengerService;
+	private PassengerService passengerService;
 	
+	@GetMapping("/health")
+	public ResponseEntity<Object> health() {
+		return new ResponseEntity<>("\"status\": \"up\"", HttpStatus.OK);
+	}
+
 	@GetMapping
-	public ResponseEntity<Object> findAll()
-	throws ConnectException, SQLException {
-		
+	public ResponseEntity<Object> findAll() {
 		List<Passenger> passengers = passengerService.findAll();
 		return !passengers.isEmpty()
 			? new ResponseEntity<>(passengers, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("{passengerId}")
-	public ResponseEntity<Object> findById(@PathVariable String passengerId)
-	throws ConnectException, SQLException {
-
-		try {
-			Integer formattedId = Integer.parseInt(passengerId);
-			Passenger passenger = passengerService.findById(formattedId);
-			return new ResponseEntity<>(passenger, HttpStatus.OK);
-
-		} catch(PassengerNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Object> findById(@PathVariable String passengerId) 
+	throws PassengerNotFoundException {
+		Integer formattedId = Integer.parseInt(passengerId);
+		Passenger passenger = passengerService.findById(formattedId);
+		return new ResponseEntity<>(passenger, HttpStatus.OK);
 	}
 
 	@GetMapping("/booking/{id}")
-	public ResponseEntity<Object> findByBookingId(@PathVariable String bookingId) {
-
-		try {
-			Integer formattedBookingId = Integer.parseInt(bookingId);
-			Passenger passenger = passengerService.findByBookingId(formattedBookingId);
-			return new ResponseEntity<>(passenger, HttpStatus.OK);
-			// return !passengerList.isEmpty()
-			// 	? new ResponseEntity<>(passengerList, HttpStatus.OK)
-			// 	: new ResponseEntity<>(new HttpError("No Passenger(s) with Booking ID: " + bookingId + " exists.", 404), HttpStatus.NOT_FOUND);
-
-		} catch (PassengerNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger Booking ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Object> findByBookingId(@PathVariable String bookingId) 
+	throws PassengerNotFoundException {
+		Integer formattedBookingId = Integer.parseInt(bookingId);
+		Passenger passenger = passengerService.findByBookingId(formattedBookingId);
+		return new ResponseEntity<>(passenger, HttpStatus.OK);
 	}
 
 	@GetMapping("/passport/{id}")
 	public ResponseEntity<Object> findByPassportId(@PathVariable String id) {
-		try {
-			List<Passenger> passengerList = passengerService.findByPassportId(id);
-			return passengerList.isEmpty()
-				? new ResponseEntity<>(passengerList, HttpStatus.OK)
-				: new ResponseEntity<>(new HttpError("No Passenger with Passport ID: " + id + " exists.", 404), HttpStatus.NOT_FOUND);
-			
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger Passport ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
+		List<Passenger> passengerList = passengerService.findByPassportId(id);
+		return passengerList.isEmpty()
+			? new ResponseEntity<>(passengerList, HttpStatus.OK)
+			: new ResponseEntity<>(new ErrorMessage("No Passenger with Passport ID: " + id + " exists."), HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<Object> findBySearchAndFilter(@RequestBody Map<String, String> filterMap)
-	throws ConnectException, SQLException {
-
-		List<Passenger> passengers = passengerService.findBySearchAndFilter(filterMap);
+	public ResponseEntity<Object> findByFilter(@RequestBody Map<String, String> filterMap) {
+		List<Passenger> passengers = passengerService.findByFilter(filterMap);
 		return !passengers.isEmpty()
 			? new ResponseEntity<>(passengers, HttpStatus.OK)
-			: new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			: new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> insert(@RequestBody Map<String, String> passengerMap) {
+	public ResponseEntity<Object> insert(@RequestBody Map<String, String> passengerMap) 
+	throws PassengerAlreadyExistsException {
+		Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
+		String passengerPassportId = passengerMap.get("passengerPassportId");
+		String passengerFirstName = passengerMap.get("passengerFirstName");
+		String passengerLastName = passengerMap.get("passengerLastName");
+		Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+		String passengerSex = passengerMap.get("passengerSex");
+		String passengerAddress = passengerMap.get("passengerAddress");
+		Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
 
-		try {
-			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
-			String passengerPassportId = passengerMap.get("passengerPassportId");
-			String passengerFirstName = passengerMap.get("passengerFirstName");
-			String passengerLastName = passengerMap.get("passengerLastName");
-			Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
-			String passengerSex = passengerMap.get("passengerSex");
-			String passengerAddress = passengerMap.get("passengerAddress");
-			Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
-
-			Passenger newPassenger = passengerService.insert(
-				passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
-			);
-			return new ResponseEntity<>(newPassenger, HttpStatus.CREATED);
-
-		} catch(PassengerAlreadyExistsException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 409), HttpStatus.CONFLICT);
-
-		} catch(IllegalArgumentException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 400), HttpStatus.BAD_REQUEST);
-
-		} catch(NullPointerException err) {
-			String errorMessage = "Cannot process Passenger, " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length());
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
+		Passenger newPassenger = passengerService.insert(
+			passengerBookingId, passengerPassportId, passengerFirstName, 
+			passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, 
+			passengerIsVeteran
+		);
+		return new ResponseEntity<>(newPassenger, HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public ResponseEntity<Object> update(@RequestBody Map<String, String> passengerMap) {
+	public ResponseEntity<Object> update(@RequestBody Map<String, String> passengerMap) 
+	throws PassengerNotFoundException {
+		Integer passengerId = Integer.parseInt(passengerMap.get("passengerId"));
+		Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
+		String passengerPassportId = passengerMap.get("passengerPassportId");
+		String passengerFirstName = passengerMap.get("passengerFirstName");
+		String passengerLastName = passengerMap.get("passengerLastName");
+		Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
+		String passengerSex = passengerMap.get("passengerSex");
+		String passengerAddress = passengerMap.get("passengerAddress");
+		Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
 
-		try {
-			Integer passengerId = Integer.parseInt(passengerMap.get("passengerId"));
-			Integer passengerBookingId = Integer.parseInt(passengerMap.get("passengerBookingId"));
-			String passengerPassportId = passengerMap.get("passengerPassportId");
-			String passengerFirstName = passengerMap.get("passengerFirstName");
-			String passengerLastName = passengerMap.get("passengerLastName");
-			Date passengerDateOfBirth = Date.valueOf(passengerMap.get("passengerDateOfBirth"));
-			String passengerSex = passengerMap.get("passengerSex");
-			String passengerAddress = passengerMap.get("passengerAddress");
-			Boolean passengerIsVeteran = Boolean.parseBoolean(passengerMap.get("passengerIsVeteran"));
-
-			Passenger newPassenger = passengerService.update(
-				passengerId, passengerBookingId, passengerPassportId, passengerFirstName, passengerLastName, passengerDateOfBirth, passengerSex, passengerAddress, passengerIsVeteran
-			);
-			return new ResponseEntity<>(newPassenger, HttpStatus.ACCEPTED);
-
-		} catch(PassengerNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger, " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length());
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		} 
+		Passenger newPassenger = passengerService.update(
+			passengerId, passengerBookingId, passengerPassportId, 
+			passengerFirstName, passengerLastName, passengerDateOfBirth, 
+			passengerSex, passengerAddress, passengerIsVeteran
+		);
+		return new ResponseEntity<>(newPassenger, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("{passengerId}")
 	public ResponseEntity<Object> delete(@PathVariable String passengerId) 
+	throws IllegalArgumentException, PassengerNotFoundException {
+		Integer formattedId = Integer.parseInt(passengerId);
+		passengerService.delete(formattedId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 
-	throws ConnectException, SQLException {
-
-		try {
-			Integer formattedId = Integer.parseInt(passengerId);
-			passengerService.delete(formattedId);
-			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-
-		} catch(PassengerNotFoundException err) {
-			return new ResponseEntity<>(new HttpError(err.getMessage(), 404), HttpStatus.NOT_FOUND);
-		
-		} catch(IllegalArgumentException | NullPointerException err) {
-			String errorMessage = "Cannot process Passenger ID " + err.getMessage()
-			.substring(0, 1).toLowerCase() + err.getMessage()
-			.substring(1, err.getMessage().length()).replaceAll("[\"]", "");
-			return new ResponseEntity<>(new HttpError(errorMessage, 400), HttpStatus.BAD_REQUEST);
-		}
+	// Exception Handling
+	// ========================================================================
+	@ExceptionHandler(PassengerNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<Object> passengerNotFoundException(Throwable err) {
+		return new ResponseEntity<>(
+			new ErrorMessage(err.getMessage()), 
+			HttpStatus.NOT_FOUND
+		);
 	}
 
 	@ExceptionHandler(ConnectException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public ResponseEntity<Object> invalidConnection() {
-		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(
+			new ErrorMessage("Service temporarily unavailabe."), 
+			HttpStatus.SERVICE_UNAVAILABLE
+		);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<Object> invalidMessage() {
-		return new ResponseEntity<>(new HttpError("Invalid HTTP message content.", 400), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(
+			new ErrorMessage("Invalid HTTP message content."), 
+			HttpStatus.BAD_REQUEST
+		);
 	}
 
 	@ExceptionHandler(SQLException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public ResponseEntity<Object> invalidSQL() {
-		return new ResponseEntity<>(new HttpError("Service temporarily unavailabe.", 500), HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<>(
+			new ErrorMessage("Service temporarily unavailabe."), 
+			HttpStatus.SERVICE_UNAVAILABLE
+		);
 	}
 }
